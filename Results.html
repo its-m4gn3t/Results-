@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>PUBG Match Results & Qualification</title>
+<style>
+  body { font-family: Arial, sans-serif; margin: 20px; }
+  table { border-collapse: collapse; width: 100%; margin-bottom: 20px; }
+  th, td { border: 1px solid #ccc; padding: 8px; text-align: center; }
+  th { background: #f4f4f4; }
+  input[type=number] { width: 60px; }
+  .group-title { margin-top: 40px; font-size: 1.2em; font-weight: bold; }
+  .qualified { background-color: #d4edda; }
+</style>
+</head>
+<body>
+
+<h1>PUBG Match Results - 16 Teams, 2 Groups</h1>
+
+<div id="groups-container"></div>
+
+<button onclick="calculatePoints()">Calculate & Show Top 7 per Group</button>
+
+<div id="results"></div>
+
+<script>
+// Setup teams in 2 groups of 8
+const groups = {
+  A: ['Team A1','Team A2','Team A3','Team A4','Team A5','Team A6','Team A7','Team A8'],
+  B: ['Team B1','Team B2','Team B3','Team B4','Team B5','Team B6','Team B7','Team B8']
+};
+
+// Placement points mapping
+const placementPointsMap = {
+  1:10, 2:7, 3:6, 4:4, 5:3, 6:2, 7:2, 8:1, 9:1, 10:1
+};
+
+function createGroupTable(groupName, teams) {
+  let html = `<div class="group-title">Group ${groupName}</div>`;
+  html += `<table><thead><tr><th>Team</th><th>Placement</th><th>Kills</th><th>Total Points</th></tr></thead><tbody>`;
+  teams.forEach((team, i) => {
+    html += `<tr>
+      <td>${team}</td>
+      <td><input type="number" min="1" max="16" id="${groupName}-placement-${i}" placeholder="1-16"></td>
+      <td><input type="number" min="0" max="20" id="${groupName}-kills-${i}" placeholder="Kills"></td>
+      <td id="${groupName}-total-${i}">0</td>
+    </tr>`;
+  });
+  html += `</tbody></table>`;
+  return html;
+}
+
+function calculatePoints() {
+  const resultsDiv = document.getElementById('results');
+  resultsDiv.innerHTML = '';
+
+  for (const [groupName, teams] of Object.entries(groups)) {
+    // Calculate points per team
+    const teamPoints = teams.map((team, i) => {
+      const placementInput = document.getElementById(`${groupName}-placement-${i}`);
+      const killsInput = document.getElementById(`${groupName}-kills-${i}`);
+
+      let placement = parseInt(placementInput.value);
+      let kills = parseInt(killsInput.value);
+
+      if (isNaN(placement) || placement < 1 || placement > 16) placement = 16; // Default worst
+      if (isNaN(kills) || kills < 0) kills = 0;
+
+      // Placement points (only top 10 get points, else 0)
+      const placementPoints = placementPointsMap[placement] || 0;
+      const total = placementPoints + kills;
+
+      // Update table cell
+      document.getElementById(`${groupName}-total-${i}`).textContent = total;
+
+      return { team, total };
+    });
+
+    // Sort descending by points
+    teamPoints.sort((a,b) => b.total - a.total);
+
+    // Show top 7 qualified teams
+    let resultHTML = `<h2>Group ${groupName} - Top 7 Qualified Teams</h2><table><thead><tr><th>Rank</th><th>Team</th><th>Points</th></tr></thead><tbody>`;
+    teamPoints.forEach((tp, idx) => {
+      const qualifiedClass = idx < 7 ? 'qualified' : '';
+      resultHTML += `<tr class="${qualifiedClass}"><td>${idx+1}</td><td>${tp.team}</td><td>${tp.total}</td></tr>`;
+    });
+    resultHTML += `</tbody></table>`;
+    resultsDiv.innerHTML += resultHTML;
+  }
+}
+
+// Render input tables
+const container = document.getElementById('groups-container');
+for (const [groupName, teams] of Object.entries(groups)) {
+  container.innerHTML += createGroupTable(groupName, teams);
+}
+</script>
+
+</body>
+</html>
