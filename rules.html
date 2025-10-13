@@ -13,7 +13,6 @@
     }
     body {
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background: linear-gradient(135deg, #1f4037, #99f2c8);
       color: #eeeeee;
       min-height: 100vh;
       display: flex;
@@ -21,6 +20,20 @@
       align-items: flex-start;
       padding: 2rem;
       line-height: 1.6;
+      /* Background for parallax */
+      background: url('https://images.unsplash.com/photo-1506744038136-46273834b3fb?ixlib=rb-4.0.3&auto=format&fit=crop&w=1470&q=80') no-repeat center center fixed;
+      background-size: cover;
+      overflow-x: hidden;
+    }
+
+    /* Parallax Overlay for subtle dark layering and blur */
+    body::before {
+      content: "";
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(0, 0, 0, 0.5);
+      backdrop-filter: blur(5px);
+      z-index: -1;
     }
 
     /* Container for glass effect */
@@ -34,6 +47,9 @@
       width: 100%;
       padding: 2rem 3rem;
       overflow-wrap: break-word;
+      /* Elevate container above background */
+      position: relative;
+      z-index: 1;
     }
 
     /* Header styles */
