@@ -19,7 +19,7 @@
       position: fixed;
       top:0; left:0; width:100vw; height:100vh;
       z-index: 0;
-      background: linear-gradient(120deg, #191970 0%, #222 50%, #ff4500 100%);
+      background: linear-gradient(120deg, #191970 0%, #222 55%, #ff4500 100%);
       animation: bgMove 12s ease-in-out infinite alternate;
       pointer-events:none;
     }
@@ -42,13 +42,7 @@
       background-position: 0 0;
       animation: bgWave 18s linear infinite alternate;
     }
-    @keyframes bgWave {
-      to { background-position-x: 20vw; }
-    }
-    .fade-in { opacity: 0; animation: fadeIn 1s forwards;}
-    @keyframes fadeIn { to { opacity: 1; } }
-    .pulse-title { animation: pulseGlow 2.5s infinite alternate;}
-    @keyframes pulseGlow { from {text-shadow: 0 0 10px #ff4500;} to {text-shadow: 0 0 25px #ff4500;} }
+    @keyframes bgWave { to { background-position-x: 20vw; } }
 
     /* Triple dot icon and nav styles */
     .nav-bar {
@@ -65,57 +59,47 @@
     #dateTime { color:#ccc;font-weight:400;min-width:220px;text-align:right;font-size:1rem;}
     .dots-menu {
       cursor: pointer;
-      width: 32px;
-      height: 32px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      border-radius: 50%;
-      border: none;
-      background: #222;
+      width: 32px; height: 32px;
+      display: flex; align-items: center; justify-content: center;
+      border-radius: 50%; border: none; background: #222;
       box-shadow: 0 0 8px #ff450080;
       margin-left: 10px;
+      position: relative;
+      z-index: 13;
+      font-size: 2rem;
     }
-    .dots-menu span {
-      font-size: 2.3rem; color: #ff4500; user-select: none; padding-top: 3px;
-    }
+    .dots-menu span { font-size: 2.3rem; color: #ff4500; user-select: none; }
+
     .menu-popup {
       position: absolute;
-      top: 60px; right: 16px;
+      top: 58px; right: 16px;
       min-width: 180px;
       background: #232323;
       border-radius: 11px;
       box-shadow: 0 0 22px #0009, 0 3px 12px #ff450080;
       padding: 18px 0;
-      display: none;
       flex-direction: column;
       z-index: 999;
       animation: fadeIn 0.2s;
+      display: none;
     }
-    .menu-popup.show {
-      display: flex;
-    }
+    .menu-popup.show { display: flex; }
     .menu-popup a {
-      color: #eee;
-      text-decoration: none;
-      font-weight: 600;
-      padding: 10px 34px;
-      border-radius: 8px;
+      color: #eee; text-decoration: none;
+      font-weight: 600; padding: 10px 34px; border-radius: 8px;
       transition: color 0.2s, background 0.2s, box-shadow 0.3s;
       font-size: 1.13rem;
     }
     .menu-popup a:hover, .menu-popup a:focus {
-      color: #ff4500;
-      background: #171717;
-      box-shadow: 0 0 8px #ff4500;
+      color: #ff4500; background: #171717; box-shadow: 0 0 8px #ff4500;
     }
 
-    /* Content styles as before */
+    /* Responsive */
     @media (max-width: 768px) {
       .team-container { flex-direction: column; align-items: center; }
       .player-card { width: 90% !important; }
-      iframe { height: 300px !important; }
-      .menu-popup { right: 5%; top: 60px; }
+      iframe, .yt-embed { height: 260px !important; }
+      .menu-popup { right: 6%; top: 58px; }
     }
     .player-card {
       transition: transform 0.3s, box-shadow 0.3s;
@@ -130,18 +114,63 @@
     .sponsor-logo{transition:transform 0.3s, filter 0.3s; cursor:pointer; filter:grayscale(100%) brightness(150%);height:70px;}
     .sponsor-logo:hover{filter:grayscale(0) brightness(100%);transform:scale(1.15);position:relative;z-index:2;}
     .pulse-button {animation: pulseGlow 2.5s infinite alternate; box-shadow: 0 0 15px #ff4500; background: #ff4500; color: #121212; padding: 15px 40px; border-radius: 30px; font-weight: 700; font-size: 1.2rem; text-decoration: none; display: inline-block; user-select: none;}
+    @keyframes pulseGlow { from {box-shadow: 0 0 10px #ff4500;} to {box-shadow: 0 0 25px #ff4500;} }
     section, footer {max-width:1200px; margin-left:auto; margin-right:auto;}
     header {max-width: 1200px; margin-left: auto; margin-right:auto;}
+
+    /* Form styles */
+    form {
+      background: #111;
+      padding: 25px 30px;
+      border-radius: 15px;
+      box-shadow: 0 0 20px #ff450080;
+      color: #eee;
+      max-width: 600px;
+      margin: 0 auto 40px auto;
+    }
+    form label {
+      display: block;
+      margin-bottom: 6px;
+      font-weight: 600;
+      color: #ff4500;
+      font-size: 1.1rem;
+    }
+    form input, form select, form textarea {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 18px;
+      border-radius: 8px;
+      border: none;
+      font-size: 1rem;
+      color: #222;
+    }
+    form textarea {
+      resize: vertical;
+      min-height: 80px;
+    }
+    form button {
+      background: #ff4500;
+      color: #121212;
+      padding: 12px 28px;
+      border: none;
+      border-radius: 12px;
+      font-weight: 700;
+      font-size: 1.2rem;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+    form button:hover {
+      background: #e23e00;
+    }
   </style>
 </head>
 <body>
   <div class="bg-animate"></div>
   <div class="bg-waves"></div>
 
-  <!-- Header and triple dot menu -->
   <header class="nav-bar">
     <div class="pulse-title">MME</div>
-    <button class="dots-menu" id="menuToggle" aria-label="Open navigation menu"><span>⋮</span></button>
+    <button class="dots-menu" id="menuToggle" aria-label="Open navigation menu"><span>&#8942;</span></button>
     <div id="dateTime"></div>
     <!-- NAV MENU POPUP -->
     <nav class="menu-popup" id="navMenu" aria-label="Main Navigation">
@@ -149,6 +178,8 @@
       <a href="#live">Live</a>
       <a href="#news">News</a>
       <a href="#sponsors">Sponsors</a>
+      <a href="#contact">Contact</a>
+      <a href="#shop">Shop Jerseys</a>
     </nav>
   </header>
 
@@ -166,7 +197,10 @@
 
   <!-- Team Roster -->
   <section id="team" class="fade-in" style="padding:50px 20px;max-width:1000px;margin:0 auto;position:relative;z-index:3;">
-    <h2 style="text-align:center;font-size:2.3rem;margin-bottom:40px;color:#ff4500;">Team Roster</h2>
+    <h2 style="text-align:center;font-size:2.3rem;margin-bottom:24px;color:#ff4500;">Team Roster</h2>
+    <div style="text-align:center; font-size:1.17rem; color:#ffa15a; margin-bottom:28px;">
+      <strong>Mad Morans Esports</strong> (MME) is a fearless squad competing at the highest PUBG battlegrounds level, known for clutch plays, sharp rotations, and relentless team synergy. Passionate and unpredictable, MME combines talent and heart—turning every match into a spectacle.
+    </div>
     <div class="team-container" style="display:flex;gap:30px;flex-wrap:wrap;justify-content:center;">
       <div class="player-card">
         <img src="https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=facearea&w=400&h=400" alt="RazeX" />
@@ -204,12 +238,16 @@
     </div>
   </section>
 
-  <!-- Live Streaming -->
+  <!-- Live Streaming (Twitch + YouTube Live embed) -->
   <section id="live" class="fade-in" style="padding:50px 20px;max-width:900px;margin:40px auto;text-align:center;position:relative;z-index:3;">
     <h2 style="color:#ff4500;font-size:2.2rem;margin-bottom:30px;">Live Stream</h2>
-    <iframe src="https://player.twitch.tv/?channel=madmorans&parent=yourdomain.com" 
-      height="480" width="100%" frameborder="0" scrolling="no" allowfullscreen="true" 
-      style="border-radius:12px;box-shadow:0 0 15px #ff4500;"></iframe>
+    <div class="yt-embed" style="margin-bottom:40px;">
+      <iframe width="100%" height="480"
+        src="https://www.youtube.com/embed/Fc9czfoW2vI?autoplay=1&mute=1"
+        frameborder="0" allow="autoplay; encrypted-media" allowfullscreen
+        style="border-radius:12px;box-shadow:0 0 15px #ff4500;">
+      </iframe>
+    </div>
   </section>
 
   <!-- News Section -->
@@ -237,6 +275,53 @@
     </div>
   </section>
 
+  <!-- Contact Section -->
+  <section id="contact" class="fade-in" style="padding:50px 20px;max-width:700px;margin:40px auto;text-align:center;position:relative;z-index:3;">
+    <h2 style="color:#ff4500;font-size:2.2rem;margin-bottom:30px;">Contact Us</h2>
+    <form action="https://formspree.io/f/YOUR_CONTACT_FORM_ID" method="POST">
+      <label for="name">Name</label>
+      <input type="text" id="name" name="name" required placeholder="Your Full Name" />
+
+      <label for="email">Email</label>
+      <input type="email" id="email" name="_replyto" required placeholder="Your Email Address" />
+
+      <label for="message">Message</label>
+      <textarea id="message" name="message" required placeholder="Your message here" rows="5"></textarea>
+
+      <button type="submit">Send Message</button>
+    </form>
+  </section>
+
+  <!-- Shop Section -->
+  <section id="shop" class="fade-in" style="padding:50px 20px;max-width:700px;margin:40px auto;text-align:center;position:relative;z-index:3;">
+    <h2 style="color:#ff4500;font-size:2.2rem;margin-bottom:30px;">Order Your Jersey</h2>
+    <form action="https://formspree.io/f/YOUR_ORDER_FORM_ID" method="POST">
+      <label for="customer-name">Full Name</label>
+      <input type="text" id="customer-name" name="name" required placeholder="Your Full Name" />
+
+      <label for="customer-email">Email</label>
+      <input type="email" id="customer-email" name="_replyto" required placeholder="Your Email Address" />
+
+      <label for="jersey-size">Jersey Size</label>
+      <select id="jersey-size" name="jersey_size" required>
+        <option value="" disabled selected>Select Size</option>
+        <option value="Small">Small</option>
+        <option value="Medium">Medium</option>
+        <option value="Large">Large</option>
+        <option value="XL">XL</option>
+        <option value="XXL">XXL</option>
+      </select>
+
+      <label for="quantity">Quantity</label>
+      <input type="number" id="quantity" name="quantity" min="1" max="10" value="1" required />
+
+      <label for="custom-note">Customization (Name, Number, etc.)</label>
+      <textarea id="custom-note" name="custom_note" placeholder="Optional customization details" rows="3"></textarea>
+
+      <button type="submit">Place Order</button>
+    </form>
+  </section>
+
   <footer class="fade-in" style="background:#1f1f1f;padding:25px 20px;text-align:center;color:#888;font-size:0.9rem;margin-top:50px;position:relative;z-index:4;">
     &copy; 2025 MME. All rights reserved.
     <div style="margin-top:10px;">
@@ -246,7 +331,6 @@
     </div>
   </footer>
 
-  <!-- DateTime Script & Triple dot toggle -->
   <script>
     function updateDateTime() {
       const dateTimeElem = document.getElementById('dateTime');
@@ -258,18 +342,28 @@
     }
     setInterval(updateDateTime, 1000); updateDateTime();
 
-    // Menu logic
+    // Improved Menu logic
     const menuToggle = document.getElementById('menuToggle');
     const navMenu = document.getElementById('navMenu');
-    menuToggle.onclick = function() {
-      navMenu.classList.toggle('show');
+    let menuOpen = false;
+    menuToggle.onclick = function(e) {
+      e.stopPropagation();
+      menuOpen = !menuOpen;
+      navMenu.classList.toggle('show', menuOpen);
     };
-    // Hide menu clicking outside
+    // Hide menu clicking anywhere except menu (on link clicks or outside)
     document.addEventListener('click', function(e) {
-      if (!navMenu.contains(e.target) && e.target !== menuToggle) {
+      if (menuOpen && !navMenu.contains(e.target) && e.target !== menuToggle) {
         navMenu.classList.remove('show');
+        menuOpen = false;
       }
     });
+    navMenu.onclick = function(e) {
+      if (e.target.tagName === 'A') {
+        navMenu.classList.remove('show');
+        menuOpen = false;
+      }
+    };
   </script>
 </body>
 </html>
