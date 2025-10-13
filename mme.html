@@ -5,128 +5,155 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>MME - Mad Morans Esports</title>
   <style>
-    @media (max-width: 768px) {
-      .menu {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 18px;
-      }
-      .team-container {
-        flex-direction: column;
-        align-items: center;
-      } 
-      .player-card {
-        width: 90% !important;
-      }
-      iframe {
-        height: 300px !important;
-      }
+    html, body { min-height:100%; height:100%; }
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      color: #eee;
+      min-height: 100vh;
+      position: relative;
+      z-index: 1;
+      overflow-x: hidden;
     }
-    /* Animations & header */
-    .fade-in {
-      opacity: 0;
-      animation: fadeIn 1s forwards;
+    .bg-animate {
+      position: fixed;
+      top:0; left:0; width:100vw; height:100vh;
+      z-index: 0;
+      background: linear-gradient(120deg, #191970 0%, #222 50%, #ff4500 100%);
+      animation: bgMove 12s ease-in-out infinite alternate;
+      pointer-events:none;
     }
-    @keyframes fadeIn {
-      to {
-        opacity: 1;
-      }
+    @keyframes bgMove {
+      0% { background-position: 0% 50%; filter: blur(0.5px) brightness(1.05);}
+      30% { background-position: 100% 60%; filter: blur(1px) brightness(1.10);}
+      55% { background-position: 50% 110%; filter: blur(0.8px) brightness(1.14);}
+      70% { background-position: 60% 45%; filter: blur(1.5px) brightness(1.10);}
+      100% { background-position: 100% 0%; filter: blur(0.4px) brightness(1.00);}
     }
-    .pulse-title {
-      animation: pulseGlow 2.5s infinite alternate;
+    .bg-waves {
+      position: fixed;
+      top:0; left:0; width:100vw; height:100vh;
+      z-index: 1;
+      pointer-events: none;
+      opacity: 0.19;
+      background: url('image/svg+xml;utf8,<svg viewBox="0 0 1440 960" xmlns="http://www.w3.org/2000/svg"><path fill="%23ff4500" fill-opacity="0.22" d="M0,160L120,186.7C240,213,480,267,720,266.7C960,267,1200,213,1320,186.7L1440,160V960H1320C1200,960,960,960,720,960C480,960,240,960,120,960H0Z"></path></svg>');
+      background-size: cover;
+      background-repeat: repeat-x;
+      background-position: 0 0;
+      animation: bgWave 18s linear infinite alternate;
     }
-    @keyframes pulseGlow {
-      from { text-shadow: 0 0 10px #ff4500; }
-      to { text-shadow: 0 0 25px #ff4500; }
+    @keyframes bgWave {
+      to { background-position-x: 20vw; }
     }
-    .menu {
+    .fade-in { opacity: 0; animation: fadeIn 1s forwards;}
+    @keyframes fadeIn { to { opacity: 1; } }
+    .pulse-title { animation: pulseGlow 2.5s infinite alternate;}
+    @keyframes pulseGlow { from {text-shadow: 0 0 10px #ff4500;} to {text-shadow: 0 0 25px #ff4500;} }
+
+    /* Triple dot icon and nav styles */
+    .nav-bar {
       display: flex;
-      gap: 40px;
-      padding: 25px 0 15px 0;
-      background: #212121;
-      justify-content: center;
-      font-size: 1.14rem;
-      border-bottom: 2px solid #ff4500;
-      box-shadow: 0 4px 28px rgba(255,69,0,0.09);
+      justify-content: space-between;
+      align-items: center;
+      padding: 20px 20px;
+      background: #1f1f1f;
+      border-bottom: 1px solid #171717;
+      position: relative;
+      z-index: 4;
     }
-    .menu a {
+    .pulse-title { font-size: 2.2rem; font-weight: 800; color: #ff4500; letter-spacing: 3px; flex:1; text-align:center; }
+    #dateTime { color:#ccc;font-weight:400;min-width:220px;text-align:right;font-size:1rem;}
+    .dots-menu {
+      cursor: pointer;
+      width: 32px;
+      height: 32px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+      border: none;
+      background: #222;
+      box-shadow: 0 0 8px #ff450080;
+      margin-left: 10px;
+    }
+    .dots-menu span {
+      font-size: 2.3rem; color: #ff4500; user-select: none; padding-top: 3px;
+    }
+    .menu-popup {
+      position: absolute;
+      top: 60px; right: 16px;
+      min-width: 180px;
+      background: #232323;
+      border-radius: 11px;
+      box-shadow: 0 0 22px #0009, 0 3px 12px #ff450080;
+      padding: 18px 0;
+      display: none;
+      flex-direction: column;
+      z-index: 999;
+      animation: fadeIn 0.2s;
+    }
+    .menu-popup.show {
+      display: flex;
+    }
+    .menu-popup a {
       color: #eee;
       text-decoration: none;
       font-weight: 600;
-      padding: 6px 22px;
+      padding: 10px 34px;
       border-radius: 8px;
       transition: color 0.2s, background 0.2s, box-shadow 0.3s;
+      font-size: 1.13rem;
     }
-    .menu a:hover, .menu a:focus {
+    .menu-popup a:hover, .menu-popup a:focus {
       color: #ff4500;
       background: #171717;
       box-shadow: 0 0 8px #ff4500;
     }
+
+    /* Content styles as before */
+    @media (max-width: 768px) {
+      .team-container { flex-direction: column; align-items: center; }
+      .player-card { width: 90% !important; }
+      iframe { height: 300px !important; }
+      .menu-popup { right: 5%; top: 60px; }
+    }
     .player-card {
       transition: transform 0.3s, box-shadow 0.3s;
-      cursor: pointer;
-      border-radius: 18px;
-      overflow: hidden;
-      box-shadow: 0 4px 15px rgba(255,69,0,0.3);
-      background: #1f1f1f;
-      width: 220px;
-      text-align: center;
-      padding: 20px;
-      margin-bottom: 20px;
+      cursor: pointer; border-radius: 18px; overflow: hidden; box-shadow: 0 4px 15px rgba(255,69,0,0.3);
+      background: #1f1f1f; width: 220px; text-align: center; padding: 20px; margin-bottom: 20px; z-index: 3;
     }
     .player-card img {
-      width: 150px; height: 150px;
-      border-radius: 50%;
-      object-fit: cover; border: 3px solid #ff4500;
-      box-shadow: 0 0 15px #ff4500;
-      transition: transform 0.4s;
+      width: 150px; height: 150px; border-radius: 50%; object-fit: cover; border: 3px solid #ff4500; box-shadow: 0 0 15px #ff4500; transition: transform 0.4s;
     }
-    .player-card:hover { transform: scale(1.05); box-shadow:0 0 25px #ff4500; position:relative; z-index:2;}
+    .player-card:hover { transform: scale(1.05); box-shadow:0 0 25px #ff4500; position:relative; z-index:5;}
     .player-card:hover img { transform: scale(1.1);}
-    .sponsor-logo {
-      transition: transform 0.3s, filter 0.3s;
-      cursor: pointer;
-      filter: grayscale(100%) brightness(150%);
-      height: 70px;
-    }
-    .sponsor-logo:hover { filter: grayscale(0) brightness(100%); transform:scale(1.15); position:relative; z-index:2;}
-    .pulse-button {
-      animation: pulseGlow 2.5s infinite alternate;
-      box-shadow: 0 0 15px #ff4500;
-      background: #ff4500;
-      color: #121212;
-      padding: 15px 40px;
-      border-radius: 30px;
-      font-weight: 700;
-      font-size: 1.2rem;
-      text-decoration: none;
-      display: inline-block;
-      user-select: none;
-    }
-    section, footer {max-width:1200px; margin-left: auto; margin-right:auto;}
+    .sponsor-logo{transition:transform 0.3s, filter 0.3s; cursor:pointer; filter:grayscale(100%) brightness(150%);height:70px;}
+    .sponsor-logo:hover{filter:grayscale(0) brightness(100%);transform:scale(1.15);position:relative;z-index:2;}
+    .pulse-button {animation: pulseGlow 2.5s infinite alternate; box-shadow: 0 0 15px #ff4500; background: #ff4500; color: #121212; padding: 15px 40px; border-radius: 30px; font-weight: 700; font-size: 1.2rem; text-decoration: none; display: inline-block; user-select: none;}
+    section, footer {max-width:1200px; margin-left:auto; margin-right:auto;}
     header {max-width: 1200px; margin-left: auto; margin-right:auto;}
   </style>
 </head>
-<body style="margin:0; font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background:#121212; color:#eee;">
+<body>
+  <div class="bg-animate"></div>
+  <div class="bg-waves"></div>
 
-  <!-- Minimal Header with MME only -->
-  <header class="fade-in" style="display:flex; justify-content: space-between; align-items: center; 
-    padding: 20px 20px; background: #1f1f1f; border-bottom: 1px solid #171717; flex-wrap: wrap;">
-    <div class="pulse-title" style="font-size: 2.2rem; font-weight: 800; color: #ff4500; letter-spacing: 3px; flex:1; text-align: center;">
-      MME
-    </div>
-    <div id="dateTime" style="color: #ccc; font-weight: 400; min-width: 220px; text-align: right; font-size: 1rem;"></div>
+  <!-- Header and triple dot menu -->
+  <header class="nav-bar">
+    <div class="pulse-title">MME</div>
+    <button class="dots-menu" id="menuToggle" aria-label="Open navigation menu"><span>⋮</span></button>
+    <div id="dateTime"></div>
+    <!-- NAV MENU POPUP -->
+    <nav class="menu-popup" id="navMenu" aria-label="Main Navigation">
+      <a href="#team">Team</a>
+      <a href="#live">Live</a>
+      <a href="#news">News</a>
+      <a href="#sponsors">Sponsors</a>
+    </nav>
   </header>
 
-  <!-- Menu Section Below Header -->
-  <nav class="menu fade-in" aria-label="Main Navigation">
-    <a href="#team">Team</a>
-    <a href="#live">Live</a>
-    <a href="#news">News</a>
-    <a href="#sponsors">Sponsors</a>
-  </nav>
-
-  <section class="fade-in" style="background:url('https://i.imgur.com/Fp0N2Rg.jpg') center/cover no-repeat; height:80vh; display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;padding:0 20px;">
+  <!-- Hero Section -->
+  <section class="fade-in" style="height:80vh; display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;padding:0 20px; z-index:2;position:relative;">
     <h1 style="font-size: 3.2rem; color: #ff4500; text-shadow: 0 0 10px #ff4500; margin: 0;">
       Mad Morans Esports
       <span style="font-size:1.4rem;display:block;color:#ffa15a;">MME</span>
@@ -138,11 +165,11 @@
   </section>
 
   <!-- Team Roster -->
-  <section id="team" class="fade-in" style="padding:50px 20px;max-width:1000px;margin:0 auto;">
+  <section id="team" class="fade-in" style="padding:50px 20px;max-width:1000px;margin:0 auto;position:relative;z-index:3;">
     <h2 style="text-align:center;font-size:2.3rem;margin-bottom:40px;color:#ff4500;">Team Roster</h2>
     <div class="team-container" style="display:flex;gap:30px;flex-wrap:wrap;justify-content:center;">
       <div class="player-card">
-        <img src="https://liquipedia.net/commons/images/thumb/d/d0/AHQ_Hong.jpg/600px-AHQ_Hong.jpg" alt="Player 1" />
+        <img src="https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=facearea&w=400&h=400" alt="RazeX" />
         <h3 style="margin:15px 0 5px;font-size:1.2rem;">RazeX</h3>
         <p style="font-size:0.93rem;color:#ccc;">Role: Sniper</p>
         <p style="font-size:0.86rem;color:#aaa;">Sharpshooter with deadly precision.</p>
@@ -153,7 +180,7 @@
         </div>
       </div>
       <div class="player-card">
-        <img src="https://liquipedia.net/commons/images/thumb/d/d0/AHQ_Hong.jpg/600px-AHQ_Hong.jpg" alt="Player 2" />
+        <img src="https://images.unsplash.com/photo-1508214751196-bcfd4ca60f91?auto=format&fit=facearea&w=400&h=400" alt="Moro" />
         <h3 style="margin:15px 0 5px;font-size:1.2rem;">Moro</h3>
         <p style="font-size:0.93rem;color:#ccc;">Role: Support</p>
         <p style="font-size:0.86rem;color:#aaa;">Tactical mastermind and team backbone.</p>
@@ -164,7 +191,7 @@
         </div>
       </div>
       <div class="player-card">
-        <img src="https://liquipedia.net/commons/images/thumb/d/d0/AHQ_Hong.jpg/600px-AHQ_Hong.jpg" alt="Player 3" />
+        <img src="https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e?auto=format&fit=facearea&w=400&h=400" alt="Falcon" />
         <h3 style="margin:15px 0 5px;font-size:1.2rem;">Falcon</h3>
         <p style="font-size:0.93rem;color:#ccc;">Role: Leader</p>
         <p style="font-size:0.86rem;color:#aaa;">Strategic planner with fierce instincts.</p>
@@ -178,7 +205,7 @@
   </section>
 
   <!-- Live Streaming -->
-  <section id="live" class="fade-in" style="padding:50px 20px;max-width:900px;margin:40px auto;text-align:center;">
+  <section id="live" class="fade-in" style="padding:50px 20px;max-width:900px;margin:40px auto;text-align:center;position:relative;z-index:3;">
     <h2 style="color:#ff4500;font-size:2.2rem;margin-bottom:30px;">Live Stream</h2>
     <iframe src="https://player.twitch.tv/?channel=madmorans&parent=yourdomain.com" 
       height="480" width="100%" frameborder="0" scrolling="no" allowfullscreen="true" 
@@ -186,7 +213,7 @@
   </section>
 
   <!-- News Section -->
-  <section id="news" class="fade-in" style="background:#1a1a1a;padding: 50px 20px;max-width:900px;margin:40px auto; border-radius:12px;">
+  <section id="news" class="fade-in" style="background:#1a1a1a;padding:50px 20px;max-width:900px;margin:40px auto; border-radius:12px;position:relative;z-index:3;">
     <h2 style="text-align:center;color:#ff4500;font-size:2.2rem;margin-bottom:40px;">Latest News</h2>
     <article style="margin-bottom:30px;border-bottom:1px solid #333;padding-bottom:20px;">
       <h3 style="color:#ff4500;font-size:1.2rem;margin-bottom:10px;">Mad Morans Qualify for PUBG Global Finals</h3>
@@ -201,7 +228,7 @@
   </section>
 
   <!-- Sponsors Section -->
-  <section id="sponsors" class="fade-in" style="padding:50px 20px;max-width:900px;margin:40px auto;text-align:center;">
+  <section id="sponsors" class="fade-in" style="padding:50px 20px;max-width:900px;margin:40px auto;text-align:center;position:relative;z-index:3;">
     <h2 style="color:#ff4500;font-size:2.2rem;margin-bottom:40px;">Our Sponsors</h2>
     <div style="display:flex;justify-content:center;gap:50px;flex-wrap:wrap;">
       <img src="https://upload.wikimedia.org/wikipedia/commons/4/47/PNG_transparency_demonstration_1.png" alt="Sponsor 1" class="sponsor-logo" />
@@ -210,7 +237,7 @@
     </div>
   </section>
 
-  <footer class="fade-in" style="background:#1f1f1f;padding:25px 20px;text-align:center;color:#888;font-size:0.9rem;margin-top:50px;">
+  <footer class="fade-in" style="background:#1f1f1f;padding:25px 20px;text-align:center;color:#888;font-size:0.9rem;margin-top:50px;position:relative;z-index:4;">
     &copy; 2025 MME. All rights reserved.
     <div style="margin-top:10px;">
       <a href="#" style="color:#ff4500;margin:0 15px;text-decoration:none;">Twitter</a>
@@ -219,6 +246,7 @@
     </div>
   </footer>
 
+  <!-- DateTime Script & Triple dot toggle -->
   <script>
     function updateDateTime() {
       const dateTimeElem = document.getElementById('dateTime');
@@ -228,8 +256,20 @@
       const timeStr = now.toLocaleTimeString(undefined, { hour12: true });
       dateTimeElem.textContent = `${dateStr} | ${timeStr}`;
     }
-    setInterval(updateDateTime, 1000);
-    updateDateTime();
+    setInterval(updateDateTime, 1000); updateDateTime();
+
+    // Menu logic
+    const menuToggle = document.getElementById('menuToggle');
+    const navMenu = document.getElementById('navMenu');
+    menuToggle.onclick = function() {
+      navMenu.classList.toggle('show');
+    };
+    // Hide menu clicking outside
+    document.addEventListener('click', function(e) {
+      if (!navMenu.contains(e.target) && e.target !== menuToggle) {
+        navMenu.classList.remove('show');
+      }
+    });
   </script>
 </body>
 </html>
