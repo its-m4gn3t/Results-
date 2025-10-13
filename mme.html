@@ -3,9 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Mad Morans Esports - PUBG Team</title>
+  <title>Mad Morans Esports (MME) - PUBG Team</title>
   <style>
-    /* Responsive tweaks */
     @media (max-width: 768px) {
       nav {
         flex-direction: column;
@@ -22,8 +21,6 @@
         height: 300px !important;
       }
     }
-
-    /* Fade-in animation for sections */
     .fade-in {
       opacity: 0;
       animation: fadeIn 1s forwards;
@@ -43,36 +40,60 @@
         opacity: 1;
       }
     }
-
-    /* Player card hover */
     .player-card {
       transition: transform 0.3s ease, box-shadow 0.3s ease;
       cursor: pointer;
+      border-radius: 18px;
+      overflow: hidden;
+      box-shadow: 0 4px 15px rgba(255, 69, 0, 0.3);
+      background: #1f1f1f;
+      width: 220px;
+      text-align: center;
+      padding: 20px;
+      margin-bottom: 20px;
+    }
+    .player-card img {
+      width: 150px;
+      height: 150px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 3px solid #ff4500;
+      box-shadow: 0 0 15px #ff4500;
+      transition: transform 0.4s ease;
     }
     .player-card:hover {
       transform: scale(1.05);
-      box-shadow: 0 0 20px #ff4500;
-      z-index: 2;
+      box-shadow: 0 0 25px #ff4500;
       position: relative;
+      z-index: 2;
     }
-
-    /* Sponsor logos hover */
+    .player-card:hover img {
+      transform: scale(1.1);
+    }
     .sponsor-logo {
       transition: transform 0.3s ease, filter 0.3s ease;
       cursor: pointer;
       filter: grayscale(100%) brightness(150%);
+      height: 70px;
     }
     .sponsor-logo:hover {
       filter: grayscale(0) brightness(100%);
       transform: scale(1.15);
-      z-index: 2;
       position: relative;
+      z-index: 2;
     }
-
-    /* Pulsing glow button */
     .pulse-button {
       animation: pulseGlow 2.5s infinite alternate;
       box-shadow: 0 0 15px #ff4500;
+      background: #ff4500;
+      color: #121212;
+      padding: 15px 40px;
+      border-radius: 30px;
+      font-weight: 700;
+      font-size: 1.2rem;
+      text-decoration: none;
+      display: inline-block;
+      user-select: none;
     }
     @keyframes pulseGlow {
       from {
@@ -82,45 +103,53 @@
         box-shadow: 0 0 25px #ff4500;
       }
     }
-
-    /* Navigation link hover */
     nav a {
       transition: color 0.3s ease, text-shadow 0.3s ease;
+      color: #eee;
+      text-decoration: none;
+      font-weight: 600;
     }
     nav a:hover {
       color: #ff6a00;
       text-shadow: 0 0 8px #ff6a00;
     }
+    header, section, footer {
+      max-width: 1200px;
+      margin-left: auto;
+      margin-right: auto;
+    }
   </style>
 </head>
 <body style="margin:0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #121212; color: #eee;">
 
-  <!-- Header -->
-  <header class="fade-in" style="display:flex; justify-content: space-between; align-items: center; padding: 20px 50px; background: #1f1f1f; border-bottom: 2px solid #ff4500; flex-wrap: wrap;">
-    <div style="font-size: 1.8rem; font-weight: 700; color: #ff4500; letter-spacing: 2px;">Mad Morans Esports</div>
+  <header class="fade-in" style="display:flex; justify-content: space-between; align-items: center; padding: 20px 20px 20px 20px; background: #1f1f1f; border-bottom: 2px solid #ff4500; flex-wrap: wrap;">
+    <div style="font-size: 1.8rem; font-weight: 700; color: #ff4500; letter-spacing: 2px;">
+      Mad Morans Esports <span style="font-size:1rem; color:#ffa15a;">(MME)</span>
+    </div>
     <nav style="display: flex; gap: 30px; flex-wrap: wrap; flex: 1; justify-content: center; margin: 10px 0;">
-      <a href="#team" style="color: #eee; text-decoration: none; font-weight: 600;">Team</a>
-      <a href="#schedule" style="color: #eee; text-decoration: none; font-weight: 600;">Schedule</a>
-      <a href="#live" style="color: #eee; text-decoration: none; font-weight: 600;">Live</a>
-      <a href="#news" style="color: #eee; text-decoration: none; font-weight: 600;">News</a>
-      <a href="#sponsors" style="color: #eee; text-decoration: none; font-weight: 600;">Sponsors</a>
+      <a href="#team">Team</a>
+      <a href="#schedule">Schedule</a>
+      <a href="#live">Live</a>
+      <a href="#news">News</a>
+      <a href="#sponsors">Sponsors</a>
     </nav>
     <div id="dateTime" style="color: #ccc; font-weight: 500; min-width: 220px; text-align: right;"></div>
   </header>
 
-  <!-- Hero Section -->
   <section class="fade-in-delayed" style="background: url('https://i.imgur.com/Fp0N2Rg.jpg') center/cover no-repeat; height: 80vh; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; padding: 0 20px;">
-    <h1 style="font-size: 4rem; margin: 0; color: #ff4500; text-shadow: 0 0 10px #ff4500;">Mad Morans Esports</h1>
+    <h1 style="font-size: 4rem; margin: 0; color: #ff4500; text-shadow: 0 0 10px #ff4500;">
+      Mad Morans Esports <br /><span style="font-size:2.4rem; font-weight: 700; color:#ffa15a;">(MME)</span>
+    </h1>
     <p style="font-size: 1.4rem; font-weight: 500; color: #fff; margin: 12px 0 30px;">The Fury of PUBG Battlegrounds</p>
-    <a href="#team" class="pulse-button" style="background: #ff4500; color: #121212; padding: 15px 40px; border-radius: 30px; font-weight: 700; text-decoration: none; font-size: 1.2rem;">Meet The Team</a>
+    <a href="#team" class="pulse-button">Meet The Team</a>
   </section>
 
   <!-- Team Roster -->
   <section id="team" class="fade-in-delayed-2" style="padding: 50px 20px; max-width: 1000px; margin: 0 auto;">
     <h2 style="text-align: center; font-size: 2.5rem; margin-bottom: 40px; color: #ff4500;">Team Roster</h2>
     <div class="team-container" style="display: flex; gap: 30px; flex-wrap: wrap; justify-content: center;">
-      <div class="player-card" style="background: #1f1f1f; padding: 20px; border-radius: 15px; width: 220px; text-align: center; box-shadow: 0 0 10px #ff4500;">
-        <img src="https://i.imgur.com/nwqWv7J.jpg" alt="Player 1" style="width: 150px; height: 150px; border-radius: 50%; object-fit: cover; border: 3px solid #ff4500;" />
+      <div class="player-card">
+        <img src="https://i.imgur.com/nwqWv7J.jpg" alt="Player 1" />
         <h3 style="margin: 15px 0 5px; font-size: 1.3rem;">RazeX</h3>
         <p style="font-size: 0.9rem; color: #ccc;">Role: Sniper</p>
         <p style="font-size: 0.85rem; color: #aaa;">Sharpshooter with deadly precision.</p>
@@ -131,8 +160,8 @@
         </div>
       </div>
 
-      <div class="player-card" style="background: #1f1f1f; padding: 20px; border-radius: 15px; width: 220px; text-align: center; box-shadow: 0 0 10px #ff4500;">
-        <img src="https://i.imgur.com/7HIsL3A.jpg" alt="Player 2" style="width: 150px; height: 150px; border-radius: 50%; object-fit: cover; border: 3px solid #ff4500;" />
+      <div class="player-card">
+        <img src="https://i.imgur.com/7HIsL3A.jpg" alt="Player 2" />
         <h3 style="margin: 15px 0 5px; font-size: 1.3rem;">Moro</h3>
         <p style="font-size: 0.9rem; color: #ccc;">Role: Support</p>
         <p style="font-size: 0.85rem; color: #aaa;">Tactical mastermind and team backbone.</p>
@@ -143,8 +172,8 @@
         </div>
       </div>
 
-      <div class="player-card" style="background: #1f1f1f; padding: 20px; border-radius: 15px; width: 220px; text-align: center; box-shadow: 0 0 10px #ff4500;">
-        <img src="https://i.imgur.com/Oe4hfur.jpg" alt="Player 3" style="width: 150px; height: 150px; border-radius: 50%; object-fit: cover; border: 3px solid #ff4500;" />
+      <div class="player-card">
+        <img src="https://i.imgur.com/Oe4hfur.jpg" alt="Player 3" />
         <h3 style="margin: 15px 0 5px; font-size: 1.3rem;">Falcon</h3>
         <p style="font-size: 0.9rem; color: #ccc;">Role: Leader</p>
         <p style="font-size: 0.85rem; color: #aaa;">Strategic planner with fierce instincts.</p>
@@ -157,40 +186,7 @@
     </div>
   </section>
 
-  <!-- Match Schedule -->
-  <section id="schedule" class="fade-in" style="background: #1a1a1a; padding: 50px 20px; max-width: 900px; margin: 40px auto; border-radius: 12px;">
-    <h2 style="text-align: center; color: #ff4500; font-size: 2.5rem; margin-bottom: 40px;">Upcoming Matches & Results</h2>
-    <table style="width: 100%; border-collapse: collapse; color: #eee;">
-      <thead>
-        <tr>
-          <th style="padding: 15px 10px; border-bottom: 2px solid #ff4500; text-align: left;">Date</th>
-          <th style="padding: 15px 10px; border-bottom: 2px solid #ff4500; text-align: left;">Opponent</th>
-          <th style="padding: 15px 10px; border-bottom: 2px solid #ff4500; text-align: left;">Tournament</th>
-          <th style="padding: 15px 10px; border-bottom: 2px solid #ff4500; text-align: left;">Result</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr style="border-bottom: 1px solid #333;">
-          <td style="padding: 12px 10px;">Oct 20, 2025</td>
-          <td style="padding: 12px 10px;">Phoenix Squad</td>
-          <td style="padding: 12px 10px;">PUBG Global Series</td>
-          <td style="padding: 12px 10px; color: #4CAF50;">Win 2 - 1</td>
-        </tr>
-        <tr style="border-bottom: 1px solid #333;">
-          <td style="padding: 12px 10px;">Nov 5, 2025</td>
-          <td style="padding: 12px 10px;">Shadow Wolves</td>
-          <td style="padding: 12px 10px;">Esports Championship</td>
-          <td style="padding: 12px 10px; color: #FF5722;">Loss 0 - 2</td>
-        </tr>
-        <tr>
-          <td style="padding: 12px 10px;">Nov 18, 2025</td>
-          <td style="padding: 12px 10px;">Iron Titans</td>
-          <td style="padding: 12px 10px;">Winter Invitational</td>
-          <td style="padding: 12px 10px; color: #FFC107;">Scheduled</td>
-        </tr>
-      </tbody>
-    </table>
-  </section>
+  <!-- Removed Results Section -->
 
   <!-- Live Streaming -->
   <section id="live" class="fade-in-delayed" style="padding: 50px 20px; max-width: 900px; margin: 40px auto; text-align: center;">
@@ -225,7 +221,6 @@
     </div>
   </section>
 
-  <!-- Footer -->
   <footer class="fade-in" style="background: #1f1f1f; padding: 25px 20px; text-align: center; color: #888; font-size: 0.9rem; margin-top: 50px;">
     &copy; 2025 Mad Morans Esports. All rights reserved.
     <div style="margin-top: 10px;">
@@ -236,7 +231,6 @@
   </footer>
 
   <script>
-    // Live date and time
     function updateDateTime() {
       const dateTimeElem = document.getElementById('dateTime');
       const now = new Date();
