@@ -293,21 +293,44 @@
   </section>
 
   <!-- Shop Section -->
-  <section id="contact" class="fade-in" style="padding:50px 20px;max-width:700px;margin:40px auto;text-align:center;position:relative;z-index:3;">
-    <h2 style="color:#ff4500;font-size:2.2rem;margin-bottom:30px;">Contact Us</h2>
-    <form action="https://formspree.io/f/YOUR_CONTACT_FORM_ID" method="POST">
-      <label for="name">Name</label>
-      <input type="text" id="name" name="name" required placeholder="Your Full Name" />
 
-      <label for="email">Email</label>
-      <input type="email" id="email" name="_replyto" required placeholder="Your Email Address" />
+<section id="shop" class="fade-in" style="padding:50px 20px;max-width:700px;margin:40px auto;text-align:center;position:relative;z-index:3;">
+  <h2 style="color:#ff4500;font-size:2.2rem;margin-bottom:30px;">Order Your Jersey</h2>
+  <form action="https://formspree.io/f/YOUR_ORDER_FORM_ID" method="POST">
+    <label for="customer-name">Full Name</label>
+    <input type="text" id="customer-name" name="name" required placeholder="Your Full Name" />
 
-      <label for="message">Message</label>
-      <textarea id="message" name="message" required placeholder="Your message here" rows="5"></textarea>
+    <label for="customer-address">Address</label>
+    <textarea id="customer-address" name="address" required placeholder="Your Address" rows="3"></textarea>
 
-      <button type="submit">Send Message</button>
-    </form>
-  </section>
+    <label for="customer-phone">Phone Number</label>
+    <input type="tel" id="customer-phone" name="phone" required placeholder="Your Phone Number" />
+
+    <label for="print-name">Name to be Printed on Jersey</label>
+    <input type="text" id="print-name" name="print_name" required placeholder="Name on Jersey" />
+
+    <label for="customer-email">Email</label>
+    <input type="email" id="customer-email" name="_replyto" required placeholder="Your Email Address" />
+
+    <label for="jersey-size">Jersey Size</label>
+    <select id="jersey-size" name="jersey_size" required>
+      <option value="" disabled selected>Select Size</option>
+      <option value="Small">Small</option>
+      <option value="Medium">Medium</option>
+      <option value="Large">Large</option>
+      <option value="XL">XL</option>
+      <option value="XXL">XXL</option>
+    </select>
+
+    <label for="quantity">Quantity</label>
+    <input type="number" id="quantity" name="quantity" min="1" max="10" value="1" required />
+
+    <label for="custom-note">Customization (Number, etc.)</label>
+    <textarea id="custom-note" name="custom_note" placeholder="Optional customization details" rows="3"></textarea>
+
+    <button type="submit">Place Order</button>
+  </form>
+</section>
 
 
   <footer class="fade-in" style="background:#1f1f1f;padding:25px 20px;text-align:center;color:#888;font-size:0.9rem;margin-top:50px;position:relative;z-index:4;">
