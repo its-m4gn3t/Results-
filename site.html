@@ -1,419 +1,307 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>Image Monitor Dashboard — CRUD (Single File)</title>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Leo Club Sainamaina</title>
+
 <style>
-:root{--card:#0b1220;--accent:#ffd700;--muted:#94a3b8;--glass: rgba(255,255,255,0.04);}
-*{box-sizing:border-box}body{margin:0;font-family:Inter,Segoe UI,Roboto,Helvetica,Arial,sans-serif;background:linear-gradient(180deg,#071028 0%,#0f1724 100%);color:#e6eef8}
-.header{display:flex;align-items:center;justify-content:space-between;padding:1rem;gap:1rem}
-.brand{display:flex;align-items:center;gap:.75rem}
-.logo{width:44px;height:44px;border-radius:8px;background:linear-gradient(135deg,#ffd700,#ffa500);display:flex;align-items:center;justify-content:center;color:#1a1a1a;font-weight:700}
-h1{margin:0;font-size:1.05rem}
-.container{display:grid;grid-template-columns:300px 1fr;gap:1rem;padding:1rem;max-width:1200px;margin:0 auto}
-.sidebar{background:var(--card);border-radius:12px;padding:1rem;min-height:60vh;box-shadow:0 6px 20px rgba(0,0,0,0.6)}
-.card{background:linear-gradient(180deg,rgba(255,255,255,0.02),var(--glass));padding:1rem;border-radius:10px;margin-bottom:1rem;box-shadow:0 6px 20px rgba(0,0,0,0.6)}
-.controls label{display:block;font-size:.85rem;color:var(--muted);margin-bottom:.35rem}
-.input,textarea,select{width:100%;padding:.6rem;border-radius:8px;border:1px solid rgba(255,255,255,0.04);background:transparent;color:inherit}
-.btn{display:inline-block;padding:.6rem .9rem;border-radius:8px;background:linear-gradient(90deg,#ffd700,#ffa500);color:#111;font-weight:700;border:none;cursor:pointer}
-.btn.ghost{background:transparent;border:1px solid rgba(255,255,255,0.06);color:var(--muted)}
-.preview{display:flex;flex-direction:column;align-items:center;gap:.6rem}
-.preview img{max-width:100%;border-radius:10px;border:4px solid rgba(255,255,255,0.03)}
-.list{max-height:56vh;overflow:auto;padding-right:.25rem}
-.item{display:flex;gap:.75rem;align-items:center;padding:.5rem;border-radius:8px;cursor:pointer;border:1px solid rgba(255,255,255,0.02);margin-bottom:.5rem}
-.item:hover{transform:translateY(-3px)}
-.thumb{width:56px;height:56px;border-radius:8px;flex:0 0 56px;background-size:cover;background-position:center}
-.meta{flex:1}
-.meta h4{margin:0;font-size:.95rem}
-.meta p{margin:0;font-size:.8rem;color:var(--muted)}
-.actions{display:flex;gap:.5rem}
-.icon-btn{background:transparent;border:1px solid rgba(255,255,255,0.04);padding:.35rem .5rem;border-radius:8px;color:var(--muted);cursor:pointer}
-.footer{text-align:center;padding:1rem;color:var(--muted);font-size:.85rem}
+    body {
+        margin: 0;
+        font-family: Arial, sans-serif;
+        background: #fff7d6;
+        scroll-behavior: smooth;
+    }
 
-/* responsive */
-@media (max-width:900px){.container{grid-template-columns:1fr;padding:0.8rem}.sidebar{order:2}.preview-col{order:1}}
-.small{font-size:.8rem;color:var(--muted)}
+    /* HEADER */
+    header {
+        background: linear-gradient(45deg, #ffcc00, #ffb300);
+        padding: 15px 20px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        position: sticky;
+        top: 0;
+        z-index: 999;
+    }
+    header h1 {
+        margin: 0;
+        font-size: 23px;
+        display: flex;
+        align-items: center;
+    }
 
-.badge{display:inline-block;padding:.25rem .5rem;border-radius:6px;background:rgba(255,255,255,0.04);font-size:.75rem;color:var(--muted)}
+    #menuIcon {
+        font-size: 26px;
+        cursor: pointer;
+    }
 
-/* modal */
-.modal{position:fixed;inset:0;display:none;align-items:center;justify-content:center;background:rgba(2,6,23,0.6);z-index:9999}
-.modal.open{display:flex}
-.modal .dialog{max-width:900px;width:94%;background:#061021;padding:1rem;border-radius:12px}
-.dialog-header{display:flex;justify-content:space-between;align-items:center;gap:1rem;margin-bottom:.5rem}
-.row{display:flex;gap:1rem;align-items:center}
-.form-row{display:grid;grid-template-columns:1fr 1fr;gap:.5rem}
-@media (max-width:600px){.form-row{grid-template-columns:1fr}}
+    /* Mobile Menu */
+    #menu {
+        display: none;
+        background: #ffcf00;
+        padding: 20px;
+        flex-direction: column;
+        gap: 18px;
+        font-size: 19px;
+    }
+
+    #menu a {
+        text-decoration: none;
+        color: #000;
+        font-weight: 600;
+    }
+
+    /* HERO SECTION */
+    #hero {
+        padding: 60px 20px;
+        text-align: center;
+        background: linear-gradient(45deg, #a87400, #d5a630);
+        color: white;
+    }
+
+    #hero button {
+        margin-top: 20px;
+        padding: 15px 35px;
+        border-radius: 30px;
+        border: 2px solid white;
+        background: transparent;
+        color: white;
+        font-size: 18px;
+        cursor: pointer;
+    }
+
+    /* SECTIONS */
+    section {
+        padding: 40px 20px;
+    }
+
+    h2 {
+        color: #d29d00;
+        margin-bottom: 15px;
+    }
+
+    /* ADMIN DASHBOARD */
+    #admin {
+        display: none;
+    }
+
+    .admin-header {
+        background: #222;
+        color: white;
+        padding: 20px;
+        font-size: 22px;
+    }
+
+    .admin-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+        gap: 20px;
+        padding: 20px;
+    }
+
+    .card {
+        background: white;
+        border-radius: 12px;
+        padding: 20px;
+        text-align: center;
+        font-weight: bold;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+
+    .data-table {
+        width: 100%;
+        margin-top: 20px;
+        border-collapse: collapse;
+        background: white;
+    }
+
+    .data-table th, .data-table td {
+        border: 1px solid #ddd;
+        padding: 12px;
+    }
+
+    .data-table th {
+        background: #ffcf00;
+    }
+
+    .adminBtn {
+        background: #ffb300;
+        border: none;
+        padding: 10px 20px;
+        color: black;
+        border-radius: 6px;
+        cursor: pointer;
+        margin: 10px 0;
+    }
+
+    /* LOGIN MODAL */
+    #loginModal {
+        position: fixed;
+        top: 0; left: 0;
+        width: 100%; height: 100%;
+        background: rgba(0,0,0,0.7);
+        display: none;
+        justify-content: center;
+        align-items: center;
+    }
+    .login-box {
+        background: white;
+        padding: 25px;
+        border-radius: 10px;
+        width: 85%;
+        max-width: 350px;
+        text-align: center;
+    }
+    .login-box input {
+        width: 100%;
+        padding: 12px;
+        margin: 10px 0;
+        border-radius: 6px;
+        border: 1px solid #ccc;
+    }
 </style>
 </head>
+
+
 <body>
-<header class="header container-wide" style="max-width:1200px;margin:0 auto">
-  <div class="brand"><div class="logo">🦁</div><div><h1>Image Monitor Dashboard</h1><div class="small">Client-only CRUD · Responsive · Persistent (localStorage)</div></div></div>
-  <div style="display:flex;gap:.5rem;align-items:center">
-    <button id="importBtn" class="btn ghost" title="Import sample image">Import sample</button>
-    <button id="clearAll" class="btn ghost" title="Clear storage">Clear All</button>
-  </div>
+
+<!-- HEADER -->
+<header>
+    <h1>🦁 Leo Club Sainamaina</h1>
+    <div id="menuIcon">☰</div>
 </header>
 
-<main class="container">
-  <aside class="sidebar">
-    <div class="card">
-      <h3 style="margin-top:0">Add / Update Image</h3>
-      <form id="imageForm">
-        <div class="controls">
-          <label>Title</label>
-          <input id="title" class="input" placeholder="Image title (e.g. Hero screenshot)" required />
-        </div>
-        <div class="controls">
-          <label>Description</label>
-          <textarea id="desc" class="input" rows="3" placeholder="Short description"></textarea>
-        </div>
-        <div class="controls">
-          <label>Choose Image</label>
-          <input id="file" type="file" accept="image/*" class="input" />
-        </div>
-        <div style="display:flex;gap:.5rem;margin-top:.75rem">
-          <button type="submit" class="btn">Save</button>
-          <button type="button" id="resetBtn" class="btn ghost">Reset</button>
-        </div>
-      </form>
+<!-- MOBILE MENU -->
+<div id="menu">
+    <a href="#hero">Home</a>
+    <a href="#about">About</a>
+    <a href="#announcements">Announcements</a>
+    <a href="#members">Members</a>
+    <a href="#events">Events</a>
+    <a href="#admin" onclick="openLogin()">Admin</a>
+</div>
+
+<!-- HERO -->
+<section id="hero">
+    <h1>Serving Sainamaina Community</h1>
+    <p>With Passion & Dedication</p>
+    <button onclick="alert('You clicked Get Involved!')">Get Involved</button>
+</section>
+
+<!-- ABOUT -->
+<section id="about">
+    <h2>About Leo Club</h2>
+    <p>We are dedicated to community service, leadership, and youth empowerment.</p>
+</section>
+
+<!-- ANNOUNCEMENTS -->
+<section id="announcements">
+    <h2>Latest Announcements</h2>
+    <div id="announceList">No announcements yet.</div>
+</section>
+
+<!-- MEMBERS -->
+<section id="members">
+    <h2>Our Members</h2>
+    <div id="memberList">Members will appear here.</div>
+</section>
+
+<!-- EVENTS -->
+<section id="events">
+    <h2>Upcoming Events</h2>
+    <div id="eventList">No events available.</div>
+</section>
+
+<!-- ADMIN PANEL -->
+<section id="admin">
+    <div class="admin-header">Admin Dashboard</div>
+
+    <button class="adminBtn" onclick="addAnnouncement()">+ Add Announcement</button>
+
+    <div class="admin-grid">
+        <div class="card">Total Members: <span id="memberCount">0</span></div>
+        <div class="card">Events: <span id="eventCount">0</span></div>
+        <div class="card">Announcements: <span id="announceCount">0</span></div>
     </div>
 
-    <div class="card">
-      <h4 class="small">Filters & Search</h4>
-      <input id="search" class="input" placeholder="Search by title or description" />
-      <div style="display:flex;gap:.5rem;margin-top:.6rem">
-        <select id="sortBy" class="input">
-          <option value="new">Sort: Newest</option>
-          <option value="old">Sort: Oldest</option>
-          <option value="alpha">Sort: A → Z</option>
-        </select>
-        <select id="limit" class="input">
-          <option value="all">All</option>
-          <option value="10">10</option>
-          <option value="25">25</option>
-        </select>
-      </div>
-    </div>
+    <h2>Announcements Table</h2>
+    <table class="data-table">
+        <thead>
+            <tr>
+                <th>Title</th>
+                <th>Date</th>
+            </tr>
+        </thead>
+        <tbody id="adminAnnounceTable"></tbody>
+    </table>
+</section>
 
-    <div class="card">
-      <h4 class="small">Storage</h4>
-      <div class="small">Total images: <span id="count">0</span></div>
-      <div class="small" style="margin-top:.5rem">Storage used (approx): <span id="size">0 KB</span></div>
+<!-- LOGIN MODAL -->
+<div id="loginModal">
+    <div class="login-box">
+        <h3>Admin Login</h3>
+        <input id="user" placeholder="Username" />
+        <input id="pass" type="password" placeholder="Password" />
+        <button class="adminBtn" onclick="login()">Login</button>
     </div>
-
-  </aside>
-
-  <section class="preview-col">
-    <div class="card preview" id="mainPreview">
-      <h3 style="margin:0">Preview</h3>
-      <div style="width:100%;display:flex;gap:1rem;align-items:center;flex-wrap:wrap;margin-top:.75rem">
-        <div style="flex:1;min-width:240px">
-          <img id="previewImg" src="@@DATA_URL@@" alt="preview" style="max-height:420px;object-fit:contain;width:100%;background:#071427;padding:8px;border-radius:8px" />
-        </div>
-        <div style="flex:1;min-width:220px">
-          <h4 id="previewTitle">Sample: Leo Club Sainamaina</h4>
-          <p id="previewDesc" class="small">Mobile hero screenshot (click any item in the list to preview / edit)</p>
-          <div style="margin-top:1rem;display:flex;gap:.5rem;flex-wrap:wrap">
-            <button id="openModal" class="btn ghost">Open Large</button>
-            <button id="downloadPreview" class="btn">Download</button>
-            <span class="badge" id="previewBadge">source: embedded</span>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div class="card">
-      <h3 style="margin-top:0">Images</h3>
-      <div class="list" id="listArea"></div>
-    </div>
-
-    <div class="footer card small">
-      This dashboard stores images & metadata locally in your browser (localStorage). Works offline. Use "Import sample" to add the embedded image.
-    </div>
-  </section>
-</main>
-
-<!-- modal -->
-<div id="modal" class="modal" aria-hidden="true">
-  <div class="dialog">
-    <div class="dialog-header">
-      <div><strong id="modalTitle">Image Preview</strong><div class="small" id="modalMeta"></div></div>
-      <div style="display:flex;gap:.5rem">
-        <button id="modalEdit" class="icon-btn">Edit</button>
-        <button id="modalClose" class="icon-btn">Close</button>
-      </div>
-    </div>
-    <div style="display:flex;gap:1rem;flex-wrap:wrap">
-      <div style="flex:1"><img id="modalImg" src="" style="width:100%;border-radius:8px" /></div>
-      <div style="flex:1;min-width:240px">
-        <div class="form-row">
-          <input id="modalTitleInput" class="input" placeholder="Title" />
-          <input id="modalAmount" class="input" placeholder="(Optional) tag" />
-        </div>
-        <textarea id="modalDescInput" class="input" rows="6" placeholder="Description"></textarea>
-        <div style="display:flex;gap:.5rem;margin-top:.6rem">
-          <button id="saveEdit" class="btn">Save changes</button>
-          <button id="deleteBtn" class="btn ghost">Delete</button>
-          <button id="replaceBtn" class="btn ghost">Replace Image</button>
-          <input id="replaceFile" type="file" accept="image/*" style="display:none" />
-        </div>
-      </div>
-    </div>
-  </div>
 </div>
 
 <script>
-// Simple client-only CRUD using localStorage.
-// Data model: array of {id, title, desc, dataUrl, created}
+    // Toggle Menu
+    document.getElementById("menuIcon").onclick = () => {
+        let m = document.getElementById("menu");
+        m.style.display = m.style.display === "flex" ? "none" : "flex";
+        m.style.flexDirection = "column";
+    };
 
-// helpers
-const uid = () => 'id_' + Math.random().toString(36).slice(2,9);
-const LS_KEY = 'image_monitor_v1';
-
-function approxSizeKB(str) {
-  // rough bytes estimate of base64 length
-  if(!str) return 0;
-  return Math.round((str.length * 3/4) / 1024);
-}
-
-function readStore(){ try{ return JSON.parse(localStorage.getItem(LS_KEY) || '[]') }catch(e){ return [] } }
-function writeStore(a){ localStorage.setItem(LS_KEY, JSON.stringify(a)) }
-
-// UI refs
-const listArea = document.getElementById('listArea');
-const previewImg = document.getElementById('previewImg');
-const previewTitle = document.getElementById('previewTitle');
-const previewDesc = document.getElementById('previewDesc');
-const previewBadge = document.getElementById('previewBadge');
-const countEl = document.getElementById('count');
-const sizeEl = document.getElementById('size');
-
-const imageForm = document.getElementById('imageForm');
-const titleInput = document.getElementById('title');
-const descInput = document.getElementById('desc');
-const fileInput = document.getElementById('file');
-const importBtn = document.getElementById('importBtn');
-const clearAllBtn = document.getElementById('clearAll');
-const resetBtn = document.getElementById('resetBtn');
-const openModalBtn = document.getElementById('openModal');
-const downloadPreviewBtn = document.getElementById('downloadPreview');
-
-const modal = document.getElementById('modal');
-const modalImg = document.getElementById('modalImg');
-const modalTitleInput = document.getElementById('modalTitleInput');
-const modalDescInput = document.getElementById('modalDescInput');
-const modalTitleEl = document.getElementById('modalTitle');
-const modalMeta = document.getElementById('modalMeta');
-const saveEditBtn = document.getElementById('saveEdit');
-const deleteBtn = document.getElementById('deleteBtn');
-const replaceBtn = document.getElementById('replaceBtn');
-const replaceFile = document.getElementById('replaceFile');
-const modalEdit = document.getElementById('modalEdit');
-
-let activeId = null;
-let store = readStore();
-
-// render list
-function renderList(filter='') {
-  store = readStore();
-  listArea.innerHTML = '';
-  let items = store.slice(); // copy
-  // sorting (simple by created timestamp)
-  const sortBy = document.getElementById('sortBy')?.value || 'new';
-  if (sortBy === 'new') items = items.sort((a,b)=>b.created - a.created);
-  if (sortBy === 'old') items = items.sort((a,b)=>a.created - b.created);
-  if (sortBy === 'alpha') items = items.sort((a,b)=> (a.title||'').localeCompare(b.title||''));
-  // limit
-  const limit = document.getElementById('limit')?.value || 'all';
-  if(limit !== 'all') items = items.slice(0, Number(limit));
-
-  items = items.reverse(); // newest first in UI listing
-  items.forEach(it=>{
-    if (filter) {
-      const q = filter.toLowerCase();
-      if (!(it.title||'').toLowerCase().includes(q) && !(it.desc||'').toLowerCase().includes(q)) return;
+    // Login Logic
+    function openLogin() {
+        document.getElementById("loginModal").style.display = "flex";
     }
-    const el = document.createElement('div');
-    el.className = 'item';
-    el.dataset.id = it.id;
-    el.innerHTML = `<div class="thumb" style="background-image:url('${it.dataUrl}')"></div>
-      <div class="meta"><h4>${escapeHtml(it.title||'Untitled')}</h4><p>${escapeHtml(it.desc||'')}</p></div>
-      <div class="actions">
-        <button class="icon-btn" title="Edit">✏️</button>
-        <button class="icon-btn" title="Download">⬇️</button>
-      </div>`;
-    // click to preview
-    el.addEventListener('click', (e)=>{
-      if (e.target.closest('.icon-btn')) return;
-      openItem(it.id);
-    });
-    // edit button
-    el.querySelector('.icon-btn').addEventListener('click', (e)=>{ e.stopPropagation(); openItem(it.id); });
-    // download second button
-    el.querySelectorAll('.icon-btn')[1].addEventListener('click', (e)=>{ e.stopPropagation(); downloadDataUrl(it.dataUrl, it.title||'image') });
-    listArea.appendChild(el);
-  });
 
-  countEl.textContent = store.length;
-  // approx size
-  const total = store.reduce((s,i)=>s+(i.dataUrl?approxSizeKB(i.dataUrl):0),0);
-  sizeEl.textContent = total + ' KB';
-}
-
-// escape HTML
-function escapeHtml(s){ return String(s||'').replace(/[&<>"']/g, m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":"&#39;"})[m]) }
-
-// open preview of item
-function openItem(id) {
-  const it = store.find(x=>x.id===id);
-  if(!it) return;
-  activeId = id;
-  previewImg.src = it.dataUrl;
-  previewTitle.textContent = it.title;
-  previewDesc.textContent = it.desc;
-  previewBadge.textContent = 'source: saved';
-  // populate modal
-  modalImg.src = it.dataUrl;
-  modalTitleInput.value = it.title;
-  modalDescInput.value = it.desc;
-  modalTitleEl.textContent = it.title || 'Preview';
-  modalMeta.textContent = 'Created: ' + new Date(it.created).toLocaleString();
-}
-
-// helper read file
-function readFileAsDataURL(file){ return new Promise((res,rej)=>{ const r=new FileReader(); r.onload=()=>res(r.result); r.onerror=rej; r.readAsDataURL(file); }) }
-
-// download helper
-function downloadDataUrl(dataUrl, name){
-  const a = document.createElement('a');
-  a.href = dataUrl;
-  a.download = (name || 'image') + '.png';
-  document.body.appendChild(a);
-  a.click();
-  a.remove();
-}
-
-// form submit - create or update
-imageForm.addEventListener('submit', async (e)=>{
-  e.preventDefault();
-  const title = titleInput.value.trim();
-  const desc = descInput.value.trim();
-  // read file if provided
-  let dataUrl = null;
-  if (fileInput.files && fileInput.files[0]) {
-    dataUrl = await readFileAsDataURL(fileInput.files[0]);
-  }
-  store = readStore();
-  if (activeId) {
-    // update existing
-    const idx = store.findIndex(x=>x.id===activeId);
-    if (idx>=0) {
-      if (title) store[idx].title = title;
-      if (desc) store[idx].desc = desc;
-      if (dataUrl) store[idx].dataUrl = dataUrl;
-      writeStore(store);
-      renderList(document.getElementById('search').value);
-      openItem(activeId);
-      alert('Updated');
+    function login() {
+        let u = document.getElementById("user").value;
+        let p = document.getElementById("pass").value;
+        if (u === "admin" && p === "123") {
+            document.getElementById("admin").style.display = "block";
+            document.getElementById("loginModal").style.display = "none";
+        } else {
+            alert("Invalid Credentials!");
+        }
     }
-  } else {
-    // create new
-    const newItem = { id: uid(), title: title||'Untitled', desc, dataUrl: dataUrl||previewImg.src, created: Date.now() };
-    store.push(newItem);
-    writeStore(store);
-    renderList();
-    // set active to newly created
-    openItem(newItem.id);
-    alert('Saved');
-  }
-  imageForm.reset();
-  activeId = null;
-});
 
-// reset handler
-resetBtn.addEventListener('click', ()=>{ imageForm.reset(); activeId=null; previewBadge.textContent='source: embedded'; previewTitle.textContent='Sample: Leo Club Sainamaina'; previewDesc.textContent='Mobile hero screenshot (click any item in the list to preview / edit)'; previewImg.src = document.getElementById('previewImg').getAttribute('src') });
+    // Add Announcement
+    const announcements = [];
 
-// import embedded sample to store
-importBtn.addEventListener('click', ()=>{
-  const sample = { id: uid(), title: 'Leo Club Sainamaina (sample)', desc: 'Mobile hero screenshot', dataUrl: document.getElementById('previewImg').src, created: Date.now() };
-  store = readStore(); store.push(sample); writeStore(store); renderList(); openItem(sample.id);
-  alert('Sample imported');
-});
+    function addAnnouncement() {
+        const title = prompt("Enter announcement title:");
+        if (!title) return;
 
-// clear all
-clearAllBtn.addEventListener('click', ()=>{
-  if(!confirm('Clear all stored images?')) return;
-  localStorage.removeItem(LS_KEY);
-  store = []; renderList(); alert('Cleared');
-});
+        const newAnn = {
+            title,
+            date: new Date().toLocaleDateString()
+        };
 
-// search
-document.getElementById('search').addEventListener('input', (e)=> renderList(e.target.value));
-document.getElementById('sortBy')?.addEventListener('change', ()=> renderList(document.getElementById('search').value));
-document.getElementById('limit')?.addEventListener('change', ()=> renderList(document.getElementById('search').value));
+        announcements.push(newAnn);
+        renderAnnouncements();
+    }
 
-// open modal
-openModalBtn.addEventListener('click', ()=>{ if(!previewImg.src) return; modal.classList.add('open'); modal.setAttribute('aria-hidden','false'); });
+    function renderAnnouncements() {
+        const list = document.getElementById("announceList");
+        const adminTable = document.getElementById("adminAnnounceTable");
 
-// close modal
-document.getElementById('modalClose').addEventListener('click', ()=>{ modal.classList.remove('open'); modal.setAttribute('aria-hidden','true'); });
+        list.innerHTML = "";
+        adminTable.innerHTML = "";
 
-// save changes in modal (edit metadata)
-saveEditBtn.addEventListener('click', ()=>{
-  if(!activeId){ alert('Select an item from the list first'); return; }
-  store = readStore();
-  const it = store.find(x=>x.id===activeId);
-  if(!it) return;
-  it.title = modalTitleInput.value;
-  it.desc = modalDescInput.value;
-  writeStore(store);
-  renderList();
-  openItem(activeId);
-  alert('Saved');
-});
+        announcements.forEach(a => {
+            list.innerHTML += `<p>🔔 ${a.title} — <small>${a.date}</small></p>`;
+            adminTable.innerHTML += `<tr><td>${a.title}</td><td>${a.date}</td></tr>`;
+        });
 
-// delete
-deleteBtn.addEventListener('click', ()=>{
-  if(!activeId) return;
-  if(!confirm('Delete this image?')) return;
-  store = readStore().filter(x=>x.id!==activeId);
-  writeStore(store);
-  modal.classList.remove('open');
-  activeId = null;
-  renderList();
-  alert('Deleted');
-});
-
-// replace image
-replaceBtn.addEventListener('click', ()=> replaceFile.click());
-replaceFile.addEventListener('change', async (e)=>{
-  if(!activeId) return;
-  const f = e.target.files[0];
-  if(!f) return;
-  const dataUrl = await readFileAsDataURL(f);
-  store = readStore();
-  const it = store.find(x=>x.id===activeId);
-  it.dataUrl = dataUrl;
-  writeStore(store);
-  renderList();
-  openItem(activeId);
-  alert('Replaced image');
-});
-
-// download preview
-downloadPreviewBtn.addEventListener('click', ()=> downloadDataUrl(previewImg.src, previewTitle.textContent || 'preview'));
-
-// modal edit toggles
-modalEdit.addEventListener('click', ()=>{ modalTitleInput.focus(); })
-
-// utilities: on load render
-renderList();
-
-// expose global for dev console
-window._IM = { readStore, writeStore, renderList, approxSizeKB };
-
+        document.getElementById("announceCount").innerText = announcements.length;
+    }
 </script>
+
 </body>
 </html>
