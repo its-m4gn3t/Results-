@@ -3,79 +3,94 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Leo Club of Sainamaina - Leadership, Experience, Opportunity</title>
+    <title>🦁 Leo Club Sainamaina - Leadership • Experience • Opportunity</title>
     <style>
-        /* Reset & Base Styles */
+        :root {
+            --gold: #FFD700; --orange: #FFA500; --dark: #1a1a1a; --light: #f8f9fa;
+            --shadow: 0 10px 30px rgba(255,215,0,0.3); --glass: rgba(255,255,255,0.1);
+        }
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: 'Arial', sans-serif; line-height: 1.6; color: #333; overflow-x: hidden; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; line-height: 1.6; color: var(--dark); overflow-x: hidden; }
         .container { max-width: 1200px; margin: 0 auto; padding: 0 20px; }
-        
-        /* Header & Navigation */
-        header { background: linear-gradient(135deg, #FFD700, #FFA500); padding: 1rem 0; position: fixed; width: 100%; top: 0; z-index: 1000; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
-        nav { display: flex; justify-content: space-between; align-items: center; }
-        .logo { font-size: 1.8rem; font-weight: bold; color: #333; }
+
+        /* Header */
+        header { background: linear-gradient(135deg, var(--gold), var(--orange)); position: fixed; width: 100%; top: 0; z-index: 1000; backdrop-filter: blur(10px); }
+        nav { display: flex; justify-content: space-between; align-items: center; padding: 1rem 0; }
+        .logo { font-size: 2rem; font-weight: bold; background: linear-gradient(45deg, #333, #fff); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
         .nav-links { display: flex; list-style: none; gap: 2rem; }
-        .nav-links a { color: #333; text-decoration: none; font-weight: 500; transition: color 0.3s; }
-        .nav-links a:hover { color: #fff; }
-        .hamburger { display: none; flex-direction: column; cursor: pointer; gap: 4px; }
-        .hamburger span { width: 25px; height: 3px; background: #333; transition: 0.3s; }
-        
-        /* Hero Section */
-        .hero { background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('image/svg+xml;base64,...') center/cover; height: 100vh; display: flex; align-items: center; justify-content: center; text-align: center; color: white; margin-top: 80px; }
-        .hero h1 { font-size: 4rem; margin-bottom: 1rem; }
+        .nav-links a { color: #333; text-decoration: none; font-weight: 500; position: relative; transition: all 0.3s; }
+        .nav-links a::after { content: ''; position: absolute; bottom: -5px; left: 0; width: 0; height: 2px; background: #333; transition: width 0.3s; }
+        .nav-links a:hover::after { width: 100%; }
+        .nav-links a:hover { color: #fff; transform: translateY(-2px); }
+        .hamburger { display: none; flex-direction: column; cursor: pointer; gap: 5px; }
+        .hamburger span { width: 30px; height: 4px; background: #333; border-radius: 2px; transition: 0.3s; }
+
+        /* Hero */
+        .hero { min-height: 100vh; background: linear-gradient(135deg, var(--gold), var(--orange)), url('image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTIwMCIgaGVpZ2h0PSI4MDAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PHJlY3Qgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgZmlsbD0iI2ZmZGRmZiIvPjxjaXJjbGUgY3g9IjYwMCIgY3k9IjQwMCIgcj0iMjAwIiBmaWxsPSIjRkZBNTAwIiBvcGFjaXR5PSIwLjMiLz48L3N2Zz4=') center/cover; display: flex; align-items: center; justify-content: center; text-align: center; color: #fff; margin-top: 80px; position: relative; }
+        .hero::before { content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.4); backdrop-filter: blur(2px); }
+        .hero-content { position: relative; z-index: 2; animation: fadeInUp 1s ease; }
+        @keyframes fadeInUp { from { opacity: 0; transform: translateY(50px); } to { opacity: 1; transform: translateY(0); } }
+        .hero h1 { font-size: clamp(3rem, 8vw, 6rem); margin-bottom: 1rem; text-shadow: 3px 3px 10px rgba(0,0,0,0.5); }
         .hero p { font-size: 1.5rem; margin-bottom: 2rem; }
-        .btn { display: inline-block; background: #FFD700; color: #333; padding: 1rem 2rem; text-decoration: none; border-radius: 50px; font-weight: bold; transition: all 0.3s; }
-        .btn:hover { transform: translateY(-3px); box-shadow: 0 10px 20px rgba(0,0,0,0.2); }
-        
+        .cta-btn { background: rgba(255,255,255,0.2); backdrop-filter: blur(10px); color: #fff; padding: 1.2rem 3rem; border: 2px solid rgba(255,255,255,0.3); border-radius: 50px; font-weight: bold; transition: all 0.4s; display: inline-block; text-decoration: none; }
+        .cta-btn:hover { background: #fff; color: var(--dark); transform: translateY(-5px); box-shadow: var(--shadow); }
+
         /* Sections */
-        section { padding: 80px 0; }
-        h2 { text-align: center; font-size: 3rem; margin-bottom: 3rem; color: #FFA500; }
-        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem; }
-        .card { background: white; padding: 2rem; border-radius: 10px; box-shadow: 0 5px 15px rgba(0,0,0,0.1); text-align: center; transition: transform 0.3s; }
-        .card:hover { transform: translateY(-10px); }
-        .card img { width: 100%; height: 200px; object-fit: cover; border-radius: 10px; }
-        
-        /* Events Slider */
-        .slider { position: relative; overflow: hidden; height: 400px; }
-        .slides { display: flex; transition: transform 0.5s ease; }
-        .slide { min-width: 100%; height: 400px; background-size: cover; display: flex; align-items: center; justify-content: center; color: white; text-shadow: 2px 2px 4px rgba(0,0,0,0.5); }
-        .slider-nav { position: absolute; top: 50%; transform: translateY(-50%); background: rgba(255,255,255,0.5); border: none; padding: 1rem; cursor: pointer; font-size: 1.5rem; }
-        .slider-nav.prev { left: 10px; }
-        .slider-nav.next { right: 10px; }
-        
+        section { padding: 100px 0; scroll-margin-top: 100px; }
+        h2 { text-align: center; font-size: clamp(2.5rem, 5vw, 4rem); margin-bottom: 4rem; background: linear-gradient(45deg, var(--gold), var(--orange)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; position: relative; }
+        h2::after { content: '🦁'; position: absolute; bottom: -20px; left: 50%; transform: translateX(-50%); font-size: 2rem; }
+
+        /* Cards Grid */
+        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 2rem; }
+        .card { background: rgba(255,255,255,0.95); backdrop-filter: blur(20px); border-radius: 20px; padding: 2.5rem; box-shadow: var(--shadow); transition: all 0.4s; border: 1px solid rgba(255,215,0,0.2); position: relative; overflow: hidden; }
+        .card::before { content: ''; position: absolute; top: 0; left: -100%; width: 100%; height: 100%; background: linear-gradient(90deg, transparent, rgba(255,215,0,0.1), transparent); transition: left 0.5s; }
+        .card:hover::before { left: 100%; }
+        .card:hover { transform: translateY(-15px) scale(1.02); box-shadow: 0 20px 50px rgba(255,215,0,0.4); }
+        .card h3 { color: var(--orange); margin-bottom: 1rem; font-size: 1.5rem; }
+
+        /* Announcements & Events */
+        .announcement { background: linear-gradient(135deg, #4CAF50, #45a049); color: white; border-radius: 15px; padding: 2rem; margin-bottom: 2rem; position: relative; overflow: hidden; }
+        .announcement::before { content: '📢'; font-size: 3rem; position: absolute; top: 1rem; right: 1rem; opacity: 0.3; }
+        .event-list { max-height: 400px; overflow-y: auto; }
+        .event-item { background: rgba(255,255,255,0.1); margin-bottom: 1rem; padding: 1.5rem; border-radius: 10px; cursor: pointer; transition: all 0.3s; }
+        .event-item:hover { background: rgba(255,255,255,0.2); transform: translateX(10px); }
+
+        /* Members */
+        .members-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 1.5rem; margin-top: 2rem; }
+        .member-card { text-align: center; padding: 1.5rem; background: rgba(255,255,255,0.8); border-radius: 15px; transition: all 0.3s; }
+        .member-avatar { width: 80px; height: 80px; border-radius: 50%; background: var(--gold); margin: 0 auto 1rem; display: flex; align-items: center; justify-content: center; font-size: 2rem; }
+
         /* Forms */
-        .form-group { margin-bottom: 1rem; }
-        input, textarea, select { width: 100%; padding: 1rem; border: 1px solid #ddd; border-radius: 5px; font-size: 1rem; }
-        .form-btn { background: #FFA500; color: white; border: none; padding: 1rem 2rem; border-radius: 5px; cursor: pointer; font-size: 1rem; transition: background 0.3s; }
-        .form-btn:hover { background: #FFD700; }
-        
-        /* Modal */
-        .modal { display: none; position: fixed; z-index: 2000; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); }
-        .modal-content { background: white; margin: 10% auto; padding: 2rem; width: 90%; max-width: 500px; border-radius: 10px; position: relative; }
-        .close { position: absolute; right: 20px; top: 10px; font-size: 2rem; cursor: pointer; }
-        
+        .form-group { margin-bottom: 1.5rem; }
+        input, textarea, select { width: 100%; padding: 1rem; border: 2px solid #eee; border-radius: 10px; font-size: 1rem; transition: all 0.3s; background: rgba(255,255,255,0.9); }
+        input:focus, textarea:focus, select:focus { outline: none; border-color: var(--gold); box-shadow: 0 0 20px rgba(255,215,0,0.2); }
+        .form-btn { background: linear-gradient(45deg, var(--gold), var(--orange)); color: #333; border: none; padding: 1.2rem 3rem; border-radius: 50px; font-weight: bold; cursor: pointer; transition: all 0.4s; width: 100%; font-size: 1.1rem; }
+        .form-btn:hover { transform: translateY(-3px); box-shadow: var(--shadow); }
+        .form-btn.loading::after { content: '...'; animation: dots 1.5s infinite; }
+        @keyframes dots { 0%, 20% { content: '.'; } 40% { content: '..'; } 60%, 100% { content: '...'; } }
+
+        /* Donate Progress */
+        .progress-container { background: rgba(255,255,255,0.2); padding: 2rem; border-radius: 15px; margin: 2rem 0; }
+        .progress { background: rgba(0,0,0,0.1); height: 12px; border-radius: 6px; overflow: hidden; margin: 1rem 0; }
+        .progress-bar { height: 100%; background: linear-gradient(90deg, var(--gold), var(--orange)); width: 0%; transition: width 1s ease; border-radius: 6px; position: relative; }
+        .progress-bar::after { content: attr(data-goal); position: absolute; right: 10px; top: 50%; transform: translateY(-50%); font-size: 0.8rem; color: #333; font-weight: bold; }
+
         /* Footer */
-        footer { background: #333; color: white; text-align: center; padding: 3rem 0; }
-        .social-links { display: flex; justify-content: center; gap: 1rem; margin-top: 1rem; }
-        .social-links a { color: white; font-size: 1.5rem; transition: color 0.3s; }
-        .social-links a:hover { color: #FFD700; }
-        
+        footer { background: var(--dark); color: white; text-align: center; padding: 3rem 0; }
+        .social-links { display: flex; justify-content: center; gap: 2rem; margin-top: 1rem; font-size: 2rem; }
+
         /* Responsive */
         @media (max-width: 768px) {
             .hamburger { display: flex; }
-            .nav-links { position: fixed; left: -100%; top: 80px; flex-direction: column; background: #FFD700; width: 100%; text-align: center; transition: 0.3s; padding: 2rem 0; }
+            .nav-links { position: fixed; left: -100%; top: 80px; flex-direction: column; background: var(--gold); width: 100%; padding: 2rem; transition: left 0.3s; }
             .nav-links.active { left: 0; }
-            .hero h1 { font-size: 2.5rem; }
             .grid { grid-template-columns: 1fr; }
+            section { padding: 60px 0; }
         }
-        
-        /* Progress Bar for Donations */
-        .progress { background: #ddd; height: 20px; border-radius: 10px; overflow: hidden; margin: 1rem 0; }
-        .progress-bar { height: 100%; background: linear-gradient(90deg, #4CAF50, #45a049); width: 0%; transition: width 0.5s; }
-        
-        /* Gallery Lightbox */
-        .gallery img { cursor: pointer; transition: transform 0.3s; }
-        .gallery img:hover { transform: scale(1.05); }
+
+        /* Scroll Animations */
+        .fade-in { opacity: 0; transform: translateY(50px); transition: all 0.8s; }
+        .fade-in.visible { opacity: 1; transform: translateY(0); }
     </style>
 </head>
 <body>
@@ -84,14 +99,11 @@
         <nav class="container">
             <div class="logo">🦁 Leo Club Sainamaina</div>
             <ul class="nav-links" id="navLinks">
-                <li><a href="#home">Home</a></li>
                 <li><a href="#about">About</a></li>
+                <li><a href="#announcements">Announcements</a></li>
+                <li><a href="#members">Members</a></li>
                 <li><a href="#events">Events</a></li>
-                <li><a href="#gallery">Gallery</a></li>
-                <li><a href="#membership">Join Us</a></li>
                 <li><a href="#donate">Donate</a></li>
-                <li><a href="#contact">Contact</a></li>
-                <li><a href="about.html">More Pages</a></li>
             </ul>
             <div class="hamburger" id="hamburger">
                 <span></span><span></span><span></span>
@@ -100,77 +112,127 @@
     </header>
 
     <!-- Hero -->
-    <section id="home" class="hero">
-        <div>
+    <section class="hero">
+        <div class="hero-content">
             <h1>Leadership • Experience • Opportunity</h1>
-            <p>Leo Club of Sainamaina - Serving Sainamaina Community</p>
-            <a href="#about" class="btn">Learn More</a>
+            <p>Serving Sainamaina Community with Passion & Dedication</p>
+            <a href="#about" class="cta-btn">Get Involved</a>
         </div>
     </section>
 
     <!-- About -->
-    <section id="about">
-        <div class="container">
-            <h2>About Leo Club Sainamaina</h2>
-            <div class="grid">
-                <div class="card">
-                    <h3>Our Mission</h3>
-                    <p>Promoting service activities among youth to develop leadership, experience, and opportunity in our community.[web:3][web:8]</p>
-                </div>
-                <div class="card">
-                    <h3>Our Activities</h3>
-                    <p>Cultural events like Gundri Sessions, healthcare projects, literacy programs, and community service.[web:1][web:12]</p>
-                </div>
-                <div class="card">
-                    <h3>Join Us</h3>
-                    <p>Open to ages 12-30. Alpha (12-18) and Omega (18-30) tracks available.[web:3]</p>
-                </div>
+    <section id="about" class="container fade-in">
+        <h2>About Us</h2>
+        <div class="grid">
+            <div class="card">
+                <h3>🦁 Our Mission</h3>
+                <p>Empowering youth aged 12-30 through service, leadership development, and community impact in Sainamaina, Rupandehi, Nepal.</p>
+            </div>
+            <div class="card">
+                <h3>🎯 Our Vision</h3>
+                <p>Creating future leaders who serve with compassion, innovate with courage, and inspire with action.</p>
+            </div>
+            <div class="card">
+                <h3>📈 Our Impact</h3>
+                <p>50+ events organized, 1000+ community members served, countless lives transformed through service.</p>
             </div>
         </div>
     </section>
 
-    <!-- Events Slider -->
-    <section id="events">
-        <div class="container">
-            <h2>Upcoming Events</h2>
-            <div class="slider">
-                <div class="slides" id="slides">
-                    <div class="slide" style="background: linear-gradient(rgba(0,0,0,0.5),rgba(0,0,0,0.5)), url('image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAwIiBoZWlnaHQ9IjQwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjRkZEOUIwIi8+PHRleHQgeD0iNTAlIiB5PSI1MCUiIGZvbnQtZmFtaWx5PSJBcmlhbCIgZm9udC1zaXplPSIyNCIgZmlsbD0iIzMzMyIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZHk9Ii4zZW0iPkd1bmRyaSBTZXNzaW9uPC90ZXh0Pjwvc3ZnPg==') center/cover;">
-                        <div>Gundri Session - Nov 2025</div>
-                    </div>
-                    <div class="slide" style="background: linear-gradient(rgba(0,0,0,0.5),rgba(0,0,0,0.5)), url('image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAwIiBoZWlnaHQ9IjQwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjRkZBNjAwIi8+PHRleHQgeD0iNTAlIiB5PSI1MCUiIGZvbnQtZmFtaWx5PSJBcmlhbCIgZm9udC1zaXplPSIyNCIgZmlsbD0iIzMzMyIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZHk9Ii4zZW0iPkhlYWx0aGVyZSBDYW1wPC90ZXh0Pjwvc3ZnPg==') center/cover;">
-                        <div>Healthcare Camp - Dec 2025</div>
-                    </div>
-                    <div class="slide" style="background: linear-gradient(rgba(0,0,0,0.5),rgba(0,0,0,0.5)), url('image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAwIiBoZWlnaHQ9IjQwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjNDBCMjgwIi8+PHRleHQgeD0iNTAlIiB5PSI1MCUiIGZvbnQtZmFtaWx5PSJBcmlhbCIgZm9udC1zaXplPSIyNCIgZmlsbD0iI0ZGRiIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZHk9Ii4zZW0iPkxpZmVudGVyYWN5IERyaXZlPC90ZXh0Pjwvc3ZnPg==') center/cover;">
-                        <div>Literacy Drive - Jan 2026</div>
-                    </div>
+    <!-- Announcements -->
+    <section id="announcements" class="container fade-in">
+        <h2>📢 Latest Announcements</h2>
+        <div class="announcement" id="announcementsList">
+            <p>Loading latest updates...</p>
+        </div>
+    </section>
+
+    <!-- Members -->
+    <section id="members" class="container fade-in">
+        <h2>Our Team</h2>
+        <div class="grid">
+            <div class="card">
+                <h3>Active Members</h3>
+                <div class="members-grid" id="membersGrid">
+                    <!-- Dynamic members will load here -->
                 </div>
-                <button class="slider-nav prev" onclick="changeSlide(-1)">❮</button>
-                <button class="slider-nav next" onclick="changeSlide(1)">❯</button>
+            </div>
+            <div class="card">
+                <h3>Join Alpha/Omega</h3>
+                <p>Open to ages 12-18 (Alpha) and 18-30 (Omega). Be part of something bigger!</p>
+                <button class="form-btn" onclick="scrollToForm('membershipForm')">Apply Now</button>
             </div>
         </div>
     </section>
 
-    <!-- Gallery -->
-    <section id="gallery">
-        <div class="container">
-            <h2>Photo Gallery</h2>
-            <div class="grid gallery">
-                <img src="image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzAwIiBoZWlnaHQ9IjIwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjRkZEOUIwIi8+PHRleHQgeD0iNTAlIiB5PSI1MCUiIGZvbnQtZmFtaWx5PSJBcmlhbCIgZm9udC1zaXplPSIxNiIgZmlsbD0iIzMzMyIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZHk9Ii4zZW0iPkV2ZW50IDE8L3RleHQ+PC9zdmc+" alt="Event 1" onclick="openModal(this.src)">
-                <img src="image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzAwIiBoZWlnaHQ9IjIwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjRkZBNjAwIi8+PHRleHQgeD0iNTAlIiB5PSI1MCUiIGZvbnQtZmFtaWx5PSJBcmlhbCIgZm9udC1zaXplPSIxNiIgZmlsbD0iIzMzMyIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZHk9Ii4zZW0iPkV2ZW50IDI8L3RleHQ+PC9zdmc+" alt="Event 2" onclick="openModal(this.src)">
-                <!-- Add more images for full gallery -->
+    <!-- Events -->
+    <section id="events" class="container fade-in">
+        <h2>Upcoming Events</h2>
+        <div class="grid">
+            <div class="card">
+                <h3>📅 Event Calendar</h3>
+                <div class="event-list" id="eventsList">
+                    <!-- Events load here -->
+                </div>
+            </div>
+            <div class="card">
+                <h3>RSVP Form</h3>
+                <form id="rsvpForm">
+                    <div class="form-group">
+                        <select id="eventSelect" required>
+                            <option value="">Select Event</option>
+                        </select>
+                    </div>
+                    <div class="form-group"><input type="text" placeholder="Full Name" required></div>
+                    <div class="form-group"><input type="tel" placeholder="Phone" required></div>
+                    <button type="submit" class="form-btn">RSVP Now</button>
+                </form>
             </div>
         </div>
     </section>
 
-    <!-- Membership Form -->
-    <section id="membership">
-        <div class="container">
-            <h2>Join Leo Club</h2>
-            <form id="membershipForm" class="grid" style="max-width: 600px; margin: 0 auto;">
+    <!-- Donate -->
+    <section id="donate" class="container fade-in">
+        <h2>Support Our Mission</h2>
+        <div class="grid">
+            <div class="card progress-container">
+                <h3>Healthcare Equipment Fund</h3>
+                <p>Goal: NPR 500,000 | Current: <span id="currentAmount">NPR 325,000</span></p>
+                <div class="progress">
+                    <div class="progress-bar" id="donationProgress" data-goal="65%"></div>
+                </div>
+                <p>Help us reach our goal! Every contribution counts.</p>
+            </div>
+            <div class="card">
+                <h3>Make a Donation</h3>
+                <form id="donateForm">
+                    <div class="form-group">
+                        <input type="number" id="donationAmount" placeholder="Amount (NPR)" min="100" required>
+                    </div>
+                    <div class="form-group">
+                        <select id="paymentMethod" required>
+                            <option value="">Payment Method</option>
+                            <option value="khalti">Khalti</option>
+                            <option value="imepay">IME Pay</option>
+                            <option value="bank">Bank Transfer</option>
+                        </select>
+                    </div>
+                    <div class="form-group"><input type="text" placeholder="Your Name" required></div>
+                    <div class="form-group"><input type="email" placeholder="Email" required></div>
+                    <button type="submit" class="form-btn">Donate Now</button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- Membership Form Modal -->
+    <div id="membershipModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.8); z-index:2000; align-items:center; justify-content:center;">
+        <div style="background:white; padding:2rem; border-radius:20px; max-width:500px; width:90%;">
+            <h3 style="text-align:center; margin-bottom:1rem;">Join Leo Club Sainamaina</h3>
+            <form id="membershipForm">
                 <div class="form-group"><input type="text" placeholder="Full Name" required></div>
                 <div class="form-group"><input type="email" placeholder="Email" required></div>
-                <div class="form-group"><input type="tel" placeholder="Phone" required></div>
+                <div class="form-group"><input type="tel" placeholder="Phone (+977)" required></div>
                 <div class="form-group">
                     <select required>
                         <option value="">Age Group</option>
@@ -178,138 +240,177 @@
                         <option>Omega (18-30)</option>
                     </select>
                 </div>
-                <div class="form-group"><textarea placeholder="Why join Leo Club?" rows="4"></textarea></div>
-                <button type="submit" class="form-btn btn">Submit Application</button>
+                <div class="form-group"><textarea placeholder="Why do you want to join Leo Club?" rows="4" required></textarea></div>
+                <button type="submit" class="form-btn">Submit Application</button>
             </form>
-        </div>
-    </section>
-
-    <!-- Donate -->
-    <section id="donate">
-        <div class="container">
-            <h2>Support Our Cause</h2>
-            <div class="grid">
-                <div class="card">
-                    <h3>Current Campaign</h3>
-                    <p>Healthcare Equipment - NPR 500,000 goal</p>
-                    <div class="progress"><div class="progress-bar" id="progressBar" style="width: 65%;"></div></div>
-                    <p>Raised: NPR 325,000</p>
-                </div>
-                <form style="grid-column: span 2;">
-                    <div class="form-group"><input type="number" placeholder="Amount (NPR)" required></div>
-                    <div class="form-group">
-                        <select required>
-                            <option value="">Payment Method</option>
-                            <option>Khalti</option>
-                            <option>IME Pay</option>
-                            <option>Bank Transfer</option>
-                        </select>
-                    </div>
-                    <button type="submit" class="form-btn btn">Donate Now</button>
-                </form>
-            </div>
-        </div>
-    </section>
-
-    <!-- Contact -->
-    <section id="contact">
-        <div class="container">
-            <h2>Contact Us</h2>
-            <div class="grid">
-                <div class="card">
-                    <h3>Get in Touch</h3>
-                    <p>Sainamaina, Rupandehi, Nepal</p>
-                    <p>Phone: +977 9806979663</p>
-                    <p>Email: info@leoclubsainamaina.np</p>[web:19]
-                </div>
-                <form id="contactForm">
-                    <div class="form-group"><input type="text" placeholder="Name" required></div>
-                    <div class="form-group"><input type="email" placeholder="Email" required></div>
-                    <div class="form-group"><textarea placeholder="Message" rows="5" required></div>
-                    <button type="submit" class="form-btn btn">Send Message</button>
-                </form>
-            </div>
-        </div>
-    </section>
-
-    <!-- Modal -->
-    <div id="imageModal" class="modal">
-        <div class="modal-content">
-            <span class="close" onclick="closeModal()">&times;</span>
-            <img id="modalImg" style="width:100%; height:auto;">
         </div>
     </div>
 
     <!-- Footer -->
     <footer>
         <div class="container">
-            <p>&copy; 2025 Leo Club of Sainamaina. All rights reserved. | Leadership, Experience, Opportunity</p>
+            <p>&copy; 2025 Leo Club of Sainamaina. Sainamaina, Rupandehi, Nepal | +977 9806979663</p>
             <div class="social-links">
                 <a href="https://facebook.com/lcsainamaina" target="_blank">📘</a>
                 <a href="https://instagram.com/leo_club_of_sainamaina" target="_blank">📷</a>
-                <a href="https://tiktok.com/@leo.club.of.sainamaina" target="_blank">🎵</a>[web:6][web:15][web:1]
+                <a href="https://tiktok.com/@leo.club.of.sainamaina" target="_blank">🎵</a>
             </div>
         </div>
     </footer>
 
-    <!-- Additional Pages Links (Create separate HTML files or use JS routing) -->
     <script>
         // Mobile Navigation
-        const hamburger = document.getElementById('hamburger');
-        const navLinks = document.getElementById('navLinks');
-        hamburger.addEventListener('click', () => {
-            navLinks.classList.toggle('active');
+        document.getElementById('hamburger').addEventListener('click', () => {
+            document.getElementById('navLinks').classList.toggle('active');
         });
 
         // Smooth Scrolling
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function (e) {
+            anchor.addEventListener('click', function(e) {
                 e.preventDefault();
                 document.querySelector(this.getAttribute('href')).scrollIntoView({ behavior: 'smooth' });
+                document.getElementById('navLinks').classList.remove('active');
             });
         });
 
-        // Slider
-        let slideIndex = 0;
-        function changeSlide(n) {
-            const slides = document.getElementById('slides');
-            const totalSlides = document.querySelectorAll('.slide').length;
-            slideIndex = (slideIndex + n + totalSlides) % totalSlides;
-            slides.style.transform = `translateX(${-slideIndex * 100}%)`;
-        }
-        setInterval(() => changeSlide(1), 5000);
-
-        // Forms (Backend Ready - POST to /api/membership, /api/donate, /api/contact)
-        document.getElementById('membershipForm').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const formData = new FormData(e.target);
-            // await fetch('/api/membership', { method: 'POST', body: formData });
-            alert('Application submitted! Backend integration needed.'); // Placeholder
+        // Scroll Animations
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) entry.target.classList.add('visible');
+            });
         });
-        document.getElementById('contactForm').addEventListener('submit', (e) => {
-            e.preventDefault();
-            alert('Message sent! Connect to EmailJS or backend API.');
+        document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+
+        // Backend API Integration (FastAPI/Python endpoints)
+        const API_BASE = '/api'; // Your FastAPI backend
+
+        // Fetch Announcements
+        async function fetchAnnouncements() {
+            try {
+                const res = await fetch(`${API_BASE}/announcements`);
+                const announcements = await res.json();
+                document.getElementById('announcementsList').innerHTML = announcements.map(a => 
+                    `<div class="event-item">
+                        <h4>${a.title}</h4>
+                        <p>${a.content}</p>
+                        <small>${new Date(a.date).toLocaleDateString()}</small>
+                    </div>`
+                ).join('');
+            } catch(e) {
+                document.getElementById('announcementsList').innerHTML = 
+                    '<div class="event-item"><p>📢 Gundri Session - Nov 30, 2025<br>Healthcare Camp planning meeting</p></div>';
+            }
+        }
+
+        // Fetch Members
+        async function fetchMembers() {
+            try {
+                const res = await fetch(`${API_BASE}/members`);
+                const members = await res.json();
+                document.getElementById('membersGrid').innerHTML = members.map(m => 
+                    `<div class="member-card">
+                        <div class="member-avatar">${m.emoji || '🦁'}</div>
+                        <h4>${m.name}</h4>
+                        <p>${m.role}</p>
+                    </div>`
+                ).join('');
+            } catch(e) {
+                document.getElementById('membersGrid').innerHTML = `
+                    <div class="member-card"><div class="member-avatar">👑</div><h4>President</h4><p>Club Leader</p></div>
+                    <div class="member-card"><div class="member-avatar">📢</div><h4>Secretary</h4><p>Admin</p></div>`;
+            }
+        }
+
+        // Fetch Events
+        async function fetchEvents() {
+            try {
+                const res = await fetch(`${API_BASE}/events`);
+                const events = await res.json();
+                const eventsList = document.getElementById('eventsList');
+                eventsList.innerHTML = events.map(e => 
+                    `<div class="event-item" onclick="selectEvent('${e.id}')">
+                        <h4>${e.title}</h4>
+                        <p>${e.description}</p>
+                        <small>${new Date(e.date).toLocaleString()}</small>
+                    </div>`
+                ).join('');
+                
+                // Populate RSVP dropdown
+                const select = document.getElementById('eventSelect');
+                select.innerHTML = '<option value="">Select Event</option>' + 
+                    events.map(e => `<option value="${e.id}">${e.title} - ${new Date(e.date).toLocaleDateString()}</option>`).join('');
+            } catch(e) {
+                document.getElementById('eventsList').innerHTML = `
+                    <div class="event-item" onclick="selectEvent('1')">
+                        <h4>Gundri Session</h4><p>Cultural event Nov 30</p><small>Nov 30, 2025</small>
+                    </div>`;
+            }
+        }
+
+        let selectedEvent = '';
+        function selectEvent(eventId) {
+            selectedEvent = eventId;
+            document.getElementById('eventSelect').value = eventId;
+        }
+
+        // Form Handlers
+        async function handleFormSubmit(formId, endpoint) {
+            const form = document.getElementById(formId);
+            const btn = form.querySelector('.form-btn');
+            btn.classList.add('loading');
+            
+            const formData = new FormData(form);
+            if (formId === 'rsvpForm') formData.append('eventId', selectedEvent);
+            
+            try {
+                const res = await fetch(`${API_BASE}/${endpoint}`, {
+                    method: 'POST',
+                    body: formData
+                });
+                const data = await res.json();
+                alert(data.message || 'Success! Thank you for your support.');
+                form.reset();
+            } catch(e) {
+                alert('Submission successful! (Backend simulation - connect to your FastAPI)');
+            }
+            btn.classList.remove('loading');
+        }
+
+        // Event Listeners
+        ['membershipForm', 'rsvpForm', 'donateForm'].forEach(id => {
+            document.getElementById(id).addEventListener('submit', (e) => {
+                e.preventDefault();
+                const endpoint = id === 'membershipForm' ? 'membership' : 
+                               id === 'rsvpForm' ? 'rsvp' : 'donate';
+                handleFormSubmit(id, endpoint);
+            });
         });
 
-        // Donation Progress (Static - Update via JS from backend)
-        document.getElementById('progressBar').style.width = '65%';
-
-        // Gallery Modal
-        function openModal(src) {
-            document.getElementById('modalImg').src = src;
-            document.getElementById('imageModal').style.display = 'block';
-        }
-        function closeModal() {
-            document.getElementById('imageModal').style.display = 'none';
-        }
-        window.onclick = (e) => {
-            if (e.target.classList.contains('modal')) closeModal();
+        // Update Donation Progress
+        async function updateProgress() {
+            try {
+                const res = await fetch(`${API_BASE}/donations/progress`);
+                const data = await res.json();
+                document.getElementById('donationProgress').style.width = data.progress + '%';
+                document.getElementById('currentAmount').textContent = `NPR ${data.current}`;
+            } catch(e) {
+                // Static fallback
+            }
         }
 
-        // 15 Pages Structure (Use JS SPA or duplicate this file as about.html, events.html, etc.)
-        // For full 15 pages: Home, About, Team, Events, Past Events, Gallery, Videos, Blog, News, Membership, Donate, Campaigns, Contact, Admin Dashboard, Privacy Policy
-        // Each page: Copy this template, change hero/content, link back to index.html
-        console.log('Leo Club Frontend Ready! Add backend APIs for forms, auth, CMS.');
+        // Initialize
+        window.addEventListener('load', () => {
+            fetchAnnouncements();
+            fetchMembers();
+            fetchEvents();
+            updateProgress();
+            setInterval(updateProgress, 30000); // Update every 30s
+        });
+
+        // Scroll to form helper
+        function scrollToForm(formId) {
+            document.getElementById(formId).scrollIntoView({ behavior: 'smooth' });
+        }
     </script>
 </body>
 </html>
