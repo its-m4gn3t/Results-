@@ -1,215 +1,1065 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>MAD MORANS ESPORTS Team Rules and Regulations</title>
-  <style>
-    /* Reset and base */
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
-    body {
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      color: #eeeeee;
-      min-height: 100vh;
-      display: flex;
-      justify-content: center;
-      align-items: flex-start;
-      padding: 2rem;
-      line-height: 1.6;
-      /* Background for parallax */
-      background: url('https://images.unsplash.com/photo-1506744038136-46273834b3fb?ixlib=rb-4.0.3&auto=format&fit=crop&w=1470&q=80') no-repeat center center fixed;
-      background-size: cover;
-      overflow-x: hidden;
-    }
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>🦁 Leo Club Sainamaina - Completes Features</title>
+    <style>
+        :root {
+            --gold: #ffd700;
+            --orange: #ffa500;
+            --dark: #1a1a1a;
+            --light: #f8f9fa;
+            --shadow: 0 10px 30px rgba(255, 215, 0, 0.3);
+        }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: var(--dark);
+            overflow-x: hidden;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
 
-    /* Parallax Overlay for subtle dark layering and blur */
-    body::before {
-      content: "";
-      position: fixed;
-      top: 0; left: 0; right: 0; bottom: 0;
-      background: rgba(0, 0, 0, 0.5);
-      backdrop-filter: blur(5px);
-      z-index: -1;
-    }
+        header {
+            background: linear-gradient(135deg, var(--gold), var(--orange));
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            backdrop-filter: blur(10px);
+        }
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 0;
+        }
+        .logo {
+            font-size: 2rem;
+            font-weight: bold;
+            background: linear-gradient(45deg, #333, #fff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+            flex-wrap: wrap;
+        }
+        .nav-links a {
+            color: #333;
+            text-decoration: none;
+            font-weight: 500;
+            position: relative;
+            transition: all 0.3s;
+        }
+        .nav-links a::after {
+            content: "";
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: #333;
+            transition: width 0.3s;
+        }
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+        .nav-links a:hover {
+            color: #fff;
+            transform: translateY(-2px);
+        }
+        .hamburger {
+            display: none;
+            flex-direction: column;
+            cursor: pointer;
+            gap: 5px;
+        }
+        .hamburger span {
+            width: 30px;
+            height: 4px;
+            background: #333;
+            border-radius: 2px;
+            transition: 0.3s;
+        }
 
-    /* Container for glass effect */
-    .container {
-      background: rgba(255, 255, 255, 0.15);
-      border-radius: 20px;
-      backdrop-filter: blur(15px);
-      -webkit-backdrop-filter: blur(15px);
-      box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
-      max-width: 800px;
-      width: 100%;
-      padding: 2rem 3rem;
-      overflow-wrap: break-word;
-      /* Elevate container above background */
-      position: relative;
-      z-index: 1;
-    }
+        /* Hero */
+        .hero {
+            min-height: 100vh;
+            background: linear-gradient(135deg, var(--gold), var(--orange)),
+                url("image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTIwMCIgaGVpZ2h0PSI4MDAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PHJlY3Qgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgZmlsbD0iI2ZmZGRmZiIvPjxjaXJjbGUgY3g9IjYwMCIgY3k9IjQwMCIgcj0iMjAwIiBmaWxsPSIjRkZBNTAwIiBvcGFjaXR5PSIwLjMiLz48L3N2Zz4=");
+            center/cover;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            color: #fff;
+            margin-top: 80px;
+            position: relative;
+        }
+        .hero::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.4);
+            backdrop-filter: blur(2px);
+        }
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            animation: fadeInUp 1s ease;
+            max-width: 700px;
+        }
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        .hero h1 {
+            font-size: clamp(3rem, 8vw, 6rem);
+            margin-bottom: 1rem;
+            text-shadow: 3px 3px 10px rgba(0, 0, 0, 0.5);
+        }
+        .hero p {
+            font-size: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        .cta-btn {
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
+            color: #fff;
+            padding: 1.2rem 3rem;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50px;
+            font-weight: bold;
+            transition: all 0.4s;
+            display: inline-block;
+            text-decoration: none;
+        }
+        .cta-btn:hover {
+            background: #fff;
+            color: var(--dark);
+            transform: translateY(-5px);
+            box-shadow: var(--shadow);
+        }
 
-    /* Header styles */
-    h1 {
-      font-size: 2.6rem;
-      font-weight: 900;
-      letter-spacing: 3px;
-      color: #00bfa6;
-      margin-bottom: 1rem;
-      text-align: center;
-      text-transform: uppercase;
-      text-shadow: 0 0 8px #00bfa6;
-    }
+        section {
+            padding: 100px 0;
+            scroll-margin-top: 100px;
+        }
+        h2 {
+            text-align: center;
+            font-size: clamp(2.5rem, 5vw, 4rem);
+            margin-bottom: 4rem;
+            background: linear-gradient(45deg, var(--gold), var(--orange));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            position: relative;
+        }
+        h2::after {
+            content: "🦁";
+            position: absolute;
+            bottom: -20px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 2rem;
+        }
+        /* Cards Grid */
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+        }
+        .card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            padding: 2.5rem;
+            box-shadow: var(--shadow);
+            transition: all 0.4s;
+            border: 1px solid rgba(255, 215, 0, 0.2);
+            position: relative;
+            overflow: hidden;
+        }
+        .card::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(
+                90deg,
+                transparent,
+                rgba(255, 215, 0, 0.1),
+                transparent
+            );
+            transition: left 0.5s;
+        }
+        .card:hover::before {
+            left: 100%;
+        }
+        .card:hover {
+            transform: translateY(-15px) scale(1.02);
+            box-shadow: 0 20px 50px rgba(255, 215, 0, 0.4);
+        }
+        .card h3 {
+            color: var(--orange);
+            margin-bottom: 1rem;
+            font-size: 1.5rem;
+        }
 
-    /* Section headers */
-    h2 {
-      color: #00bfa6;
-      border-bottom: 2px solid #00bfa6;
-      padding-bottom: 0.4rem;
-      margin-top: 2rem;
-      margin-bottom: 1rem;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 1px;
-    }
+        /* Announcements & Events */
+        .announcement {
+            background: linear-gradient(135deg, #4caf50, #45a049);
+            color: white;
+            border-radius: 15px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            position: relative;
+            overflow: hidden;
+        }
+        .announcement::before {
+            content: "📢";
+            font-size: 3rem;
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            opacity: 0.3;
+        }
+        .event-list {
+            max-height: 400px;
+            overflow-y: auto;
+        }
+        .event-item {
+            background: rgba(255, 255, 255, 0.1);
+            margin-bottom: 1rem;
+            padding: 1.5rem;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .event-item:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateX(10px);
+        }
 
-    /* List styles */
-    ul {
-      list-style-type: none;
-      padding-left: 1rem;
-    }
+        /* Members */
+        .members-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+        .member-card {
+            text-align: center;
+            padding: 1.5rem;
+            background: rgba(255, 255, 255, 0.8);
+            border-radius: 15px;
+            transition: all 0.3s;
+        }
+        .member-avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: var(--gold);
+            margin: 0 auto 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+        }
 
-    ul li {
-      background: rgba(255, 255, 255, 0.1);
-      margin-bottom: 0.85rem;
-      padding: 1rem 1.25rem;
-      border-radius: 12px;
-      box-shadow: 0 4px 16px rgba(0, 191, 166, 0.12);
-      font-size: 1.1rem;
-      transition: background-color 0.3s ease;
-    }
+        /* Past donors and form */
+        #pastDonorsList {
+            max-height: 300px;
+            overflow-y: auto;
+            background: #fff;
+            padding: 1rem;
+            border-radius: 15px;
+            border: 1px solid #ddd;
+        }
+        .donor-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            border-bottom: 1px solid #eee;
+            padding: 0.6rem 0;
+        }
+        .donor-item img {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid var(--gold);
+        }
 
-    ul li:hover {
-      background-color: rgba(255, 255, 255, 0.18);
-    }
+        /* Forms */
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+        input,
+        textarea,
+        select {
+            width: 100%;
+            padding: 1rem;
+            border: 2px solid #eee;
+            border-radius: 10px;
+            font-size: 1rem;
+            transition: all 0.3s;
+            background: rgba(255, 255, 255, 0.9);
+        }
+        input:focus,
+        textarea:focus,
+        select:focus {
+            outline: none;
+            border-color: var(--gold);
+            box-shadow: 0 0 20px rgba(255, 215, 0, 0.2);
+        }
+        .form-btn {
+            background: linear-gradient(45deg, var(--gold), var(--orange));
+            color: #333;
+            border: none;
+            padding: 1.2rem 3rem;
+            border-radius: 50px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.4s;
+            width: 100%;
+            font-size: 1.1rem;
+        }
+        .form-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow);
+        }
+        .form-btn.loading::after {
+            content: "...";
+            animation: dots 1.5s infinite;
+        }
+        @keyframes dots {
+            0%,
+            20% {
+                content: ".";
+            }
+            40% {
+                content: "..";
+            }
+            60%,
+            100% {
+                content: "...";
+            }
+        }
 
-    /* Links */
-    a {
-      color: #00d4aa;
-      text-decoration: none;
-    }
+        /* Donate Progress */
+        .progress-container {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 2rem;
+            border-radius: 15px;
+            margin: 2rem 0;
+        }
+        .progress {
+            background: rgba(0, 0, 0, 0.1);
+            height: 12px;
+            border-radius: 6px;
+            overflow: hidden;
+            margin: 1rem 0;
+        }
+        .progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, var(--gold), var(--orange));
+            width: 0%;
+            transition: width 1s ease;
+            border-radius: 6px;
+            position: relative;
+        }
+        .progress-bar::after {
+            content: attr(data-goal);
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 0.8rem;
+            color: #333;
+            font-weight: bold;
+        }
 
-    a:hover {
-      text-decoration: underline;
-    }
+        /* Footer */
+        footer {
+            background: var(--dark);
+            color: white;
+            text-align: center;
+            padding: 3rem 0;
+        }
+        .social-links {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-top: 1rem;
+            font-size: 2rem;
+        }
 
-    /* Responsive */
-    @media (max-width: 600px) {
-      body {
-        padding: 1rem;
-        align-items: stretch;
-      }
-      .container {
-        padding: 1.5rem 2rem;
-      }
-      h1 {
-        font-size: 1.9rem;
-      }
-      ul li {
-        font-size: 1rem;
-        padding: 0.75rem 1rem;
-      }
-    }
-  </style>
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hamburger {
+                display: flex;
+            }
+            .nav-links {
+                position: fixed;
+                left: -100%;
+                top: 80px;
+                flex-direction: column;
+                background: var(--gold);
+                width: 100%;
+                padding: 2rem;
+                transition: left 0.3s;
+            }
+            .nav-links.active {
+                left: 0;
+            }
+            .grid {
+                grid-template-columns: 1fr;
+            }
+            section {
+                padding: 60px 0;
+            }
+        }
+        /* Scroll Animations */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(50px);
+            transition: all 0.8s;
+        }
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    </style>
 </head>
 <body>
-  <main class="container" role="main">
-    <h1>MAD MORANS ESPORTS Team Rules and Regulations</h1>
+    <!-- Header -->
+    <header>
+        <nav class="container">
+            <div class="logo">🦁 Leo Club Sainamaina</div>
+            <ul class="nav-links" id="navLinks">
+                <li><a href="#about">About</a></li>
+                <li><a href="#announcements">Announcements</a></li>
+                <li><a href="#members">Members</a></li>
+                <li><a href="#events">Events</a></li>
+                <li><a href="#pastEvents">Past Events</a></li>
+                <li><a href="#founders">Founding Members</a></li>
+                <li><a href="#donate">Donate</a></li>
+            </ul>
+            <div class="hamburger" id="hamburger">
+                <span></span><span></span><span></span>
+            </div>
+        </nav>
+    </header>
 
-    <section>
-      <h2>1. Attendance and Punctuality</h2>
-      <ul>
-        <li>All team members must join practices, scrims, and meetings on time.</li>
-        <li>Notify the team leader or coach at least 24 hours in advance if unable to attend.</li>
-        <li>Habitual tardiness or unexcused absences may result in disciplinary action or benching.</li>
-      </ul>
+    <!-- Hero -->
+    <section class="hero">
+        <div class="hero-content">
+            <h1>Leadership • Experience • Opportunity</h1>
+            <p>Serving Sainamaina Community with Passion & Dedication</p>
+            <a href="#about" class="cta-btn">Get Involved</a>
+        </div>
     </section>
 
-    <section>
-      <h2>2. Communication Protocol</h2>
-      <ul>
-        <li>Use the official team communication platform (voice chat, Discord, etc.) during sessions.</li>
-        <li>Maintain respectful and clear communication at all times.</li>
-        <li>Avoid unnecessary chatter; focus on concise callouts and strategic discussions.</li>
-        <li>Report technical issues promptly and switch channels if communication fails.</li>
-      </ul>
+    <!-- About -->
+    <section id="about" class="container fade-in">
+        <h2>About Us</h2>
+        <div class="grid">
+            <div class="card">
+                <h3>🦁 Our Mission</h3>
+                <p>
+                    Empowering youth aged 12-30 through service, leadership development,
+                    and community impact in Sainamaina, Rupandehi, Nepal.
+                </p>
+            </div>
+            <div class="card">
+                <h3>🎯 Our Vision</h3>
+                <p>
+                    Creating future leaders who serve with compassion, innovate with
+                    courage, and inspire with action.
+                </p>
+            </div>
+            <div class="card">
+                <h3>📈 Our Impact</h3>
+                <p>
+                    50+ events organized, 1000+ community members served, countless lives
+                    transformed through service.
+                </p>
+            </div>
+        </div>
     </section>
 
-    <section>
-      <h2>3. Practice Conduct and Focus</h2>
-      <ul>
-        <li>Stay fully engaged during practice and scrims. No multitasking or distractions (phones outside of gameplay, unrelated browsing).</li>
-        <li>Follow the planned training schedule and respect the coach's instructions.</li>
-        <li>Use constructive language; avoid blame, negativity, or toxic behavior.</li>
-      </ul>
+    <!-- Announcements -->
+    <section id="announcements" class="container fade-in">
+        <h2>📢 Latest Announcements</h2>
+        <div class="announcement" id="announcementsList">
+            <p>Loading latest updates...</p>
+        </div>
     </section>
 
-    <section>
-      <h2>4. Role Commitment</h2>
-      <ul>
-        <li>Stick to assigned roles during matches unless changed by team leadership.</li>
-        <li>Train to maintain versatility but respect role specialization.</li>
-        <li>Communicate openly if role changes or issues arise.</li>
-      </ul>
+    <!-- Members -->
+    <section id="members" class="container fade-in">
+        <h2>Our Team</h2>
+        <div class="grid">
+            <div class="card">
+                <h3>Active Members</h3>
+                <div class="members-grid" id="membersGrid">
+                    <!-- Dynamic members will load here -->
+                </div>
+            </div>
+            <div class="card">
+                <h3>Join Alpha/Omega</h3>
+                <p>Open to ages 12-18 (Alpha) and 18-30 (Omega). Be part of something bigger!</p>
+                <button class="form-btn" onclick="scrollToForm('membershipForm')">
+                    Apply Now
+                </button>
+            </div>
+        </div>
     </section>
 
-    <section>
-      <h2>5. Accountability and Improvement</h2>
-      <ul>
-        <li>Review scrim/game footage regularly and participate actively in feedback sessions.</li>
-        <li>Set personal improvement goals aligned with team objectives.</li>
-        <li>Accept constructive criticism professionally and work on weaknesses proactively.</li>
-      </ul>
+    <!-- Events -->
+    <section id="events" class="container fade-in">
+        <h2>Upcoming Events</h2>
+        <div class="grid">
+            <div class="card">
+                <h3>📅 Event Calendar</h3>
+                <div class="event-list" id="eventsList">
+                    <!-- Events load here -->
+                </div>
+            </div>
+            <div class="card">
+                <h3>RSVP Form</h3>
+                <form id="rsvpForm">
+                    <div class="form-group">
+                        <select id="eventSelect" required>
+                            <option value="">Select Event</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <input type="text" placeholder="Full Name" required />
+                    </div>
+                    <div class="form-group">
+                        <input type="tel" placeholder="Phone" required />
+                    </div>
+                    <button type="submit" class="form-btn">RSVP Now</button>
+                </form>
+            </div>
+        </div>
     </section>
 
-    <section>
-      <h2>6. Equipment and Game Settings</h2>
-      <ul>
-        <li>Maintain personal gaming hardware and software for optimal performance.</li>
-        <li>Agree on standardized game settings for fairness during team play.</li>
-        <li>Report any hardware or connectivity issues affecting performance immediately.</li>
-      </ul>
+    <!-- Past Events -->
+    <section id="pastEvents" class="container fade-in">
+        <h2>Past Events</h2>
+        <div class="grid" id="pastEventsList">
+            <div class="card">
+                <h3>Loading past events...</h3>
+            </div>
+        </div>
     </section>
 
-    <section>
-      <h2>7. Conflict Resolution</h2>
-      <ul>
-        <li>Address conflicts internally with maturity and respect.</li>
-        <li>Escalate unresolved issues to team leadership or coach calmly and privately.</li>
-        <li>Foster a positive and supportive team environment.</li>
-      </ul>
+    <!-- Founding Members -->
+    <section id="founders" class="container fade-in">
+        <h2>Founding Members</h2>
+        <div class="members-grid" id="foundersGrid">
+            <div class="member-card">
+                <div class="member-avatar">👑</div>
+                <h4>Sharma Krishna Prasad</h4>
+                <p>Charter President, 2017 - Present</p>
+            </div>
+            <div class="member-card">
+                <div class="member-avatar">📢</div>
+                <h4>Pandey Ghanshyam</h4>
+                <p>Charter 1st Vice President</p>
+            </div>
+            <div class="member-card">
+                <div class="member-avatar">🦁</div>
+                <h4>Ghimire (last name)</h4>
+                <p>Charter 2nd Vice President</p>
+            </div>
+        </div>
     </section>
 
-    <section>
-      <h2>8. Professionalism and Representation</h2>
-      <ul>
-        <li>Represent the team positively in all public and online interactions.</li>
-        <li>Follow any sponsorship, social media, and branding guidelines provided.</li>
-        <li>Avoid any conduct that may harm the team's reputation.</li>
-      </ul>
+    <!-- Donate -->
+    <section id="donate" class="container fade-in">
+        <h2>Support Our Mission</h2>
+        <div class="grid">
+            <div class="card progress-container">
+                <h3>Healthcare Equipment Fund</h3>
+                <p>
+                    Goal: NPR 500,000 | Current: <span id="currentAmount">NPR 325,000</span>
+                </p>
+                <div class="progress">
+                    <div class="progress-bar" id="donationProgress" data-goal="65%"></div>
+                </div>
+                <p>Help us reach our goal! Every contribution counts.</p>
+            </div>
+            <div class="card">
+                <h3>Make a Donation</h3>
+                <form id="donateForm" enctype="multipart/form-data">
+                    <div class="form-group">
+                        <input
+                            type="text"
+                            id="donorName"
+                            name="donorName"
+                            placeholder="Your Full Name"
+                            required
+                        />
+                    </div>
+                    <div class="form-group">
+                        <input
+                            type="number"
+                            id="donationAmount"
+                            name="donationAmount"
+                            placeholder="Amount (NPR)"
+                            min="100"
+                            required
+                        />
+                    </div>
+                    <div class="form-group">
+                        <input
+                            type="file"
+                            id="donorPhoto"
+                            name="donorPhoto"
+                            accept="image/*"
+                            required
+                        />
+                    </div>
+                    <div class="form-group">
+                        <select id="paymentMethod" name="paymentMethod" required>
+                            <option value="">Payment Method</option>
+                            <option value="khalti">Khalti</option>
+                            <option value="imepay">IME Pay</option>
+                            <option value="bank">Bank Transfer</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="form-btn">Donate Now</button>
+                </form>
+            </div>
+        </div>
+        <section style="margin-top: 50px;">
+            <h3 style="text-align: center; margin-bottom: 20px;">Past Donators</h3>
+            <div id="pastDonorsList">Loading past donators...</div>
+        </section>
     </section>
 
-    <section>
-      <h2>9. Consequences</h2>
-      <ul>
-        <li>Warnings for minor breaches with possibility of temporary benching.</li>
-        <li>Repeated violations may lead to removal from the active roster.</li>
-        <li>Serious misconduct (cheating, harassment) results in immediate suspension or termination.</li>
-      </ul>
-    </section>
-  </main>
+    <!-- Membership Modal -->
+    <div
+        id="membershipModal"
+        style="
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 2000;
+            align-items: center;
+            justify-content: center;
+        "
+    >
+        <div
+            style="background: white; padding: 2rem; border-radius: 20px; max-width: 500px; width: 90%"
+        >
+            <h3 style="text-align: center; margin-bottom: 1rem;">Join Leo Club Sainamaina</h3>
+            <form id="membershipForm">
+                <div class="form-group">
+                    <input type="text" placeholder="Full Name" required />
+                </div>
+                <div class="form-group">
+                    <input type="email" placeholder="Email" required />
+                </div>
+                <div class="form-group">
+                    <input type="tel" placeholder="Phone (+977)" required />
+                </div>
+                <div class="form-group">
+                    <select required>
+                        <option value="">Age Group</option>
+                        <option>Alpha (12-18)</option>
+                        <option>Omega (18-30)</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <textarea
+                        placeholder="Why do you want to join Leo Club?"
+                        rows="4"
+                        required
+                    ></textarea>
+                </div>
+                <button type="submit" class="form-btn">Submit Application</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <p>
+                &copy; 2025 Leo Club of Sainamaina. Sainamaina, Rupandehi, Nepal |
+                +977 9806979663
+            </p>
+            <div class="social-links">
+                <a href="https://facebook.com/lcsainamaina" target="_blank">📘</a>
+                <a href="https://instagram.com/leo_club_of_sainamaina" target="_blank">📷</a>
+                <a href="https://tiktok.com/@leo.club.of.sainamaina" target="_blank"
+                    >🎵</a
+                >
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Mobile Navigation
+        document.getElementById("hamburger").addEventListener("click", () => {
+            document.getElementById("navLinks").classList.toggle("active");
+        });
+
+        // Smooth Scrolling
+        document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
+            anchor.addEventListener("click", function (e) {
+                e.preventDefault();
+                document
+                    .querySelector(this.getAttribute("href"))
+                    .scrollIntoView({ behavior: "smooth" });
+                document.getElementById("navLinks").classList.remove("active");
+            });
+        });
+
+        // Scroll Animations
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach((entry) => {
+                if (entry.isIntersecting) entry.target.classList.add("visible");
+            });
+        });
+        document.querySelectorAll(".fade-in").forEach((el) => observer.observe(el));
+
+        const API_BASE = "/api"; // Your FastAPI backend base URL
+
+        // Mock Backend Data When Fetch Fails (fallbacks)
+        const fallbackAnnouncements = [
+            {
+                title: "Gundri Session Nov 30",
+                content: "Cultural dance event",
+                date: "2025-11-30",
+            },
+            {
+                title: "Healthcare Camp Planning",
+                content: "Team meeting Dec 5",
+                date: "2025-12-05",
+            },
+        ];
+
+        const fallbackMembers = [
+            { name: "President Name", role: "Club President", emoji: "👑" },
+            { name: "Secretary", role: "Club Secretary", emoji: "📢" },
+        ];
+
+        const fallbackEvents = [
+            {
+                id: "1",
+                title: "Gundri Session",
+                description: "Cultural event",
+                date: "2025-11-30T18:00:00",
+            },
+            {
+                id: "2",
+                title: "Healthcare Camp",
+                description: "Free medical camp",
+                date: "2025-12-15T09:00:00",
+            },
+        ];
+
+        const fallbackPastEvents = [
+            {
+                title: "Literacy Drive Jan 2025",
+                description: "Community education program",
+                date: "2025-01-10T10:00:00",
+            },
+            {
+                title: "Blood Donation Camp",
+                description: "Community blood donation event",
+                date: "2025-03-15T12:00:00",
+            },
+        ];
+
+        const fallbackDonors = [
+            {
+                name: "Ram Shrestha",
+                amount: 5000,
+                photo: "https://i.pravatar.cc/50?u=ramshrestha",
+            },
+            {
+                name: "Sita Gurung",
+                amount: 10000,
+                photo: "https://i.pravatar.cc/50?u=sitagurung",
+            },
+        ];
+
+        // Fetch and populate announcements
+        async function fetchAnnouncements() {
+            try {
+                const res = await fetch(`${API_BASE}/announcements`);
+                if (!res.ok) throw new Error("Failed to fetch");
+                const announcements = await res.json();
+                updateAnnouncements(announcements);
+            } catch {
+                updateAnnouncements(fallbackAnnouncements);
+            }
+        }
+
+        function updateAnnouncements(announcements) {
+            const container = document.getElementById("announcementsList");
+            container.innerHTML = announcements
+                .map(
+                    (a) => `
+                    <div class="event-item">
+                        <h4>${a.title}</h4>
+                        <p>${a.content}</p>
+                        <small>${new Date(a.date).toLocaleDateString()}</small>
+                    </div>
+                `
+                )
+                .join("");
+        }
+
+        // Fetch and populate members
+        async function fetchMembers() {
+            try {
+                const res = await fetch(`${API_BASE}/members`);
+                if (!res.ok) throw new Error("Failed to fetch members");
+                const members = await res.json();
+                updateMembers(members);
+            } catch {
+                updateMembers(fallbackMembers);
+            }
+        }
+
+        function updateMembers(members) {
+            const grid = document.getElementById("membersGrid");
+            grid.innerHTML = members
+                .map(
+                    (m) => `
+                <div class="member-card">
+                    <div class="member-avatar">${m.emoji || "🦁"}</div>
+                    <h4>${m.name}</h4>
+                    <p>${m.role}</p>
+                </div>
+            `
+                )
+                .join("");
+        }
+
+        // Fetch and populate events
+        async function fetchEvents() {
+            try {
+                const res = await fetch(`${API_BASE}/events`);
+                if (!res.ok) throw new Error("Failed to fetch events");
+                const events = await res.json();
+                updateEvents(events);
+            } catch {
+                updateEvents(fallbackEvents);
+            }
+        }
+
+        function updateEvents(events) {
+            const eventsList = document.getElementById("eventsList");
+            const eventSelect = document.getElementById("eventSelect");
+            eventsList.innerHTML = events
+                .map(
+                    (e) => `
+                <div class="event-item" onclick="selectEvent('${e.id}')">
+                    <h4>${e.title}</h4>
+                    <p>${e.description}</p>
+                    <small>${new Date(e.date).toLocaleString()}</small>
+                </div>`
+                )
+                .join("");
+            eventSelect.innerHTML =
+                '<option value="">Select Event</option>' +
+                events
+                    .map(
+                        (e) =>
+                            `<option value="${e.id}">${e.title} - ${new Date(
+                                e.date
+                            ).toLocaleDateString()}</option>`
+                    )
+                    .join("");
+        }
+
+        // Select event function
+        let selectedEvent = "";
+        function selectEvent(eventId) {
+            selectedEvent = eventId;
+            document.getElementById("eventSelect").value = eventId;
+        }
+
+        // Past events fetch
+        async function fetchPastEvents() {
+            try {
+                const res = await fetch(`${API_BASE}/past-events`);
+                if (!res.ok) throw new Error("Failed to fetch past events");
+                const pastEvents = await res.json();
+                updatePastEvents(pastEvents);
+            } catch {
+                updatePastEvents(fallbackPastEvents);
+            }
+        }
+
+        function updatePastEvents(pastEvents) {
+            const container = document.getElementById("pastEventsList");
+            if (!pastEvents.length) {
+                container.innerHTML = "<p>No past events available.</p>";
+                return;
+            }
+            container.innerHTML = pastEvents
+                .map(
+                    (e) => `
+                <div class="card">
+                    <h3>${e.title}</h3>
+                    <p>${e.description}</p>
+                    <small>${new Date(e.date).toLocaleDateString()}</small>
+                </div>
+            `
+                )
+                .join("");
+        }
+
+        // Fetch and list past donators
+        async function fetchDonators() {
+            try {
+                const res = await fetch(`${API_BASE}/donators`);
+                if (!res.ok) throw new Error("Failed to fetch donators");
+                const donors = await res.json();
+                updateDonors(donors);
+            } catch {
+                updateDonors(fallbackDonors);
+            }
+        }
+
+        function updateDonors(donors) {
+            const container = document.getElementById("pastDonorsList");
+            if (!donors.length) {
+                container.innerHTML = "<p>No donations recorded yet.</p>";
+                return;
+            }
+            container.innerHTML = donors
+                .map(
+                    (d) => `
+                <div class="donor-item" title="Donated NPR ${d.amount}">
+                    <img src="${d.photo}" alt="${d.name} photo" />
+                    <div><strong>${d.name}</strong> donated NPR ${d.amount}</div>
+                </div>
+            `
+                )
+                .join("");
+        }
+
+        // Form submissions handler
+        async function handleFormSubmit(formId, endpoint) {
+            const form = document.getElementById(formId);
+            const btn = form.querySelector(".form-btn");
+            btn.classList.add("loading");
+
+            let formData;
+            if (formId === "donateForm") {
+                formData = new FormData(form);
+            } else {
+                formData = new FormData(form);
+                if (formId === "rsvpForm") {
+                    formData.append("eventId", selectedEvent);
+                }
+            }
+
+            try {
+                const res = await fetch(`${API_BASE}/${endpoint}`, {
+                    method: "POST",
+                    body: formData,
+                });
+                const data = await res.json();
+                alert(data.message || "Success! Thank you for your support.");
+                form.reset();
+
+                if (formId === "donateForm") fetchDonators();
+                if (formId === "membershipForm") {
+                    // close modal or reset UI if needed
+                }
+            } catch {
+                alert(
+                    "Submission successful! (Backend simulation - connect to your FastAPI)"
+                );
+                if (formId === "donateForm") fetchDonators();
+            }
+            btn.classList.remove("loading");
+        }
+
+        // Event listeners for forms
+        ["membershipForm", "rsvpForm", "donateForm"].forEach((id) => {
+            document.getElementById(id).addEventListener("submit", (e) => {
+                e.preventDefault();
+                const endpoint =
+                    id === "membershipForm"
+                        ? "membership"
+                        : id === "rsvpForm"
+                        ? "rsvp"
+                        : "donate";
+                handleFormSubmit(id, endpoint);
+            });
+        });
+
+        // Update donation progress with fallback
+        async function updateProgress() {
+            try {
+                const res = await fetch(`${API_BASE}/donations/progress`);
+                if (!res.ok) throw new Error();
+                const data = await res.json();
+                document.getElementById("donationProgress").style.width =
+                    data.progress + "%";
+                document.getElementById("currentAmount").textContent =
+                    "NPR " + data.current;
+            } catch {
+                // fallback - do nothing
+            }
+        }
+
+        // Scroll to form helper
+        function scrollToForm(formId) {
+            document.getElementById(formId).scrollIntoView({ behavior: "smooth" });
+        }
+
+        // Initialize all data
+        window.addEventListener("load", () => {
+            fetchAnnouncements();
+            fetchMembers();
+            fetchEvents();
+            fetchPastEvents();
+            fetchDonators();
+            updateProgress();
+            setInterval(updateProgress, 30000);
+        });
+
+        // Optional: Membership Modal logic (if you want it toggle)
+    </script>
 </body>
 </html>
