@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Swaad 90 Fast Food</title>
+
+  <style>
+    body {
+      font-family: 'Arial', sans-serif;
+      margin: 0;
+      background: #fff8f0;
+      color: #333;
+    }
+    header {
+      background-color: #ff6f47;
+      padding: 20px;
+      text-align: center;
+      color: white;
+    }
+    header h1 {
+      margin: 0;
+    }
+    nav {
+      margin-top: 15px;
+    }
+    nav a {
+      color: white;
+      margin: 0 15px;
+      text-decoration: none;
+      font-weight: bold;
+    }
+    .hero {
+      background-color: #ffd9c2;
+      padding: 40px 20px;
+      text-align: center;
+    }
+    h3 {
+      text-align: center;
+      color: #b33a00;
+    }
+
+    /* CATEGORY TABS */
+    .category-tabs {
+      display: flex;
+      justify-content: center;
+      gap: 15px;
+      margin: 20px 0;
+      flex-wrap: wrap;
+    }
+    .category-tabs button {
+      padding: 10px 20px;
+      border: none;
+      background-color: #ff6f47;
+      color: white;
+      border-radius: 5px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+    .category-tabs button.active {
+      background-color: #b33a00;
+    }
+
+    /* MENU ITEMS */
+    .menu-items {
+      display: none;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 20px;
+      padding: 10px;
+    }
+    .menu-items.active {
+      display: flex;
+    }
+    .menu-item {
+      background: white;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      padding: 15px;
+      width: 240px;
+      text-align: center;
+    }
+    .menu-item img {
+      max-width: 100%;
+      border-radius: 8px;
+    }
+    .menu-item h4 {
+      margin: 10px 0;
+    }
+    .menu-item button {
+      padding: 10px 20px;
+      border: none;
+      background-color: #ff6f47;
+      color: white;
+      border-radius: 4px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+
+    footer {
+      text-align: center;
+      padding: 20px;
+      background-color: #ff6f47;
+      color: white;
+      margin-top: 40px;
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>Swaad 90</h1>
+  <nav>
+    <a href="#home">Home</a>
+    <a href="#menu">Menu</a>
+    <a href="#about">About</a>
+    <a href="#contact">Contact</a>
+  </nav>
+</header>
+
+<section class="hero" id="home">
+  <h2>Delicious Fast Food at Your Fingertips</h2>
+  <p>Welcome to Swaad 90! Fresh, fast, and full of flavor.</p>
+</section>
+
+<!-- FOOD MENU WITH CATEGORIES -->
+<section id="menu">
+  <h3>Our Menu</h3>
+
+  <!-- CATEGORIES -->
+  <div class="category-tabs">
+    <button class="active" onclick="showCategory('burgers')">Burgers</button>
+    <button onclick="showCategory('fries')">Fries & Snacks</button>
+    <button onclick="showCategory('pizza')">Pizza</button>
+    <button onclick="showCategory('drinks')">Drinks</button>
+  </div>
+
+  <!-- BURGERS -->
+  <div class="menu-items active" id="burgers">
+    <div class="menu-item">
+      <img src="https://via.placeholder.com/250x150.png?text=Chicken+Burger">
+      <h4>Chicken Burger</h4>
+      <p>Grilled chicken patty with fresh veggies.</p>
+      <button onclick="orderItem('Chicken Burger')">Order Now</button>
+    </div>
+
+    <div class="menu-item">
+      <img src="https://via.placeholder.com/250x150.png?text=Veg+Burger">
+      <h4>Veg Burger</h4>
+      <p>Crispy veggie patty with cheese and sauce.</p>
+      <button onclick="orderItem('Veg Burger')">Order Now</button>
+    </div>
+  </div>
+
+  <!-- FRIES -->
+  <div class="menu-items" id="fries">
+    <div class="menu-item">
+      <img src="https://via.placeholder.com/250x150.png?text=French+Fries">
+      <h4>French Fries</h4>
+      <p>Crispy golden fries with salt.</p>
+      <button onclick="orderItem('French Fries')">Order Now</button>
+    </div>
+
+    <div class="menu-item">
+      <img src="https://via.placeholder.com/250x150.png?text=Momos">
+      <h4>Chicken Momos</h4>
+      <p>Steamed dumplings filled with chicken.</p>
+      <button onclick="orderItem('Chicken Momos')">Order Now</button>
+    </div>
+  </div>
+
+  <!-- PIZZA -->
+  <div class="menu-items" id="pizza">
+    <div class="menu-item">
+      <img src="https://via.placeholder.com/250x150.png?text=Cheese+Pizza">
+      <h4>Cheese Pizza</h4>
+      <p>Loaded with cheese and herbs.</p>
+      <button onclick="orderItem('Cheese Pizza')">Order Now</button>
+    </div>
+
+    <div class="menu-item">
+      <img src="https://via.placeholder.com/250x150.png?text=Veg+Pizza">
+      <h4>Veg Pizza</h4>
+      <p>Fresh vegetables with mozzarella.</p>
+      <button onclick="orderItem('Veg Pizza')">Order Now</button>
+    </div>
+  </div>
+
+  <!-- DRINKS -->
+  <div class="menu-items" id="drinks">
+    <div class="menu-item">
+      <img src="https://via.placeholder.com/250x150.png?text=Cold+Drink">
+      <h4>Cold Drinks</h4>
+      <p>Chilled beverages to refresh your meal.</p>
+      <button onclick="orderItem('Cold Drink')">Order Now</button>
+    </div>
+
+    <div class="menu-item">
+      <img src="https://via.placeholder.com/250x150.png?text=Lassi">
+      <h4>Sweet Lassi</h4>
+      <p>Cool and creamy traditional drink.</p>
+      <button onclick="orderItem('Sweet Lassi')">Order Now</button>
+    </div>
+  </div>
+
+</section>
+
+<footer>
+  © 2025 Swaad 90 Fast Food. All rights reserved.
+</footer>
+
+<script>
+  function showCategory(category) {
+    document.querySelectorAll('.menu-items').forEach(e => e.classList.remove('active'));
+    document.querySelectorAll('.category-tabs button').forEach(e => e.classList.remove('active'));
+
+    document.getElementById(category).classList.add('active');
+    event.target.classList.add('active');
+  }
+
+  function orderItem(itemName) {
+    alert(`Thank you for ordering ${itemName}!`);
+  }
+</script>
+
+</body>
+</html>
