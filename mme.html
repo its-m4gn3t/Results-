@@ -1,370 +1,596 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>MME - Mad Morans Esports</title>
-  <style>
-    html, body { min-height:100%; height:100%; }
-    body {
-      margin: 0;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      color: #eee;
-      min-height: 100vh;
-      position: relative;
-      z-index: 1;
-      overflow-x: hidden;
-    }
-    .bg-animate {
-      position: fixed;
-      top:0; left:0; width:100vw; height:100vh;
-      z-index: 0;
-      background: linear-gradient(120deg, #191970 0%, #222 55%, #ff4500 100%);
-      animation: bgMove 12s ease-in-out infinite alternate;
-      pointer-events:none;
-    }
-    @keyframes bgMove {
-      0% { background-position: 0% 50%; filter: blur(0.5px) brightness(1.05);}
-      30% { background-position: 100% 60%; filter: blur(1px) brightness(1.10);}
-      55% { background-position: 50% 110%; filter: blur(0.8px) brightness(1.14);}
-      70% { background-position: 60% 45%; filter: blur(1.5px) brightness(1.10);}
-      100% { background-position: 100% 0%; filter: blur(0.4px) brightness(1.00);}
-    }
-    .bg-waves {
-      position: fixed;
-      top:0; left:0; width:100vw; height:100vh;
-      z-index: 1;
-      pointer-events: none;
-      opacity: 0.19;
-      background: url('image/svg+xml;utf8,<svg viewBox="0 0 1440 960" xmlns="http://www.w3.org/2000/svg"><path fill="%23ff4500" fill-opacity="0.22" d="M0,160L120,186.7C240,213,480,267,720,266.7C960,267,1200,213,1320,186.7L1440,160V960H1320C1200,960,960,960,720,960C480,960,240,960,120,960H0Z"></path></svg>');
-      background-size: cover;
-      background-repeat: repeat-x;
-      background-position: 0 0;
-      animation: bgWave 18s linear infinite alternate;
-    }
-    @keyframes bgWave { to { background-position-x: 20vw; } }
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Bordio-Style Task Dashboard — Mobile Tabs</title>
+    <style>
+        /* --- Reset & base --- */
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        html,body { height: 100%; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+            background: linear-gradient(135deg,#667eea 0%,#764ba2 100%);
+            color: #111827;
+            -webkit-font-smoothing:antialiased;
+            -moz-osx-font-smoothing:grayscale;
+        }
 
-    /* Triple dot icon and nav styles */
-    .nav-bar {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 20px 20px;
-      background: #1f1f1f;
-      border-bottom: 1px solid #171717;
-      position: relative;
-      z-index: 4;
-    }
-    .pulse-title { font-size: 2.2rem; font-weight: 800; color: #ff4500; letter-spacing: 3px; flex:1; text-align:center; }
-    #dateTime { color:#ccc;font-weight:400;min-width:220px;text-align:right;font-size:1rem;}
-    .dots-menu {
-      cursor: pointer;
-      width: 32px; height: 32px;
-      display: flex; align-items: center; justify-content: center;
-      border-radius: 50%; border: none; background: #222;
-      box-shadow: 0 0 8px #ff450080;
-      margin-left: 10px;
-      position: relative;
-      z-index: 13;
-      font-size: 2rem;
-    }
-    .dots-menu span { font-size: 2.3rem; color: #ff4500; user-select: none; }
+        /* --- Header --- */
+        .header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 68px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 14px 20px;
+            z-index: 120;
+            background: rgba(255,255,255,0.95);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.08);
+        }
+        .logo {
+            font-weight: 800;
+            font-size: 20px;
+            background: linear-gradient(135deg,#667eea,#764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .add-task-btn {
+            background: linear-gradient(135deg,#667eea,#764ba2);
+            color: #fff;
+            border: none;
+            padding: 10px 16px;
+            border-radius: 22px;
+            cursor: pointer;
+            font-weight: 600;
+            box-shadow: 0 6px 18px rgba(102,126,234,0.28);
+        }
 
-    .menu-popup {
-      position: absolute;
-      top: 58px; right: 16px;
-      min-width: 180px;
-      background: #232323;
-      border-radius: 11px;
-      box-shadow: 0 0 22px #0009, 0 3px 12px #ff450080;
-      padding: 18px 0;
-      flex-direction: column;
-      z-index: 999;
-      animation: fadeIn 0.2s;
-      display: none;
-    }
-    .menu-popup.show { display: flex; }
-    .menu-popup a {
-      color: #eee; text-decoration: none;
-      font-weight: 600; padding: 10px 34px; border-radius: 8px;
-      transition: color 0.2s, background 0.2s, box-shadow 0.3s;
-      font-size: 1.13rem;
-    }
-    .menu-popup a:hover, .menu-popup a:focus {
-      color: #ff4500; background: #171717; box-shadow: 0 0 8px #ff4500;
-    }
+        /* --- Dashboard wrapper & board --- */
+        .dashboard {
+            height: 100vh;
+            padding: 20px;
+            padding-top: 88px; /* account for fixed header */
+            overflow: hidden; /* we use internal scroll for board */
+        }
 
-    /* Responsive */
-    @media (max-width: 768px) {
-      .team-container { flex-direction: column; align-items: center; }
-      .player-card { width: 90% !important; }
-      iframe, .yt-embed { height: 260px !important; }
-      .menu-popup { right: 6%; top: 58px; }
-    }
-    .player-card {
-      transition: transform 0.3s, box-shadow 0.3s;
-      cursor: pointer; border-radius: 18px; overflow: hidden; box-shadow: 0 4px 15px rgba(255,69,0,0.3);
-      background: #1f1f1f; width: 220px; text-align: center; padding: 20px; margin-bottom: 20px; z-index: 3;
-    }
-    .player-card img {
-      width: 150px; height: 150px; border-radius: 50%; object-fit: cover; border: 3px solid #ff4500; box-shadow: 0 0 15px #ff4500; transition: transform 0.4s;
-    }
-    .player-card:hover { transform: scale(1.05); box-shadow:0 0 25px #ff4500; position:relative; z-index:5;}
-    .player-card:hover img { transform: scale(1.1);}
-    .sponsor-logo{transition:transform 0.3s, filter 0.3s; cursor:pointer; filter:grayscale(100%) brightness(150%);height:70px;}
-    .sponsor-logo:hover{filter:grayscale(0) brightness(100%);transform:scale(1.15);position:relative;z-index:2;}
-    .pulse-button {animation: pulseGlow 2.5s infinite alternate; box-shadow: 0 0 15px #ff4500; background: #ff4500; color: #121212; padding: 15px 40px; border-radius: 30px; font-weight: 700; font-size: 1.2rem; text-decoration: none; display: inline-block; user-select: none;}
-    @keyframes pulseGlow { from {box-shadow: 0 0 10px #ff4500;} to {box-shadow: 0 0 25px #ff4500;} }
-    section, footer {max-width:1200px; margin-left:auto; margin-right:auto;}
-    header {max-width: 1200px; margin-left: auto; margin-right:auto;}
+        .board {
+            display: flex;
+            gap: 18px;
+            align-items: flex-start;
+            height: calc(100vh - 168px); /* header + tabbar space margins on desktop */
+            overflow-x: auto;
+            overflow-y: hidden;
+            padding-bottom: 20px;
+            scroll-behavior: smooth;
+            -webkit-overflow-scrolling: touch;
+        }
 
-    /* Form styles */
-    form {
-      background: #111;
-      padding: 25px 30px;
-      border-radius: 15px;
-      box-shadow: 0 0 20px #ff450080;
-      color: #eee;
-      max-width: 600px;
-      margin: 0 auto 40px auto;
-    }
-    form label {
-      display: block;
-      margin-bottom: 6px;
-      font-weight: 600;
-      color: #ff4500;
-      font-size: 1.1rem;
-    }
-    form input, form select, form textarea {
-      width: 100%;
-      padding: 10px;
-      margin-bottom: 18px;
-      border-radius: 8px;
-      border: none;
-      font-size: 1rem;
-      color: #222;
-    }
-    form textarea {
-      resize: vertical;
-      min-height: 80px;
-    }
-    form button {
-      background: #ff4500;
-      color: #121212;
-      padding: 12px 28px;
-      border: none;
-      border-radius: 12px;
-      font-weight: 700;
-      font-size: 1.2rem;
-      cursor: pointer;
-      transition: background 0.3s ease;
-    }
-    form button:hover {
-      background: #e23e00;
-    }
-  </style>
+        .column {
+            background: rgba(255,255,255,0.96);
+            border-radius: 14px;
+            padding: 18px;
+            min-width: 320px;
+            max-height: 100%;
+            overflow-y: auto;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+            border: 1px solid rgba(0,0,0,0.04);
+        }
+
+        .column-header {
+            display:flex;
+            justify-content:space-between;
+            align-items:center;
+            margin-bottom:12px;
+            padding-bottom:10px;
+            border-bottom:1px solid rgba(0,0,0,0.04);
+        }
+        .column-title { font-weight:700; font-size:16px; color:#111827; }
+        .column-count {
+            background:#eef2ff;
+            color:#5b21b6;
+            padding:6px 10px;
+            border-radius:16px;
+            font-weight:700;
+            font-size:13px;
+        }
+
+        .task-card {
+            background:#fff;
+            border-radius:10px;
+            padding:14px;
+            margin-bottom:12px;
+            box-shadow: 0 6px 18px rgba(0,0,0,0.06);
+            cursor:grab;
+            border-left: 4px solid #667eea;
+        }
+        .task-card.completed { opacity:0.6; background:#f9fafb; border-left-color:#6b7280; }
+        .task-title { font-weight:600; margin-bottom:8px; font-size:15px; color:#111827; }
+        .task-desc { font-size:14px; color:#6b7280; margin-bottom:10px; line-height:1.35; }
+        .task-footer { display:flex; justify-content:space-between; align-items:center; font-size:13px; color:#9ca3af; }
+
+        .priority { padding:4px 8px; border-radius:8px; font-weight:700; font-size:12px; }
+        .priority.high { background:#fee2e2; color:#b91c1c; }
+        .priority.medium { background:#fef3c7; color:#92400e; }
+        .priority.low { background:#d1fae5; color:#065f46; }
+
+        .add-card-btn {
+            display:block;
+            width:100%;
+            text-align:center;
+            padding:12px;
+            margin-top:6px;
+            border-radius:10px;
+            border:2px dashed rgba(99,102,241,0.15);
+            background:#fbfdff;
+            color:#475569;
+            font-weight:600;
+            cursor:pointer;
+        }
+
+        /* --- Mobile tab bar --- */
+        .mobile-tabbar {
+            position: fixed;
+            left: 12px;
+            right: 12px;
+            bottom: 12px;
+            height: 64px;
+            z-index: 140;
+            display: none; /* shown on small screens */
+            align-items: center;
+            justify-content: space-between;
+            background: rgba(255,255,255,0.98);
+            border-radius: 14px;
+            padding: 6px 10px;
+            box-shadow: 0 18px 40px rgba(0,0,0,0.14);
+            border: 1px solid rgba(0,0,0,0.06);
+            backdrop-filter: blur(6px);
+        }
+
+        .tab-button {
+            flex: 1 1 0;
+            height: 100%;
+            display:flex;
+            align-items:center;
+            gap:8px;
+            justify-content:center;
+            cursor:pointer;
+            color:#6b7280;
+            font-size:12px;
+            border-radius:10px;
+            user-select:none;
+            transition: all 0.18s ease;
+            padding: 6px 6px;
+        }
+        .tab-button svg { width:20px; height:20px; display:block; }
+        .tab-button .label { display:block; font-size:12px; line-height:1; margin-top:2px; }
+        .tab-button.active { background: linear-gradient(135deg,#eef2ff,#f5f3ff); color:#4f46e5; transform:translateY(-2px); box-shadow: 0 8px 22px rgba(79,70,229,0.12); }
+
+        /* show labels below icon on very small screens */
+        .tab-col { display:flex; flex-direction:column; align-items:center; justify-content:center; }
+
+        /* --- Responsive adjustments --- */
+        @media (max-width: 768px) {
+            .dashboard { padding: 10px; padding-top: 88px; }
+            .board {
+                gap: 12px;
+                height: calc(100vh - 88px - 92px); /* header + tabbar */
+                padding-bottom: 90px; /* make room for tabbar */
+            }
+            .column {
+                min-width: calc(100vw - 40px); /* full viewport minus padding */
+                max-width: calc(100vw - 40px);
+                height: 100%;
+                overflow-y: auto;
+            }
+            .mobile-tabbar { display:flex; }
+            .header { padding: 10px 12px; height: 64px; }
+        }
+
+        /* Desktop niceties */
+        @media (min-width: 1024px) {
+            .board { padding-bottom: 40px; height: calc(100vh - 120px); }
+            .column { min-width: 340px; }
+        }
+
+        /* tiny helpers for accessibility */
+        .sr-only { position:absolute; left:-10000px; top:auto; width:1px; height:1px; overflow:hidden; }
+    </style>
 </head>
 <body>
-  <div class="bg-animate"></div>
-  <div class="bg-waves"></div>
+    <div class="header" role="banner">
+        <div class="logo">Bordio Dashboard</div>
+        <button class="add-task-btn" id="global-add">+ New Task</button>
+    </div>
 
-  <header class="nav-bar">
-    <div class="pulse-title">MME</div>
-    <button class="dots-menu" id="menuToggle" aria-label="Open navigation menu"><span>&#8942;</span></button>
-    <div id="dateTime"></div>
-    <!-- NAV MENU POPUP -->
-    <nav class="menu-popup" id="navMenu" aria-label="Main Navigation">
-      <a href="#team">Team</a>
-      <a href="#live">Live</a>
-      <a href="#news">News</a>
-      <a href="#contact">Contact</a>
-      <a href="#shop">Shop Jerseys</a>
+    <main class="dashboard" role="main">
+        <div class="board" id="board" aria-label="task board">
+            <section class="column" data-status="todo" id="col-todo">
+                <div class="column-header">
+                    <div class="column-title">To Do</div>
+                    <div class="column-count" id="todo-count">3</div>
+                </div>
+
+                <article class="task-card" draggable="true">
+                    <div class="task-title">Design Leo Club landing page</div>
+                    <div class="task-desc">Create responsive hero section with animated stats and call-to-action buttons for the new management system.</div>
+                    <div class="task-footer">
+                        <span class="priority high">High</span>
+                        <span>Due: Dec 5</span>
+                    </div>
+                </article>
+
+                <article class="task-card completed" draggable="true">
+                    <div class="task-title">Setup FastAPI backend</div>
+                    <div class="task-desc">Deploy initial API endpoints for user auth and club management with Swagger docs.</div>
+                    <div class="task-footer">
+                        <span class="priority medium">Medium</span>
+                        <span>Done: Nov 28</span>
+                    </div>
+                </article>
+
+                <div class="add-card-btn" onclick="addTaskToColumn('todo')">+ Add Task</div>
+            </section>
+
+            <section class="column" data-status="in-progress" id="col-inprogress">
+                <div class="column-header">
+                    <div class="column-title">In Progress</div>
+                    <div class="column-count" id="progress-count">2</div>
+                </div>
+
+                <article class="task-card" draggable="true">
+                    <div class="task-title">PUBG Mobile tournament scheduler</div>
+                    <div class="task-desc">Build drag-and-drop match scheduling for esports team management dashboard.</div>
+                    <div class="task-footer">
+                        <span class="priority high">High</span>
+                        <span>Due: Dec 3</span>
+                    </div>
+                </article>
+
+                <article class="task-card" draggable="true">
+                    <div class="task-title">Uniq Poet battle rap forum</div>
+                    <div class="task-desc">Implement real-time chat and voting system for Nepali hiphop community platform.</div>
+                    <div class="task-footer">
+                        <span class="priority medium">Medium</span>
+                        <span>Due: Dec 7</span>
+                    </div>
+                </article>
+
+                <div class="add-card-btn" onclick="addTaskToColumn('in-progress')">+ Add Task</div>
+            </section>
+
+            <section class="column" data-status="review" id="col-review">
+                <div class="column-header">
+                    <div class="column-title">Review</div>
+                    <div class="column-count" id="review-count">1</div>
+                </div>
+
+                <article class="task-card" draggable="true">
+                    <div class="task-title">Ngrok tunnel for local demo</div>
+                    <div class="task-desc">Setup secure public URLs for frontend/backend demo of Leo Club management system.</div>
+                    <div class="task-footer">
+                        <span class="priority low">Low</span>
+                        <span>Due: Dec 2</span>
+                    </div>
+                </article>
+
+                <div class="add-card-btn" onclick="addTaskToColumn('review')">+ Add Task</div>
+            </section>
+
+            <section class="column" data-status="done" id="col-done">
+                <div class="column-header">
+                    <div class="column-title">Done</div>
+                    <div class="column-count" id="done-count">1</div>
+                </div>
+
+                <article class="task-card completed" draggable="true">
+                    <div class="task-title">Responsive MERN deployment</div>
+                    <div class="task-desc">Deployed full-stack app to Render with separate frontend/backend services.</div>
+                    <div class="task-footer">
+                        <span class="priority high">High</span>
+                        <span>Done: Nov 25</span>
+                    </div>
+                </article>
+
+                <div class="add-card-btn" onclick="addTaskToColumn('done')">+ Add Task</div>
+            </section>
+        </div>
+    </main>
+
+    <!-- Mobile Tab Bar -->
+    <nav class="mobile-tabbar" role="navigation" aria-label="Board tabs">
+        <div class="tab-button tab-col" data-target="col-todo" id="tab-todo" role="button" tabindex="0" aria-pressed="false" title="To Do">
+            <!-- clipboard list SVG -->
+            <svg viewBox="0 0 24 24" fill="none" aria-hidden="true" focusable="false">
+                <path d="M9 2h6a2 2 0 0 1 2 2v0a0 0 0 0 1 0 0h-10a2 2 0 0 0-2 2v0" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+                <rect x="3" y="7" width="18" height="14" rx="2" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="M8 11h8M8 15h8" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            <span class="label">To Do</span>
+        </div>
+
+        <div class="tab-button tab-col" data-target="col-inprogress" id="tab-inprogress" role="button" tabindex="0" aria-pressed="false" title="In Progress">
+            <!-- refresh / circular arrow -->
+            <svg viewBox="0 0 24 24" fill="none" aria-hidden="true" focusable="false">
+                <path d="M21 12a9 9 0 1 1-3.2-6.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="M21 3v6h-6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            <span class="label">Progress</span>
+        </div>
+
+        <div class="tab-button tab-col" data-target="col-review" id="tab-review" role="button" tabindex="0" aria-pressed="false" title="Review">
+            <!-- eye / review -->
+            <svg viewBox="0 0 24 24" fill="none" aria-hidden="true" focusable="false">
+                <path d="M2 12s4-7 10-7 10 7 10 7-4 7-10 7S2 12 2 12z" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+                <circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="1.4"/>
+            </svg>
+            <span class="label">Review</span>
+        </div>
+
+        <div class="tab-button tab-col" data-target="col-done" id="tab-done" role="button" tabindex="0" aria-pressed="false" title="Done">
+            <!-- check / completed -->
+            <svg viewBox="0 0 24 24" fill="none" aria-hidden="true" focusable="false">
+                <path d="M20 6L9 17l-5-5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            <span class="label">Done</span>
+        </div>
     </nav>
-  </header>
 
-  <!-- Hero Section -->
-  <section class="fade-in" style="height:80vh; display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;padding:0 20px; z-index:2;position:relative;">
-    <h1 style="font-size: 3.2rem; color: #ff4500; text-shadow: 0 0 10px #ff4500; margin: 0;">
-      Mad Morans Esports
-      <span style="font-size:1.4rem;display:block;color:#ffa15a;">MME</span>
-    </h1>
-    <p style="font-size: 1.2rem; font-weight: 500; color: #fff; margin: 12px 0 30px;">
-      The Fury of PUBG Battlegrounds
-    </p>
-    <a href="#team" class="pulse-button">Meet The Team</a>
-  </section>
+    <script>
+        /******************************
+         * Core functionality (drag/drop, counts, mobile tabs)
+         ******************************/
+        const board = document.getElementById('board');
+        const columns = document.querySelectorAll('.column');
+        const tabButtons = document.querySelectorAll('.tab-button');
+        const globalAdd = document.getElementById('global-add');
 
-  <!-- Team Roster -->
-  <section id="team" class="fade-in" style="padding:50px 20px;max-width:1000px;margin:0 auto;position:relative;z-index:3;">
-    <h2 style="text-align:center;font-size:2.3rem;margin-bottom:24px;color:#ff4500;">Team Roster</h2>
-    <div style="text-align:center; font-size:1.17rem; color:#ffa15a; margin-bottom:28px;">
-      <strong>Mad Morans Esports</strong> (MME) is a fearless squad competing at the highest PUBG battlegrounds level, known for clutch plays, sharp rotations, and relentless team synergy. Passionate and unpredictable, MME combines talent and heart—turning every match into a spectacle.
-    </div>
-    <div class="team-container" style="display:flex;gap:30px;flex-wrap:wrap;justify-content:center;">
-      <div class="player-card">
-        <img src="https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=facearea&w=400&h=400" alt="RazeX" />
-        <h3 style="margin:15px 0 5px;font-size:1.2rem;">RazeX</h3>
-        <p style="font-size:0.93rem;color:#ccc;">Role: Sniper</p>
-        <p style="font-size:0.86rem;color:#aaa;">Sharpshooter with deadly precision.</p>
-        <div style="margin-top:12px;">
-          <a href="#" style="color:#ff4500;margin-right:10px;text-decoration:none;">Twitch</a>
-          <a href="#" style="color:#ff4500;margin-right:10px;text-decoration:none;">Twitter</a>
-          <a href="#" style="color:#ff4500;text-decoration:none;">Instagram</a>
-        </div>
-      </div>
-      <div class="player-card">
-        <img src="https://images.unsplash.com/photo-1508214751196-bcfd4ca60f91?auto=format&fit=facearea&w=400&h=400" alt="Moro" />
-        <h3 style="margin:15px 0 5px;font-size:1.2rem;">Moro</h3>
-        <p style="font-size:0.93rem;color:#ccc;">Role: Support</p>
-        <p style="font-size:0.86rem;color:#aaa;">Tactical mastermind and team backbone.</p>
-        <div style="margin-top:12px;">
-          <a href="#" style="color:#ff4500;margin-right:10px;text-decoration:none;">Twitch</a>
-          <a href="#" style="color:#ff4500;margin-right:10px;text-decoration:none;">Twitter</a>
-          <a href="#" style="color:#ff4500;text-decoration:none;">Instagram</a>
-        </div>
-      </div>
-      <div class="player-card">
-        <img src="https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e?auto=format&fit=facearea&w=400&h=400" alt="Falcon" />
-        <h3 style="margin:15px 0 5px;font-size:1.2rem;">Falcon</h3>
-        <p style="font-size:0.93rem;color:#ccc;">Role: Leader</p>
-        <p style="font-size:0.86rem;color:#aaa;">Strategic planner with fierce instincts.</p>
-        <div style="margin-top:12px;">
-          <a href="#" style="color:#ff4500;margin-right:10px;text-decoration:none;">Twitch</a>
-          <a href="#" style="color:#ff4500;margin-right:10px;text-decoration:none;">Twitter</a>
-          <a href="#" style="color:#ff4500;text-decoration:none;">Instagram</a>
-        </div>
-      </div>
-    </div>
-  </section>
+        let dragTask = null;
 
-  <!-- Live Streaming (Twitch + YouTube Live embed) -->
-  <section id="live" class="fade-in" style="padding:50px 20px;max-width:900px;margin:40px auto;text-align:center;position:relative;z-index:3;">
-    <h2 style="color:#ff4500;font-size:2.2rem;margin-bottom:30px;">Live Stream</h2>
-    <div class="yt-embed" style="margin-bottom:40px;">
-      <iframe width="100%" height="480"
-        src="https://www.youtube.com/embed/Fc9czfoW2vI?autoplay=1&mute=1"
-        frameborder="0" allow="autoplay; encrypted-media" allowfullscreen
-        style="border-radius:12px;box-shadow:0 0 15px #ff4500;">
-      </iframe>
-    </div>
-  </section>
+        // Setup drag listeners for existing cards (and future ones)
+        function attachDragHandlers(card) {
+            card.addEventListener('dragstart', dragStart);
+            card.addEventListener('dragend', dragEnd);
+            // Optional: enable tap-to-edit on mobile (simple)
+            card.addEventListener('dblclick', () => editCard(card));
+        }
 
-  <!-- News Section -->
-  <section id="news" class="fade-in" style="background:#1a1a1a;padding:50px 20px;max-width:900px;margin:40px auto; border-radius:12px;position:relative;z-index:3;">
-    <h2 style="text-align:center;color:#ff4500;font-size:2.2rem;margin-bottom:40px;">Latest News</h2>
-    <article style="margin-bottom:30px;border-bottom:1px solid #333;padding-bottom:20px;">
-      <h3 style="color:#ff4500;font-size:1.2rem;margin-bottom:10px;">Mad Morans Qualify for PUBG Global Finals</h3>
-      <p style="color:#ccc;">After a stunning performance in regional qualifiers, Mad Morans secured their spot for the grand PUBG Global Series Finals.</p>
-      <small style="color:#999;">October 10, 2025</small>
-    </article>
-    <article style="margin-bottom:30px;border-bottom:1px solid #333;padding-bottom:20px;">
-      <h3 style="color:#ff4500;font-size:1.2rem;margin-bottom:10px;">Team's New Coach Announced</h3>
-      <p style="color:#ccc;">The team welcomes their new coach, bringing years of competitive PUBG experience to sharpen the squad.</p>
-      <small style="color:#999;">October 8, 2025</small>
-    </article>
-  </section>
+        function dragStart(e) {
+            dragTask = this;
+            e.dataTransfer.effectAllowed = 'move';
+            this.classList.add('dragging');
+        }
 
+        function dragEnd(e) {
+            this.classList.remove('dragging');
+            dragTask = null;
+            updateCounts();
+        }
 
-  <!-- Contact Section -->
-  <section id="contact" class="fade-in" style="padding:50px 20px;max-width:700px;margin:40px auto;text-align:center;position:relative;z-index:3;">
-    <h2 style="color:#ff4500;font-size:2.2rem;margin-bottom:30px;">Contact Us</h2>
-    <form action="https://formspree.io/f/YOUR_CONTACT_FORM_ID" method="POST">
-      <label for="name">Name</label>
-      <input type="text" id="name" name="name" required placeholder="Your Full Name" />
+        columns.forEach(col => {
+            col.addEventListener('dragover', e => {
+                e.preventDefault();
+                e.dataTransfer.dropEffect = 'move';
+            });
+            col.addEventListener('drop', function(e) {
+                e.preventDefault();
+                if (dragTask) {
+                    // insert before last add button
+                    const addBtn = this.querySelector('.add-card-btn');
+                    this.insertBefore(dragTask, addBtn);
+                    updateCounts();
+                }
+            });
+        });
 
-      <label for="email">Email</label>
-      <input type="email" id="email" name="_replyto" required placeholder="Your Email Address" />
+        // initialize drag handlers for existing cards
+        document.querySelectorAll('.task-card').forEach(attachDragHandlers);
 
-      <label for="message">Message</label>
-      <textarea id="message" name="message" required placeholder="Your message here" rows="5"></textarea>
+        // Add new task helpers
+        function createTaskElement(title = 'New Task', desc = 'Click to edit task details...', priority = 'medium') {
+            const card = document.createElement('article');
+            card.className = 'task-card';
+            card.draggable = true;
+            card.innerHTML = `
+                <div class="task-title" contenteditable="false">${escapeHtml(title)}</div>
+                <div class="task-desc" contenteditable="false">${escapeHtml(desc)}</div>
+                <div class="task-footer">
+                    <span class="priority ${priority}">${capitalize(priority)}</span>
+                    <span>Due: Today</span>
+                </div>
+            `;
+            attachDragHandlers(card);
+            // allow single-click to enable quick edit (toggle)
+            card.addEventListener('click', function (e) {
+                if (e.detail === 1) {
+                    // single click: select (no-op)
+                }
+                if (e.detail === 2) {
+                    // double click handled above (edit)
+                }
+            });
+            return card;
+        }
 
-      <button type="submit">Send Message</button>
-    </form>
-  </section>
+        function addTaskToColumn(status) {
+            const column = document.querySelector(`[data-status="${status}"]`);
+            const card = createTaskElement();
+            // insert before add button
+            const addBtn = column.querySelector('.add-card-btn');
+            column.insertBefore(card, addBtn);
+            updateCounts();
+            // on mobile, scroll into view
+            if (isMobile()) {
+                column.scrollIntoView({behavior:'smooth', inline:'center'});
+            }
+        }
 
-  <!-- Shop Section -->
+        // global add picks a column randomly (same behavior as before)
+        globalAdd.addEventListener('click', () => {
+            const statuses = ['todo','in-progress','review','done'];
+            const random = statuses[Math.floor(Math.random()*statuses.length)];
+            addTaskToColumn(random);
+        });
 
-<section id="shop" class="fade-in" style="padding:50px 20px;max-width:700px;margin:40px auto;text-align:center;position:relative;z-index:3;">
-  <h2 style="color:#ff4500;font-size:2.2rem;margin-bottom:30px;">Order Your Jersey</h2>
-  <form action="https://formspree.io/f/YOUR_ORDER_FORM_ID" method="POST">
-    <label for="customer-name">Full Name</label>
-    <input type="text" id="customer-name" name="name" required placeholder="Your Full Name" />
+        // Update column counts
+        function updateCounts() {
+            document.querySelectorAll('.column').forEach(column => {
+                const count = column.querySelectorAll('.task-card').length;
+                const countEl = column.querySelector('.column-count');
+                if (countEl) countEl.textContent = count;
+            });
+        }
 
-    <label for="customer-address">Address</label>
-    <textarea id="customer-address" name="address" required placeholder="Your Address" rows="3"></textarea>
+        // simple inline editor for double click
+        function editCard(card) {
+            const titleEl = card.querySelector('.task-title');
+            const descEl = card.querySelector('.task-desc');
+            const originalTitle = titleEl.textContent;
+            const originalDesc = descEl.textContent;
 
-    <label for="customer-phone">Phone Number</label>
-    <input type="tel" id="customer-phone" name="phone" required placeholder="Your Phone Number" />
+            titleEl.contentEditable = true;
+            descEl.contentEditable = true;
+            titleEl.focus();
 
-    <label for="print-name">Name to be Printed on Jersey</label>
-    <input type="text" id="print-name" name="print_name" required placeholder="Name on Jersey" />
+            // add visual outline while editing
+            card.style.boxShadow = '0 10px 30px rgba(99,102,241,0.15)';
+            const stopEditing = () => {
+                titleEl.contentEditable = false;
+                descEl.contentEditable = false;
+                card.style.boxShadow = '';
+                // if empty title, revert
+                if (!titleEl.textContent.trim()) titleEl.textContent = originalTitle;
+                if (!descEl.textContent.trim()) descEl.textContent = originalDesc;
+            };
 
-    <label for="customer-email">Email</label>
-    <input type="email" id="customer-email" name="_replyto" required placeholder="Your Email Address" />
+            // stop editing on blur or ESC
+            titleEl.addEventListener('blur', stopEditing, {once:true});
+            descEl.addEventListener('blur', stopEditing, {once:true});
+            document.addEventListener('keydown', function onKey(e){
+                if (e.key === 'Escape') {
+                    titleEl.textContent = originalTitle;
+                    descEl.textContent = originalDesc;
+                    stopEditing();
+                    document.removeEventListener('keydown', onKey);
+                }
+                if (e.key === 'Enter') {
+                    // prevent newline and finish edit
+                    e.preventDefault();
+                    titleEl.blur();
+                    descEl.blur();
+                }
+            });
+        }
 
-    <label for="jersey-size">Jersey Size</label>
-    <select id="jersey-size" name="jersey_size" required>
-      <option value="" disabled selected>Select Size</option>
-      <option value="Small">Small</option>
-      <option value="Medium">Medium</option>
-      <option value="Large">Large</option>
-      <option value="XL">XL</option>
-      <option value="XXL">XXL</option>
-    </select>
+        // Utility
+        function capitalize(s){ return s.charAt(0).toUpperCase() + s.slice(1); }
+        function escapeHtml(str){
+            return String(str).replace(/[&<>"']/g, (m) => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
+        }
 
-    <label for="quantity">Quantity</label>
-    <input type="number" id="quantity" name="quantity" min="1" max="10" value="1" required />
+        // Mobile tab behaviour
+        function isMobile() {
+            return window.matchMedia && window.matchMedia('(max-width:768px)').matches;
+        }
 
-    <label for="custom-note">Customization (Number, etc.)</label>
-    <textarea id="custom-note" name="custom_note" placeholder="Optional customization details" rows="3"></textarea>
+        tabButtons.forEach(btn => {
+            btn.addEventListener('click', () => {
+                const targetId = btn.getAttribute('data-target');
+                const col = document.getElementById(targetId);
+                if (col) {
+                    // scroll the board to the column
+                    // using column.scrollIntoView horizontally (board is scrollable)
+                    const leftPos = col.offsetLeft - board.offsetLeft;
+                    board.scrollTo({ left: leftPos - 12, behavior: 'smooth' });
+                    setActiveTab(btn.id);
+                }
+            });
+            // keyboard support
+            btn.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault(); btn.click();
+                }
+            });
+        });
 
-    <button type="submit">Place Order</button>
-  </form>
-</section>
+        function setActiveTab(tabId) {
+            tabButtons.forEach(t => {
+                const el = document.getElementById(tabId);
+                if (t.id === tabId) {
+                    t.classList.add('active');
+                    t.setAttribute('aria-pressed','true');
+                } else {
+                    t.classList.remove('active');
+                    t.setAttribute('aria-pressed','false');
+                }
+            });
+        }
 
+        // sync active tab with scroll using IntersectionObserver
+        function observeColumnsForActiveTab() {
+            if (!('IntersectionObserver' in window)) return;
+            const options = {
+                root: board,
+                rootMargin: '0px',
+                threshold: 0.55 // more than half visible
+            };
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    const id = entry.target.id; // e.g. col-todo
+                    const tabId = 'tab-' + id.replace('col-','');
+                    if (entry.isIntersecting) {
+                        setActiveTab(tabId);
+                    }
+                });
+            }, options);
 
-  <footer class="fade-in" style="background:#1f1f1f;padding:25px 20px;text-align:center;color:#888;font-size:0.9rem;margin-top:50px;position:relative;z-index:4;">
-    &copy; 2025 MME. All rights reserved.
-    <div style="margin-top:10px;">
-      <a href="#" style="color:#ff4500;margin:0 15px;text-decoration:none;">Twitter</a>
-      <a href="#" style="color:#ff4500;margin:0 15px;text-decoration:none;">Instagram</a>
-      <a href="#" style="color:#ff4500;margin:0 15px;text-decoration:none;">Discord</a>
-    </div>
-  </footer>
+            columns.forEach(col => observer.observe(col));
+        }
 
-  <script>
-    function updateDateTime() {
-      const dateTimeElem = document.getElementById('dateTime');
-      const now = new Date();
-      const options = { weekday: 'long', year: 'numeric', month: 'short', day: 'numeric' };
-      const dateStr = now.toLocaleDateString(undefined, options);
-      const timeStr = now.toLocaleTimeString(undefined, { hour12: true });
-      dateTimeElem.textContent = `${dateStr} | ${timeStr}`;
-    }
-    setInterval(updateDateTime, 1000); updateDateTime();
+        // initial active tab
+        function initActiveTab() {
+            // if mobile, default to todo
+            if (isMobile()) setActiveTab('tab-todo');
+            else setActiveTab('tab-todo');
+        }
 
-    // Improved Menu logic
-    const menuToggle = document.getElementById('menuToggle');
-    const navMenu = document.getElementById('navMenu');
-    let menuOpen = false;
-    menuToggle.onclick = function(e) {
-      e.stopPropagation();
-      menuOpen = !menuOpen;
-      navMenu.classList.toggle('show', menuOpen);
-    };
-    // Hide menu clicking anywhere except menu (on link clicks or outside)
-    document.addEventListener('click', function(e) {
-      if (menuOpen && !navMenu.contains(e.target) && e.target !== menuToggle) {
-        navMenu.classList.remove('show');
-        menuOpen = false;
-      }
-    });
-    navMenu.onclick = function(e) {
-      if (e.target.tagName === 'A') {
-        navMenu.classList.remove('show');
-        menuOpen = false;
-      }
-    };
-  </script>
+        // call on load
+        updateCounts();
+        initActiveTab();
+        observeColumnsForActiveTab();
+
+        // handle resizing (re-observe)
+        window.addEventListener('resize', () => {
+            // on resize ensure active tab still highlighted
+            initActiveTab();
+        });
+
+        /***********************
+         * Accessibility niceties & keyboard navigation
+         ***********************/
+        // left/right arrow navigation when board is focused (desktop)
+        board.setAttribute('tabindex','0');
+        board.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowLeft') board.scrollBy({left: -320, behavior:'smooth'});
+            if (e.key === 'ArrowRight') board.scrollBy({left: 320, behavior:'smooth'});
+        });
+
+        /***********************
+         * Small polish: when page loads on mobile ensure the visible column is centered
+         ***********************/
+        window.addEventListener('load', () => {
+            if (isMobile()) {
+                const defaultCol = document.getElementById('col-todo');
+                if (defaultCol) {
+                    const leftPos = defaultCol.offsetLeft - board.offsetLeft;
+                    board.scrollTo({ left: leftPos - 12 });
+                }
+            }
+        });
+    </script>
 </body>
 </html>
