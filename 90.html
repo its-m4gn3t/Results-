@@ -1,226 +1,349 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Swaad 90 Fast Food</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Swaad 90 – Fast Food</title>
 
-  <style>
-    body {
-      font-family: 'Arial', sans-serif;
-      margin: 0;
-      background: #fff8f0;
-      color: #333;
-    }
-    header {
-      background-color: #ff6f47;
-      padding: 20px;
-      text-align: center;
-      color: white;
-    }
-    header h1 {
-      margin: 0;
-    }
-    nav {
-      margin-top: 15px;
-    }
-    nav a {
-      color: white;
-      margin: 0 15px;
-      text-decoration: none;
-      font-weight: bold;
-    }
-    .hero {
-      background-color: #ffd9c2;
-      padding: 40px 20px;
-      text-align: center;
-    }
-    h3 {
-      text-align: center;
-      color: #b33a00;
-    }
+<style>
+/* BASIC RESET */
+*{margin:0;padding:0;box-sizing:border-box;font-family:Arial, sans-serif;scroll-behavior:smooth;}
+body{background:#fef7f2;color:#333;}
 
-    /* CATEGORY TABS */
-    .category-tabs {
-      display: flex;
-      justify-content: center;
-      gap: 15px;
-      margin: 20px 0;
-      flex-wrap: wrap;
-    }
-    .category-tabs button {
-      padding: 10px 20px;
-      border: none;
-      background-color: #ff6f47;
-      color: white;
-      border-radius: 5px;
-      font-weight: bold;
-      cursor: pointer;
-    }
-    .category-tabs button.active {
-      background-color: #b33a00;
-    }
+/* GLOBAL SECTION STYLE */
+section{padding:60px 20px;max-width:1000px;margin:auto;}
 
-    /* MENU ITEMS */
-    .menu-items {
-      display: none;
-      flex-wrap: wrap;
-      justify-content: center;
-      gap: 20px;
-      padding: 10px;
-    }
-    .menu-items.active {
-      display: flex;
-    }
-    .menu-item {
-      background: white;
-      border-radius: 8px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-      padding: 15px;
-      width: 240px;
-      text-align: center;
-    }
-    .menu-item img {
-      max-width: 100%;
-      border-radius: 8px;
-    }
-    .menu-item h4 {
-      margin: 10px 0;
-    }
-    .menu-item button {
-      padding: 10px 20px;
-      border: none;
-      background-color: #ff6f47;
-      color: white;
-      border-radius: 4px;
-      cursor: pointer;
-      font-weight: bold;
-    }
+/* HEADER */
+header{
+  position:fixed;
+  top:0;left:0;right:0;
+  background:#ff6f47;
+  padding:15px 10px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  color:white;
+  z-index:10;
+}
+header h1{margin-left:10px;}
+header nav a{
+  color:white;
+  margin:0 10px;
+  text-decoration:none;
+  font-weight:bold;
+  font-size:14px;
+}
 
-    footer {
-      text-align: center;
-      padding: 20px;
-      background-color: #ff6f47;
-      color: white;
-      margin-top: 40px;
-    }
-  </style>
+/* HERO SECTION */
+.hero{
+  padding-top:120px;
+  background:#ffd9c2;
+  text-align:center;
+  padding-bottom:60px;
+}
+.hero h2{font-size:2.4em;color:#b33a00;margin-bottom:15px;}
+.hero p{font-size:1.1em;max-width:600px;margin:auto;color:#6b3f17;}
+.hero button{
+  margin-top:20px;
+  padding:12px 22px;
+  border:none;
+  background:#ff6f47;
+  color:white;
+  border-radius:8px;
+  font-size:1em;
+  cursor:pointer;
+}
+
+/* ABOUT */
+.about-box{
+  background:white;
+  padding:25px;
+  border-radius:12px;
+  box-shadow:0 3px 10px rgba(0,0,0,0.1);
+  line-height:1.6;
+  color:#4a2c0a;
+}
+
+/* CATEGORY SCROLLER */
+.category-scroll{
+  display:flex;
+  overflow-x:auto;
+  gap:20px;
+  padding-bottom:10px;
+  scrollbar-width:none;
+}
+.category-scroll::-webkit-scrollbar{display:none;}
+.category-card{
+  min-width:180px;
+  background:white;
+  border-radius:12px;
+  box-shadow:0 2px 8px rgba(0,0,0,0.1);
+  padding:15px;
+  text-align:center;
+  cursor:pointer;
+  transition:0.3s;
+}
+.category-card:hover{transform:scale(1.05);}
+.category-card img{
+  width:100%;
+  border-radius:12px;
+}
+
+/* MENU ITEMS */
+.menu-container{
+  display:flex;
+  flex-wrap:wrap;
+  justify-content:center;
+  gap:20px;
+}
+.menu-item{
+  width:260px;
+  background:white;
+  padding:15px;
+  border-radius:12px;
+  box-shadow:0 2px 8px rgba(0,0,0,0.1);
+  text-align:center;
+}
+.menu-item img{width:100%;border-radius:12px;}
+.menu-item button{
+  margin-top:10px;
+  padding:10px 16px;
+  background:#ff6f47;
+  color:white;
+  border:none;
+  border-radius:6px;
+  cursor:pointer;
+}
+
+/* SPECIAL COMBOS */
+.combo{
+  background:white;
+  margin-bottom:25px;
+  border-radius:12px;
+  padding:20px;
+  box-shadow:0 2px 8px rgba(0,0,0,0.1);
+}
+.combo h4{color:#b33a00;margin-bottom:6px;}
+.combo p{color:#5b3c1a;}
+
+/* REVIEWS */
+.review-box{
+  background:white;
+  padding:20px;
+  border-radius:12px;
+  box-shadow:0 2px 8px rgba(0,0,0,0.1);
+  margin-bottom:20px;
+}
+.review-rating{color:#ffb100;font-size:20px;margin-bottom:5px;}
+
+/* CONTACT */
+.contact-form{
+  background:white;
+  padding:25px;
+  border-radius:12px;
+  box-shadow:0 2px 8px rgba(0,0,0,0.1);
+  display:flex;
+  flex-direction:column;
+}
+.contact-form input,textarea{
+  padding:12px;
+  margin-top:10px;
+  border-radius:6px;
+  border:1px solid #ccc;
+}
+.contact-form button{
+  margin-top:15px;
+  padding:12px;
+  border:none;
+  background:#ff6f47;
+  color:white;
+  border-radius:6px;
+  cursor:pointer;
+}
+
+/* FOOTER */
+footer{
+  background:#ff6f47;
+  color:white;
+  text-align:center;
+  padding:20px;
+  margin-top:40px;
+}
+</style>
 </head>
 <body>
 
 <header>
   <h1>Swaad 90</h1>
   <nav>
-    <a href="#home">Home</a>
-    <a href="#menu">Menu</a>
+    <a href="#hero">Home</a>
     <a href="#about">About</a>
+    <a href="#categories">Categories</a>
+    <a href="#menu">Menu</a>
+    <a href="#combos">Combos</a>
+    <a href="#reviews">Reviews</a>
     <a href="#contact">Contact</a>
   </nav>
 </header>
 
-<section class="hero" id="home">
-  <h2>Delicious Fast Food at Your Fingertips</h2>
-  <p>Welcome to Swaad 90! Fresh, fast, and full of flavor.</p>
+<!-- PAGE 1 – HERO -->
+<section class="hero" id="hero">
+  <h2>Welcome to Swaad 90</h2>
+  <p>The perfect blend of freshness, speed, and unforgettable taste. Fast food made with love.</p>
+  <button onclick="location.href='#categories'">Explore Menu</button>
 </section>
 
-<!-- FOOD MENU WITH CATEGORIES -->
-<section id="menu">
-  <h3>Our Menu</h3>
-
-  <!-- CATEGORIES -->
-  <div class="category-tabs">
-    <button class="active" onclick="showCategory('burgers')">Burgers</button>
-    <button onclick="showCategory('fries')">Fries & Snacks</button>
-    <button onclick="showCategory('pizza')">Pizza</button>
-    <button onclick="showCategory('drinks')">Drinks</button>
+<!-- PAGE 2 – ABOUT -->
+<section id="about">
+  <h3 style="text-align:center;color:#b33a00;margin-bottom:20px;">About Us</h3>
+  <div class="about-box">
+    Swaad 90 brings you fresh fast food with a twist. Quality ingredients, authentic flavors, 
+    and a commitment to serve with excellence. Whether you're craving burgers, pizza, fries, 
+    or snacks — we deliver taste that feels like home.
   </div>
+</section>
 
-  <!-- BURGERS -->
-  <div class="menu-items active" id="burgers">
-    <div class="menu-item">
+<!-- PAGE 3 – CATEGORY SCROLLER -->
+<section id="categories">
+  <h3 style="text-align:center;color:#b33a00;margin-bottom:25px;">Food Categories</h3>
+  <div class="category-scroll">
+    <div class="category-card" onclick="filterMenu('burger')">
+      <img src="https://via.placeholder.com/200x120.png?text=Burger">
+      <p><b>Burgers</b></p>
+    </div>
+    <div class="category-card" onclick="filterMenu('pizza')">
+      <img src="https://via.placeholder.com/200x120.png?text=Pizza">
+      <p><b>Pizza</b></p>
+    </div>
+    <div class="category-card" onclick="filterMenu('snack')">
+      <img src="https://via.placeholder.com/200x120.png?text=Snacks">
+      <p><b>Snacks</b></p>
+    </div>
+    <div class="category-card" onclick="filterMenu('drink')">
+      <img src="https://via.placeholder.com/200x120.png?text=Drinks">
+      <p><b>Drinks</b></p>
+    </div>
+  </div>
+</section>
+
+<!-- PAGE 4 – MENU ITEMS -->
+<section id="menu">
+  <h3 style="text-align:center;color:#b33a00;margin-bottom:25px;">Our Menu</h3>
+
+  <div class="menu-container" id="menuList">
+
+    <div class="menu-item" data-type="burger">
       <img src="https://via.placeholder.com/250x150.png?text=Chicken+Burger">
       <h4>Chicken Burger</h4>
-      <p>Grilled chicken patty with fresh veggies.</p>
-      <button onclick="orderItem('Chicken Burger')">Order Now</button>
+      <p>Fresh grilled chicken with crispy lettuce.</p>
+      <button onclick="order('Chicken Burger')">Order</button>
     </div>
 
-    <div class="menu-item">
+    <div class="menu-item" data-type="burger">
       <img src="https://via.placeholder.com/250x150.png?text=Veg+Burger">
       <h4>Veg Burger</h4>
-      <p>Crispy veggie patty with cheese and sauce.</p>
-      <button onclick="orderItem('Veg Burger')">Order Now</button>
-    </div>
-  </div>
-
-  <!-- FRIES -->
-  <div class="menu-items" id="fries">
-    <div class="menu-item">
-      <img src="https://via.placeholder.com/250x150.png?text=French+Fries">
-      <h4>French Fries</h4>
-      <p>Crispy golden fries with salt.</p>
-      <button onclick="orderItem('French Fries')">Order Now</button>
+      <p>Cheesy, crispy and full of flavor.</p>
+      <button onclick="order('Veg Burger')">Order</button>
     </div>
 
-    <div class="menu-item">
-      <img src="https://via.placeholder.com/250x150.png?text=Momos">
-      <h4>Chicken Momos</h4>
-      <p>Steamed dumplings filled with chicken.</p>
-      <button onclick="orderItem('Chicken Momos')">Order Now</button>
-    </div>
-  </div>
-
-  <!-- PIZZA -->
-  <div class="menu-items" id="pizza">
-    <div class="menu-item">
-      <img src="https://via.placeholder.com/250x150.png?text=Cheese+Pizza">
-      <h4>Cheese Pizza</h4>
-      <p>Loaded with cheese and herbs.</p>
-      <button onclick="orderItem('Cheese Pizza')">Order Now</button>
-    </div>
-
-    <div class="menu-item">
+    <div class="menu-item" data-type="pizza">
       <img src="https://via.placeholder.com/250x150.png?text=Veg+Pizza">
       <h4>Veg Pizza</h4>
-      <p>Fresh vegetables with mozzarella.</p>
-      <button onclick="orderItem('Veg Pizza')">Order Now</button>
+      <p>Loaded with veggies & cheese.</p>
+      <button onclick="order('Veg Pizza')">Order</button>
     </div>
-  </div>
 
-  <!-- DRINKS -->
-  <div class="menu-items" id="drinks">
-    <div class="menu-item">
+    <div class="menu-item" data-type="snack">
+      <img src="https://via.placeholder.com/250x150.png?text=French+Fries">
+      <h4>French Fries</h4>
+      <p>Perfectly crispy golden fries.</p>
+      <button onclick="order('French Fries')">Order</button>
+    </div>
+
+    <div class="menu-item" data-type="drink">
       <img src="https://via.placeholder.com/250x150.png?text=Cold+Drink">
       <h4>Cold Drinks</h4>
-      <p>Chilled beverages to refresh your meal.</p>
-      <button onclick="orderItem('Cold Drink')">Order Now</button>
+      <p>Refreshing chilled beverages.</p>
+      <button onclick="order('Cold Drink')">Order</button>
     </div>
 
-    <div class="menu-item">
-      <img src="https://via.placeholder.com/250x150.png?text=Lassi">
-      <h4>Sweet Lassi</h4>
-      <p>Cool and creamy traditional drink.</p>
-      <button onclick="orderItem('Sweet Lassi')">Order Now</button>
-    </div>
+  </div>
+</section>
+
+<!-- PAGE 5 – COMBOS -->
+<section id="combos">
+  <h3 style="text-align:center;color:#b33a00;margin-bottom:25px;">Special Combos</h3>
+
+  <div class="combo">
+    <h4>Burger + Fries + Drink</h4>
+    <p>A perfect combo for quick satisfaction!</p>
   </div>
 
+  <div class="combo">
+    <h4>Pizza + Coke</h4>
+    <p>A delicious pairing that never fails.</p>
+  </div>
+
+  <div class="combo">
+    <h4>Momos + Cold Drink</h4>
+    <p>A crowd favorite you can’t resist!</p>
+  </div>
+</section>
+
+<!-- PAGE 6 – REVIEWS -->
+<section id="reviews">
+  <h3 style="text-align:center;color:#b33a00;margin-bottom:25px;">Customer Reviews</h3>
+
+  <div class="review-box">
+    <div class="review-rating">★★★★★</div>
+    “Best fast food in town. Loved the chicken burger!”
+  </div>
+
+  <div class="review-box">
+    <div class="review-rating">★★★★☆</div>
+    “Pizza quality is amazing. Worth the price.”
+  </div>
+
+  <div class="review-box">
+    <div class="review-rating">★★★★★</div>
+    “Great taste & super fast delivery!”
+  </div>
+</section>
+
+<!-- PAGE 7 – CONTACT -->
+<section id="contact">
+  <h3 style="text-align:center;color:#b33a00;margin-bottom:25px;">Contact Us</h3>
+
+  <form class="contact-form" onsubmit="sendMsg(event)">
+    <input type="text" id="name" placeholder="Your Name" required>
+    <input type="email" id="email" placeholder="Email" required>
+    <textarea id="msg" placeholder="Your Message" rows="4" required></textarea>
+    <button>Send Message</button>
+  </form>
 </section>
 
 <footer>
-  © 2025 Swaad 90 Fast Food. All rights reserved.
+  2025 © Swaad 90 Fast Food. All rights reserved.
 </footer>
 
 <script>
-  function showCategory(category) {
-    document.querySelectorAll('.menu-items').forEach(e => e.classList.remove('active'));
-    document.querySelectorAll('.category-tabs button').forEach(e => e.classList.remove('active'));
+function filterMenu(type){
+  let items = document.querySelectorAll('.menu-item');
+  items.forEach(i=>{
+    if(type==='all' || i.dataset.type===type) i.style.display='block';
+    else i.style.display='none';
+  });
+}
 
-    document.getElementById(category).classList.add('active');
-    event.target.classList.add('active');
-  }
+function order(item){
+  alert("You ordered: " + item);
+}
 
-  function orderItem(itemName) {
-    alert(`Thank you for ordering ${itemName}!`);
-  }
+function sendMsg(event){
+  event.preventDefault();
+  alert("Thank you for contacting us! We will reply soon.");
+  event.target.reset();
+}
 </script>
 
 </body>
