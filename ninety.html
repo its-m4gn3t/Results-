@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Swaad90 – Digital Menu</title>
+
+<!-- GOOGLE FONTS -->
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+<style>
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body {
+        font-family: 'Poppins', sans-serif;
+        background:#faf9f7;
+        color:#222;
+        overflow-x:hidden;
+    }
+
+    /* ---------- HEADER ---------- */
+    header {
+        width:100%;
+        padding:15px 20px;
+        background:#ff6f47;
+        color:white;
+        font-size:1.4em;
+        font-weight:600;
+        text-align:center;
+        position:sticky;
+        top:0; z-index:10;
+        border-bottom-left-radius:12px;
+        border-bottom-right-radius:12px;
+    }
+
+    /* -------- CATEGORY TABS -------- */
+    .tabs {
+        display:flex;
+        overflow-x:auto;
+        padding:10px;
+        gap:10px;
+        scrollbar-width:none;
+    }
+    .tabs::-webkit-scrollbar { display:none; }
+
+    .tab {
+        padding:8px 18px;
+        background:white;
+        border-radius:25px;
+        font-size:.9em;
+        font-weight:500;
+        white-space:nowrap;
+        border:1px solid #eee;
+        cursor:pointer;
+    }
+    .tab.active { background:#ff6f47; color:white; }
+
+    /* ---------- MENU GRID ---------- */
+    .menu-container {
+        padding:20px 15px;
+        display:grid;
+        gap:18px;
+    }
+
+    .item-card {
+        background:white;
+        padding:15px;
+        border-radius:15px;
+        box-shadow:0 4px 12px rgba(0,0,0,0.06);
+        display:flex;
+        align-items:center;
+        gap:12px;
+    }
+    .item-card img {
+        width:80px; height:80px;
+        border-radius:12px;
+        object-fit:cover;
+    }
+    .item-info h3 { font-size:1.1em; margin-bottom:3px; }
+    .item-info p { font-size:.85em; color:#666; margin-bottom:5px; }
+    .price { font-weight:600; color:#ff6f47; }
+
+    /* ---------- ADMIN BUTTON ---------- */
+    .admin-btn {
+        position:fixed;
+        bottom:20px; right:20px;
+        background:#222;
+        color:white;
+        padding:13px 18px;
+        border-radius:50px;
+        font-weight:600;
+        cursor:pointer;
+        box-shadow:0 4px 10px rgba(0,0,0,0.2);
+    }
+
+    /* ---------- MODAL ---------- */
+    .modal {
+        position:fixed;
+        top:0; left:0;
+        width:100%; height:100%;
+        display:none;
+        justify-content:center;
+        align-items:center;
+        background:rgba(0,0,0,.4);
+        padding:20px;
+    }
+    .modal-content {
+        background:white;
+        padding:20px;
+        width:100%;
+        max-width:420px;
+        border-radius:15px;
+        animation:fade .3s;
+    }
+
+    @keyframes fade { from{opacity:0; transform:scale(.95);} }
+
+    input, select, textarea {
+        width:100%;
+        padding:10px;
+        border:1px solid #ddd;
+        border-radius:8px;
+        margin-bottom:12px;
+        font-size:1em;
+    }
+    button {
+        width:100%;
+        padding:12px;
+        background:#ff6f47;
+        border:none;
+        border-radius:8px;
+        font-size:1.1em;
+        color:white;
+        font-weight:600;
+        cursor:pointer;
+    }
+    .close-btn {
+        background:#333 !important;
+        margin-top:8px;
+    }
+
+    /* QR BOX */
+    #qrBox {
+        text-align:center;
+        margin-top:15px;
+    }
+
+</style>
+</head>
+
+<body>
+
+<header>Swaad90 – Digital Menu</header>
+
+<!-- CATEGORY TABS -->
+<div class="tabs" id="categoryTabs"></div>
+
+<!-- MENU ITEMS -->
+<div class="menu-container" id="menuList"></div>
+
+<!-- ADMIN BUTTON -->
+<div class="admin-btn" onclick="openLogin()">Owner Panel</div>
+
+<!-- ---------- OWNER LOGIN ---------- -->
+<div class="modal" id="loginModal">
+    <div class="modal-content">
+        <h2>Owner Login</h2>
+        <input type="password" id="adminPIN" placeholder="Enter PIN (default 9090)">
+        <button onclick="loginAdmin()">Login</button>
+        <button class="close-btn" onclick="closeLogin()">Close</button>
+    </div>
+</div>
+
+<!-- ---------- CRUD MODAL ---------- -->
+<div class="modal" id="crudModal">
+    <div class="modal-content">
+        <h2 id="modalTitle">Add Item</h2>
+
+        <input id="foodName" placeholder="Food Name">
+        <input id="foodPrice" type="number" placeholder="Price">
+        <input id="foodImage" placeholder="Image URL">
+        <select id="foodCategory"></select>
+        
+        <textarea id="foodDesc" rows="3" placeholder="Description"></textarea>
+
+        <button onclick="saveItem()">Save</button>
+        <button id="deleteBtn" style="display:none; background:#b30000;" onclick="deleteItem()">Delete</button>
+        <button class="close-btn" onclick="closeCRUD()">Close</button>
+    </div>
+</div>
+
+<!-- ---------- QR GENERATOR MODAL ---------- -->
+<div class="modal" id="qrModal">
+    <div class="modal-content">
+        <h2>QR Code</h2>
+        <div id="qrBox"></div>
+        <button onclick="downloadQR()">Download QR</button>
+        <button class="close-btn" onclick="qrModal.style.display='none'">Close</button>
+    </div>
+</div>
+
+
+<!-- JS LIB FOR QR -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrious/4.0.2/qrious.min.js"></script>
+
+<script>
+/* ----------------------------------------------------
+   LOCAL STORAGE DATABASE
+-----------------------------------------------------*/
+let categories = ["Burgers", "Snacks", "Drinks", "Pizza", "Desserts"];
+let editingIndex = null;
+
+let menu = JSON.parse(localStorage.getItem("menuData")) || [];
+
+/* ----------------------------------------------------
+   LOAD CATEGORIES INTO UI
+-----------------------------------------------------*/
+function loadCategories() {
+    let tabHTML = "";
+    categories.forEach((cat, index) => {
+        tabHTML += `<div class="tab ${index===0?"active":""}" onclick="setCategory('${cat}', this)">${cat}</div>`;
+    });
+    document.getElementById("categoryTabs").innerHTML = tabHTML;
+}
+
+/* ----------------------------------------------------
+   SHOW MENU
+-----------------------------------------------------*/
+let selectedCategory = categories[0];
+
+function setCategory(cat, el) {
+    selectedCategory = cat;
+    document.querySelectorAll(".tab").forEach(t => t.classList.remove("active"));
+    el.classList.add("active");
+    displayMenu();
+}
+
+function displayMenu() {
+    const container = document.getElementById("menuList");
+    let html = "";
+
+    menu.filter(item => item.category === selectedCategory)
+    .forEach((item, index) => {
+        html += `
+        <div class="item-card" onclick="editItem(${index})">
+            <img src="${item.image}">
+            <div class="item-info">
+                <h3>${item.name}</h3>
+                <p>${item.desc}</p>
+                <div class="price">Rs ${item.price}</div>
+            </div>
+        </div>`;
+    });
+
+    container.innerHTML = html || `<p>No items yet.</p>`;
+}
+
+/* ----------------------------------------------------
+   OWNER LOGIN
+-----------------------------------------------------*/
+function openLogin(){ loginModal.style.display="flex"; }
+function closeLogin(){ loginModal.style.display="none"; }
+
+function loginAdmin() {
+    const pin = document.getElementById("adminPIN").value;
+    if(pin === "9090"){
+        loginModal.style.display="none";
+        openCRUD();
+    } else alert("Wrong PIN !");
+}
+
+/* ----------------------------------------------------
+   CRUD MODAL
+-----------------------------------------------------*/
+function openCRUD() {
+    crudModal.style.display="flex";
+    loadCategoryDropdown();
+    clearForm();
+}
+function closeCRUD(){ crudModal.style.display="none"; }
+
+function loadCategoryDropdown(){
+    let sel = document.getElementById("foodCategory");
+    sel.innerHTML = categories.map(c=>`<option>${c}</option>`).join("");
+}
+
+function clearForm(){
+    editingIndex = null;
+    document.getElementById("modalTitle").innerText="Add Item";
+    document.getElementById("deleteBtn").style.display="none";
+    foodName.value=""; foodPrice.value=""; foodImage.value=""; foodDesc.value="";
+}
+
+/* ----------------------------------------------------
+   ADD + SAVE + EDIT ITEMS
+-----------------------------------------------------*/
+function saveItem(){
+    let item = {
+        name: foodName.value,
+        price: foodPrice.value,
+        image: foodImage.value,
+        desc: foodDesc.value,
+        category: foodCategory.value
+    };
+
+    if(editingIndex===null){
+        menu.push(item);
+    } else {
+        menu[editingIndex] = item;
+    }
+
+    localStorage.setItem("menuData", JSON.stringify(menu));
+    displayMenu();
+    closeCRUD();
+}
+
+function editItem(index){
+    editingIndex = index;
+    let item = menu[index];
+    
+    foodName.value=item.name;
+    foodPrice.value=item.price;
+    foodImage.value=item.image;
+    foodDesc.value=item.desc;
+    foodCategory.value=item.category;
+
+    document.getElementById("modalTitle").innerText="Edit Item";
+    document.getElementById("deleteBtn").style.display="block";
+    crudModal.style.display="flex";
+}
+
+function deleteItem(){
+    if(!confirm("Delete this item?")) return;
+    menu.splice(editingIndex,1);
+    localStorage.setItem("menuData", JSON.stringify(menu));
+    displayMenu();
+    closeCRUD();
+}
+
+/* ----------------------------------------------------
+   QR CODE GENERATOR
+-----------------------------------------------------*/
+function openQR(){
+    qrModal.style.display="flex";
+    let qr = new QRious({
+        element: document.createElement('canvas'),
+        value: window.location.href,
+        size: 220
+    });
+    document.getElementById("qrBox").innerHTML = "";
+    document.getElementById("qrBox").appendChild(qr.element);
+}
+
+function downloadQR() {
+    const canvas = qrBox.querySelector("canvas");
+    const link = document.createElement("a");
+    link.download = "Swaad90-Menu-QR.png";
+    link.href = canvas.toDataURL();
+    link.click();
+}
+
+/* ----------------------------------------------------
+   INIT
+-----------------------------------------------------*/
+loadCategories();
+displayMenu();
+</script>
+
+</body>
+</html>
