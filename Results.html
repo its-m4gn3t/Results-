@@ -1,102 +1,362 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>PUBG Match Results & Qualification</title>
-<style>
-  body { font-family: Arial, sans-serif; margin: 20px; }
-  table { border-collapse: collapse; width: 100%; margin-bottom: 20px; }
-  th, td { border: 1px solid #ccc; padding: 8px; text-align: center; }
-  th { background: #f4f4f4; }
-  input[type=number] { width: 60px; }
-  .group-title { margin-top: 40px; font-size: 1.2em; font-weight: bold; }
-  .qualified { background-color: #d4edda; }
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bordio-Style Task Dashboard</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        .dashboard {
+            display: flex;
+            height: 100vh;
+            padding: 20px;
+            gap: 20px;
+            overflow-x: auto;
+        }
+
+        .header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            padding: 20px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 100;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: 800;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .add-task-btn {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 25px;
+            font-weight: 600;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+            transition: all 0.3s ease;
+        }
+
+        .add-task-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.5);
+        }
+
+        .board {
+            display: flex;
+            gap: 20px;
+            padding-top: 100px;
+            min-width: max-content;
+        }
+
+        .column {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border-radius: 16px;
+            padding: 20px;
+            min-width: 320px;
+            max-height: 80vh;
+            overflow-y: auto;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+
+        .column-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 12px;
+            border-bottom: 2px solid #f0f0f0;
+        }
+
+        .column-title {
+            font-size: 18px;
+            font-weight: 700;
+            color: #333;
+        }
+
+        .column-count {
+            background: #e0e7ff;
+            color: #5b21b6;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .task-card {
+            background: white;
+            border-radius: 12px;
+            padding: 16px;
+            margin-bottom: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+            cursor: grab;
+            transition: all 0.3s ease;
+            border-left: 4px solid #667eea;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .task-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+        }
+
+        .task-card.dragging {
+            opacity: 0.5;
+            transform: rotate(5deg);
+        }
+
+        .task-card.completed {
+            opacity: 0.6;
+            border-left-color: #6b7280;
+            background: #f9fafb;
+        }
+
+        .task-title {
+            font-weight: 600;
+            color: #1f2937;
+            margin-bottom: 8px;
+            font-size: 15px;
+        }
+
+        .task-desc {
+            color: #6b7280;
+            font-size: 14px;
+            margin-bottom: 12px;
+            line-height: 1.4;
+        }
+
+        .task-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 13px;
+            color: #9ca3af;
+        }
+
+        .priority {
+            padding: 2px 8px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .priority.high { background: #fee2e2; color: #dc2626; }
+        .priority.medium { background: #fef3c7; color: #d97706; }
+        .priority.low { background: #d1fae5; color: #059669; }
+
+        .add-card-btn {
+            background: #f8fafc;
+            border: 2px dashed #cbd5e1;
+            color: #64748b;
+            border-radius: 12px;
+            padding: 16px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+            font-size: 14px;
+        }
+
+        .add-card-btn:hover {
+            background: #e2e8f0;
+            border-color: #667eea;
+            color: #667eea;
+        }
+
+        @media (max-width: 768px) {
+            .dashboard { padding: 10px; }
+            .board { padding-top: 120px; }
+            .column { min-width: 280px; }
+        }
+    </style>
 </head>
 <body>
+    <div class="header">
+        <div class="logo">Bordio Dashboard</div>
+        <button class="add-task-btn" onclick="addNewTask()">+ New Task</button>
+    </div>
 
-<h1>PUBG Match Results - 16 Teams, 2 Groups</h1>
+    <div class="dashboard">
+        <div class="board" id="board">
+            <div class="column" data-status="todo">
+                <div class="column-header">
+                    <div class="column-title">To Do</div>
+                    <div class="column-count" id="todo-count">3</div>
+                </div>
+                <div class="task-card" draggable="true">
+                    <div class="task-title">Design Leo Club landing page</div>
+                    <div class="task-desc">Create responsive hero section with animated stats and call-to-action buttons for the new management system.</div>
+                    <div class="task-footer">
+                        <span class="priority high">High</span>
+                        <span>Due: Dec 5</span>
+                    </div>
+                </div>
+                <div class="task-card completed" draggable="true">
+                    <div class="task-title">Setup FastAPI backend</div>
+                    <div class="task-desc">Deploy initial API endpoints for user auth and club management with Swagger docs.</div>
+                    <div class="task-footer">
+                        <span class="priority medium">Medium</span>
+                        <span>Done: Nov 28</span>
+                    </div>
+                </div>
+                <div class="add-card-btn" onclick="addTaskToColumn('todo')">+ Add Task</div>
+            </div>
 
-<div id="groups-container"></div>
+            <div class="column" data-status="in-progress">
+                <div class="column-header">
+                    <div class="column-title">In Progress</div>
+                    <div class="column-count" id="progress-count">2</div>
+                </div>
+                <div class="task-card" draggable="true">
+                    <div class="task-title">PUBG Mobile tournament scheduler</div>
+                    <div class="task-desc">Build drag-and-drop match scheduling for esports team management dashboard.</div>
+                    <div class="task-footer">
+                        <span class="priority high">High</span>
+                        <span>Due: Dec 3</span>
+                    </div>
+                </div>
+                <div class="task-card" draggable="true">
+                    <div class="task-title">Uniq Poet battle rap forum</div>
+                    <div class="task-desc">Implement real-time chat and voting system for Nepali hiphop community platform.</div>
+                    <div class="task-footer">
+                        <span class="priority medium">Medium</span>
+                        <span>Due: Dec 7</span>
+                    </div>
+                </div>
+                <div class="add-card-btn" onclick="addTaskToColumn('in-progress')">+ Add Task</div>
+            </div>
 
-<button onclick="calculatePoints()">Calculate & Show Top 7 per Group</button>
+            <div class="column" data-status="review">
+                <div class="column-header">
+                    <div class="column-title">Review</div>
+                    <div class="column-count" id="review-count">1</div>
+                </div>
+                <div class="task-card" draggable="true">
+                    <div class="task-title">Ngrok tunnel for local demo</div>
+                    <div class="task-desc">Setup secure public URLs for frontend/backend demo of Leo Club management system.</div>
+                    <div class="task-footer">
+                        <span class="priority low">Low</span>
+                        <span>Due: Dec 2</span>
+                    </div>
+                </div>
+                <div class="add-card-btn" onclick="addTaskToColumn('review')">+ Add Task</div>
+            </div>
 
-<div id="results"></div>
+            <div class="column" data-status="done">
+                <div class="column-header">
+                    <div class="column-title">Done</div>
+                    <div class="column-count" id="done-count">4</div>
+                </div>
+                <div class="task-card completed" draggable="true">
+                    <div class="task-title">Responsive MERN deployment</div>
+                    <div class="task-desc">Deployed full-stack app to Render with separate frontend/backend services.</div>
+                    <div class="task-footer">
+                        <span class="priority high">High</span>
+                        <span>Done: Nov 25</span>
+                    </div>
+                </div>
+                <div class="add-card-btn" onclick="addTaskToColumn('done')">+ Add Task</div>
+            </div>
+        </div>
+    </div>
 
-<script>
-// Setup teams in 2 groups of 8
-const groups = {
-  A: ['Team A1','Team A2','Team A3','Team A4','Team A5','Team A6','Team A7','Team A8'],
-  B: ['Team B1','Team B2','Team B3','Team B4','Team B5','Team B6','Team B7','Team B8']
-};
+    <script>
+        let dragTask = null;
 
-// Placement points mapping
-const placementPointsMap = {
-  1:10, 2:7, 3:6, 4:4, 5:3, 6:2, 7:2, 8:1, 9:1, 10:1
-};
+        // Drag and drop functionality
+        document.querySelectorAll('.task-card').forEach(card => {
+            card.addEventListener('dragstart', dragStart);
+            card.addEventListener('dragend', dragEnd);
+        });
 
-function createGroupTable(groupName, teams) {
-  let html = `<div class="group-title">Group ${groupName}</div>`;
-  html += `<table><thead><tr><th>Team</th><th>Placement</th><th>Kills</th><th>Total Points</th></tr></thead><tbody>`;
-  teams.forEach((team, i) => {
-    html += `<tr>
-      <td>${team}</td>
-      <td><input type="number" min="1" max="16" id="${groupName}-placement-${i}" placeholder="1-16"></td>
-      <td><input type="number" min="0" max="20" id="${groupName}-kills-${i}" placeholder="Kills"></td>
-      <td id="${groupName}-total-${i}">0</td>
-    </tr>`;
-  });
-  html += `</tbody></table>`;
-  return html;
-}
+        function dragStart(e) {
+            dragTask = this;
+            e.dataTransfer.effectAllowed = 'move';
+            this.classList.add('dragging');
+        }
 
-function calculatePoints() {
-  const resultsDiv = document.getElementById('results');
-  resultsDiv.innerHTML = '';
+        function dragEnd(e) {
+            this.classList.remove('dragging');
+            dragTask = null;
+        }
 
-  for (const [groupName, teams] of Object.entries(groups)) {
-    // Calculate points per team
-    const teamPoints = teams.map((team, i) => {
-      const placementInput = document.getElementById(`${groupName}-placement-${i}`);
-      const killsInput = document.getElementById(`${groupName}-kills-${i}`);
+        document.querySelectorAll('.column').forEach(column => {
+            column.addEventListener('dragover', e => e.preventDefault());
+            column.addEventListener('drop', drop);
+        });
 
-      let placement = parseInt(placementInput.value);
-      let kills = parseInt(killsInput.value);
+        function drop(e) {
+            e.preventDefault();
+            if (dragTask) {
+                this.appendChild(dragTask);
+                updateCounts();
+            }
+        }
 
-      if (isNaN(placement) || placement < 1 || placement > 16) placement = 16; // Default worst
-      if (isNaN(kills) || kills < 0) kills = 0;
+        // Add new task to specific column
+        function addTaskToColumn(status) {
+            const column = document.querySelector(`[data-status="${status}"]`);
+            const task = document.createElement('div');
+            task.className = 'task-card';
+            task.draggable = true;
+            task.innerHTML = `
+                <div class="task-title">New Task</div>
+                <div class="task-desc">Click to edit task details...</div>
+                <div class="task-footer">
+                    <span class="priority medium">Medium</span>
+                    <span>Due: Today</span>
+                </div>
+            `;
+            task.addEventListener('dragstart', dragStart);
+            task.addEventListener('dragend', dragEnd);
+            column.insertBefore(task, column.querySelector('.add-card-btn'));
+            updateCounts();
+        }
 
-      // Placement points (only top 10 get points, else 0)
-      const placementPoints = placementPointsMap[placement] || 0;
-      const total = placementPoints + kills;
+        // Add new task (global)
+        function addNewTask() {
+            const statuses = ['todo', 'in-progress', 'review', 'done'];
+            const randomStatus = statuses[Math.floor(Math.random() * statuses.length)];
+            addTaskToColumn(randomStatus);
+        }
 
-      // Update table cell
-      document.getElementById(`${groupName}-total-${i}`).textContent = total;
+        // Update column counts
+        function updateCounts() {
+            document.querySelectorAll('.column').forEach(column => {
+                const count = column.querySelectorAll('.task-card').length;
+                const countEl = column.querySelector('.column-count');
+                countEl.textContent = count;
+            });
+        }
 
-      return { team, total };
-    });
-
-    // Sort descending by points
-    teamPoints.sort((a,b) => b.total - a.total);
-
-    // Show top 7 qualified teams
-    let resultHTML = `<h2>Group ${groupName} - Top 7 Qualified Teams</h2><table><thead><tr><th>Rank</th><th>Team</th><th>Points</th></tr></thead><tbody>`;
-    teamPoints.forEach((tp, idx) => {
-      const qualifiedClass = idx < 7 ? 'qualified' : '';
-      resultHTML += `<tr class="${qualifiedClass}"><td>${idx+1}</td><td>${tp.team}</td><td>${tp.total}</td></tr>`;
-    });
-    resultHTML += `</tbody></table>`;
-    resultsDiv.innerHTML += resultHTML;
-  }
-}
-
-// Render input tables
-const container = document.getElementById('groups-container');
-for (const [groupName, teams] of Object.entries(groups)) {
-  container.innerHTML += createGroupTable(groupName, teams);
-}
-</script>
-
+        // Initialize counts
+        updateCounts();
+    </script>
 </body>
 </html>
