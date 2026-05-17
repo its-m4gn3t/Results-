@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Nepal Police AI - Heatmap Command Center</title>
+
+<script src="https://maps.googleapis.com/maps/api/js?key=YOUR_GOOGLE_MAPS_API_KEY&libraries=visualization"></script>
+
+<style>
+body{
+margin:0;
+font-family:Arial;
+background:#05070d;
+color:white;
+}
+
+header{
+padding:15px;
+background:#000;
+color:#00f0ff;
+display:flex;
+justify-content:space-between;
+border-bottom:1px solid #00f0ff;
+}
+
+.container{
+display:grid;
+grid-template-columns:1fr 1fr;
+height:calc(100vh - 60px);
+}
+
+.panel{
+padding:15px;
+overflow:auto;
+}
+
+#map{
+height:100%;
+width:100%;
+border-left:2px solid #00f0ff;
+}
+
+.card{
+background:#0e1628;
+padding:10px;
+margin-top:10px;
+border-left:4px solid #00f0ff;
+}
+
+.high{border-left-color:red;}
+.medium{border-left-color:orange;}
+.low{border-left-color:lime;}
+
+button{
+width:100%;
+padding:10px;
+margin-top:10px;
+background:#00f0ff;
+border:none;
+cursor:pointer;
+font-weight:bold;
+}
+
+button:hover{opacity:0.8}
+
+.stats{
+display:grid;
+grid-template-columns:repeat(3,1fr);
+gap:10px;
+margin-top:10px;
+}
+
+.stat{
+background:#0e1628;
+padding:10px;
+text-align:center;
+}
+</style>
+</head>
+
+<body>
+
+<header>
+<h3>🚨 Nepal Police AI Heatmap System</h3>
+<div>LIVE MAP SYSTEM</div>
+</header>
+
+<div class="container">
+
+<!-- LEFT PANEL -->
+<div class="panel">
+
+<h3>📡 Incident Control</h3>
+
+<button onclick="addRandomIncident()">+ Generate Incident</button>
+<button onclick="clearAll()">Clear Map</button>
+
+<div class="stats">
+<div class="stat"><b id="total">0</b><br>Total</div>
+<div class="stat"><b id="high">0</b><br>High</div>
+<div class="stat"><b id="heat">0</b><br>Heat Points</div>
+</div>
+
+<div id="feed"></div>
+
+</div>
+
+<!-- MAP -->
+<div id="map"></div>
+
+</div>
+
+<script>
+
+let map;
+let heatmap;
+let markers = [];
+
+let total=0, high=0;
+
+let heatData=[];
+
+/* INIT MAP */
+function initMap(){
+
+map = new google.maps.Map(document.getElementById("map"), {
+center: { lat: 27.7172, lng: 85.3240 }, // Kathmandu
+zoom: 13
+});
+
+heatmap = new google.maps.visualization.HeatmapLayer({
+data: heatData,
+map: map,
+radius: 30
+});
+}
+
+/* INCIDENT GENERATOR */
+function addRandomIncident(){
+
+const locations=[
+{lat:27.7172,lng:85.3240,place:"New Road"},
+{lat:27.7150,lng:85.3120,place:"Thamel"},
+{lat:27.7000,lng:85.3333,place:"Baneshwor"},
+{lat:27.7300,lng:85.3200,place:"Balaju"}
+];
+
+const types=["THEFT","SCAM","VIOLENCE"];
+
+let loc=locations[Math.floor(Math.random()*locations.length)];
+let type=types[Math.floor(Math.random()*types.length)];
+
+total++;
+if(type==="VIOLENCE") high++;
+
+updateStats();
+
+/* marker */
+let marker = new google.maps.Marker({
+position:loc,
+map:map,
+title:type
+});
+
+markers.push(marker);
+
+/* heat point */
+heatData.push(new google.maps.LatLng(loc.lat,loc.lng));
+heatmap.setData(heatData);
+
+/* feed UI */
+let div=document.createElement("div");
+div.className="card "+(type==="VIOLENCE"?"high":"medium");
+div.innerHTML=`
+<b>${type}</b><br>
+${loc.place}<br>
+<small>${new Date().toLocaleTimeString()}</small>
+`;
+
+document.getElementById("feed").prepend(div);
+}
+
+/* STATS */
+function updateStats(){
+document.getElementById("total").innerText=total;
+document.getElementById("high").innerText=high;
+document.getElementById("heat").innerText=heatData.length;
+}
+
+/* CLEAR */
+function clearAll(){
+
+markers.forEach(m=>m.setMap(null));
+markers=[];
+
+heatData=[];
+heatmap.setData([]);
+
+document.getElementById("feed").innerHTML="";
+
+total=0;
+high=0;
+updateStats();
+}
+
+/* AUTO START INCIDENTS */
+setInterval(()=>{
+if(Math.random()>0.5){
+addRandomIncident();
+}
+},4000);
+
+/* INIT */
+window.onload=initMap;
+
+</script>
+
+</body>
+</html>
