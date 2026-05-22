@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Modern Single Page Template</title>
+    <title>Fully Responsive Single Page</title>
     <style>
         /* Base Styles & Reset */
         * {
@@ -40,7 +40,7 @@
             align-items: center;
             max-width: 1200px;
             margin: 0 auto;
-            padding: 20px;
+            padding: 15px 20px;
         }
 
         .logo {
@@ -53,10 +53,11 @@
         .nav-links {
             display: flex;
             list-style: none;
+            align-items: center;
         }
 
         .nav-links li {
-            margin-left: 20px;
+            margin-left: 25px;
         }
 
         .nav-links a {
@@ -68,6 +69,26 @@
 
         .nav-links a:hover {
             color: #007bff;
+        }
+
+        /* Mobile Menu Toggle (Hamburger) */
+        .menu-toggle {
+            display: none;
+            flex-direction: column;
+            justify-content: space-between;
+            width: 24px;
+            height: 18px;
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            z-index: 1001;
+        }
+
+        .menu-toggle span {
+            width: 100%;
+            height: 3px;
+            background-color: #333;
+            transition: all 0.3s ease;
         }
 
         /* Sections General */
@@ -88,7 +109,7 @@
         }
 
         h2 {
-            font-size: 36px;
+            font-size: clamp(28px, 5vw, 36px);
             margin-bottom: 20px;
             color: #222;
         }
@@ -100,12 +121,13 @@
         }
 
         #home h1 {
-            font-size: 48px;
+            font-size: clamp(32px, 7vw, 54px);
             margin-bottom: 20px;
+            line-height: 1.2;
         }
 
         #home p {
-            font-size: 20px;
+            font-size: clamp(16px, 3vw, 20px);
             margin-bottom: 30px;
             max-width: 600px;
             margin-left: auto;
@@ -117,7 +139,7 @@
             display: inline-block;
             background-color: #fff;
             color: #007bff;
-            padding: 12px 30px;
+            padding: 12px 32px;
             border-radius: 25px;
             text-decoration: none;
             font-weight: bold;
@@ -170,7 +192,7 @@
             margin: 40px auto 0 auto;
             text-align: left;
             background: white;
-            padding: 40px;
+            padding: clamp(20px, 5vw, 40px);
             border-radius: 8px;
             box-shadow: 0 4px 10px rgba(0,0,0,0.05);
         }
@@ -187,7 +209,7 @@
 
         .form-group input, .form-group textarea {
             width: 100%;
-            padding: 10px;
+            padding: 12px;
             border: 1px solid #ddd;
             border-radius: 4px;
             font-size: 16px;
@@ -204,7 +226,7 @@
             border: none;
             cursor: pointer;
             width: 100%;
-            padding: 12px;
+            padding: 14px;
             border-radius: 4px;
             font-size: 16px;
             font-weight: bold;
@@ -220,17 +242,52 @@
             background-color: #222;
             color: #fff;
             text-align: center;
-            padding: 20px;
+            padding: 24px 20px;
             font-size: 14px;
         }
 
-        /* Responsive Design */
+        /* Responsive Media Queries */
         @media (max-width: 768px) {
-            .nav-links {
-                display: none; /* Simplification for code brevity */
+            .menu-toggle {
+                display: flex; /* Show hamburger button */
             }
-            #home h1 {
-                font-size: 36px;
+
+            .nav-links {
+                position: fixed;
+                top: 0;
+                right: -100%; /* Hidden off-screen by default */
+                height: 100vh;
+                width: 70%;
+                max-width: 300px;
+                background-color: #ffffff;
+                box-shadow: -5px 0 15px rgba(0,0,0,0.1);
+                flex-direction: column;
+                justify-content: center;
+                transition: right 0.3s ease;
+                padding: 40px;
+            }
+
+            .nav-links.active {
+                right: 0; /* Slide into view */
+            }
+
+            .nav-links li {
+                margin: 20px 0;
+            }
+
+            .nav-links a {
+                font-size: 20px;
+            }
+
+            /* Hamburger to 'X' animation states */
+            .menu-toggle.active span:nth-child(1) {
+                transform: translateY(7.5px) rotate(45deg);
+            }
+            .menu-toggle.active span:nth-child(2) {
+                opacity: 0;
+            }
+            .menu-toggle.active span:nth-child(3) {
+                transform: translateY(-7.5px) rotate(-45deg);
             }
         }
     </style>
@@ -241,8 +298,13 @@
     <header>
         <div class="nav-container">
             <a href="#home" class="logo">FlexPage</a>
+            <button class="menu-toggle" id="mobile-menu" aria-label="Toggle navigation">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
             <nav>
-                <ul class="nav-links">
+                <ul class="nav-links" id="nav-list">
                     <li><a href="#home">Home</a></li>
                     <li><a href="#features">Features</a></li>
                     <li><a href="#contact">Contact</a></li>
@@ -264,7 +326,7 @@
     <section id="features">
         <div class="container">
             <h2>What We Offer</h2>
-            <p style="color: #666; max-width: 600px; margin: 0 auto;">Everything you need to deliver a fast, optimized, and stunning user experience right out of the box.</p>
+            <p style="color: #666; max-width: 600px; margin: 0 auto; padding: 0 10px;">Everything you need to deliver a fast, optimized, and stunning user experience right out of the box.</p>
             
             <div class="grid">
                 <div class="card">
@@ -312,5 +374,26 @@
         <p>&copy; 2026 FlexPage. All rights reserved.</p>
     </footer>
 
+    <!-- JavaScript for Mobile Menu Interaction -->
+    <script>
+        const mobileMenu = document.getElementById('mobile-menu');
+        const navList = document.getElementById('nav-list');
+        const navLinks = document.querySelectorAll('.nav-links a');
+
+        // Toggle mobile menu open/close
+        mobileMenu.addEventListener('click', () => {
+            mobileMenu.classList.toggle('active');
+            navList.classList.toggle('active');
+        });
+
+        // Close mobile menu when clicking any link
+        navLinks.forEach(link => {
+            link.addEventListener('click', () => {
+                mobileMenu.classList.remove('active');
+                navList.classList.remove('remove');
+                navList.classList.remove('active');
+            });
+        });
+    </script>
 </body>
 </html>
