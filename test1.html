@@ -1,0 +1,1507 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart Patrol & Road Accident System</title>
+    
+    <!-- Leaflet CSS for maps -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    
+    <style>
+        /* ===== CSS VARIABLES ===== */
+        :root {
+            --primary: #3b82f6;
+            --primary-dark: #2563eb;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --dark: #1f2937;
+            --light: #f3f4f6;
+            --white: #ffffff;
+            --gray: #9ca3af;
+            --sidebar-width: 260px;
+            --header-height: 64px;
+        }
+        
+        /* ===== RESET ===== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: var(--light);
+            color: var(--dark);
+            line-height: 1.6;
+        }
+        
+        /* ===== LOGIN PAGE ===== */
+        #login-page {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+        }
+        
+        .login-container {
+            background: var(--white);
+            padding: 2.5rem;
+            border-radius: 12px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            width: 100%;
+            max-width: 420px;
+        }
+        
+        .login-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+        
+        .login-header h1 {
+            color: var(--primary);
+            font-size: 1.8rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: var(--dark);
+        }
+        
+        .form-group input, .form-group select, .form-group textarea {
+            width: 100%;
+            padding: 0.75rem;
+            border: 2px solid var(--light);
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: border-color 0.3s;
+        }
+        
+        .form-group input:focus, .form-group select:focus, .form-group textarea:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+        
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+        
+        .btn-primary {
+            background: var(--primary);
+            color: var(--white);
+            width: 100%;
+        }
+        
+        .btn-primary:hover {
+            background: var(--primary-dark);
+        }
+        
+        .btn-success { background: var(--success); color: var(--white); }
+        .btn-warning { background: var(--warning); color: var(--white); }
+        .btn-danger { background: var(--danger); color: var(--white); }
+        
+        /* ===== DASHBOARD LAYOUT ===== */
+        #dashboard-page {
+            display: none;
+            min-height: 100vh;
+        }
+        
+        .sidebar {
+            position: fixed;
+            left: 0;
+            top: 0;
+            width: var(--sidebar-width);
+            height: 100vh;
+            background: var(--dark);
+            color: var(--white);
+            padding: 1.5rem 0;
+            overflow-y: auto;
+            transform: translateX(-100%);
+            transition: transform 0.3s;
+            z-index: 1000;
+        }
+        
+        .sidebar.active {
+            transform: translateX(0);
+        }
+        
+        .sidebar-header {
+            padding: 0 1.5rem 1.5rem;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+        
+        .sidebar-header h2 {
+            font-size: 1.4rem;
+            color: var(--primary);
+        }
+        
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-top: 1rem;
+            padding: 0.75rem;
+            background: rgba(255,255,255,0.1);
+            border-radius: 8px;
+        }
+        
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+        
+        .sidebar-menu {
+            list-style: none;
+            padding: 1rem 0;
+        }
+        
+        .sidebar-menu li {
+            margin-bottom: 0.25rem;
+        }
+        
+        .sidebar-menu a {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.75rem 1.5rem;
+            color: var(--gray);
+            text-decoration: none;
+            transition: all 0.3s;
+        }
+        
+        .sidebar-menu a:hover, .sidebar-menu a.active {
+            background: rgba(255,255,255,0.1);
+            color: var(--white);
+        }
+        
+        .sidebar-menu i {
+            width: 20px;
+        }
+        
+        .main-content {
+            margin-left: 0;
+            margin-top: var(--header-height);
+            padding: 1.5rem;
+            transition: margin-left 0.3s;
+        }
+        
+        .main-content.with-sidebar {
+            margin-left: var(--sidebar-width);
+        }
+        
+        /* ===== HEADER ===== */
+        .header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: var(--header-height);
+            background: var(--white);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 1.5rem;
+            z-index: 999;
+        }
+        
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        
+        .menu-toggle {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--dark);
+        }
+        
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        
+        .notification-btn {
+            position: relative;
+            background: none;
+            border: none;
+            font-size: 1.25rem;
+            cursor: pointer;
+            color: var(--dark);
+        }
+        
+        .notification-badge {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            background: var(--danger);
+            color: var(--white);
+            font-size: 0.7rem;
+            padding: 0.15rem 0.4rem;
+            border-radius: 10px;
+        }
+        
+        /* ===== SECTION ===== */
+        .section {
+            display: none;
+        }
+        
+        .section.active {
+            display: block;
+        }
+        
+        .section-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 1.5rem;
+        }
+        
+        .section-header h1 {
+            font-size: 1.8rem;
+            color: var(--dark);
+        }
+        
+        /* ===== CARDS ===== */
+        .card {
+            background: var(--white);
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            margin-bottom: 1.5rem;
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .stat-card {
+            background: var(--white);
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        
+        .stat-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            color: var(--white);
+        }
+        
+        .stat-icon.blue { background: var(--primary); }
+        .stat-icon.green { background: var(--success); }
+        .stat-icon.yellow { background: var(--warning); }
+        .stat-icon.red { background: var(--danger); }
+        
+        .stat-info h3 {
+            font-size: 1.8rem;
+            font-weight: bold;
+            margin-bottom: 0.25rem;
+        }
+        
+        .stat-info p {
+            color: var(--gray);
+            font-size: 0.9rem;
+        }
+        
+        /* ===== TABLE ===== */
+        .table-container {
+            overflow-x: auto;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        
+        table th, table td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid var(--light);
+        }
+        
+        table th {
+            background: var(--light);
+            font-weight: 600;
+        }
+        
+        table tr:hover {
+            background: rgba(59, 130, 246, 0.05);
+        }
+        
+        .badge {
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+        
+        .badge-pending { background: #fef3c7; color: #92400e; }
+        .badge-in-progress { background: #dbeafe; color: #1e40af; }
+        .badge-resolved { background: #d1fae5; color: #065f46; }
+        .badge-closed { background: #e5e7eb; color: #374151; }
+        
+        /* ===== MAP ===== */
+        #map {
+            height: 500px;
+            border-radius: 12px;
+            margin-bottom: 1.5rem;
+        }
+        
+        /* ===== MODAL ===== */
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 2000;
+        }
+        
+        .modal.active {
+            display: flex;
+        }
+        
+        .modal-content {
+            background: var(--white);
+            border-radius: 12px;
+            padding: 2rem;
+            max-width: 600px;
+            width: 90%;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+        
+        .modal-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 1.5rem;
+        }
+        
+        .modal-header h2 {
+            font-size: 1.5rem;
+        }
+        
+        .modal-close {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--gray);
+        }
+        
+        /* ===== MEDIA UPLOAD ===== */
+        .media-upload {
+            border: 2px dashed var(--gray);
+            border-radius: 8px;
+            padding: 2rem;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-bottom: 1rem;
+        }
+        
+        .media-upload:hover {
+            border-color: var(--primary);
+            background: rgba(59, 130, 246, 0.05);
+        }
+        
+        .media-preview {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+            gap: 0.75rem;
+            margin-top: 1rem;
+        }
+        
+        .media-preview img, .media-preview video {
+            width: 100%;
+            height: 100px;
+            object-fit: cover;
+            border-radius: 8px;
+        }
+        
+        /* ===== BUTTONS GROUP ===== */
+        .btn-group {
+            display: flex;
+            gap: 0.75rem;
+            flex-wrap: wrap;
+        }
+        
+        /* ===== ALERTS ===== */
+        .alert {
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+        
+        .alert-success { background: #d1fae5; color: #065f46; }
+        .alert-error { background: #fee2e2; color: #991b1b; }
+        .alert-warning { background: #fef3c7; color: #92400e; }
+        
+        /* ===== LOADING ===== */
+        .loading {
+            display: none;
+            text-align: center;
+            padding: 2rem;
+        }
+        
+        .loading.active {
+            display: block;
+        }
+        
+        .spinner {
+            border: 4px solid var(--light);
+            border-top: 4px solid var(--primary);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 1rem;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 768px) {
+            .sidebar {
+                transform: translateX(-100%);
+            }
+            
+            .sidebar.active {
+                transform: translateX(0);
+            }
+            
+            .main-content.with-sidebar {
+                margin-left: 0;
+            }
+            
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- ===== LOGIN PAGE ===== -->
+    <div id="login-page">
+        <div class="login-container">
+            <div class="login-header">
+                <h1><i class="fas fa-shield-alt"></i> Smart Patrol</h1>
+                <p>Smart Patrol & Road Accident Reporting System</p>
+            </div>
+            
+            <div id="login-error" class="alert alert-error" style="display: none;"></div>
+            
+            <form id="login-form">
+                <div class="form-group">
+                    <label for="phone">Phone Number</label>
+                    <input type="text" id="phone" placeholder="Enter phone number" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" placeholder="Enter password" required>
+                </div>
+                
+                <button type="submit" class="btn btn-primary">
+                    <i class="fas fa-sign-in-alt"></i> Login
+                </button>
+            </form>
+            
+            <p style="text-align: center; margin-top: 1.5rem; color: var(--gray);">
+                Don't have an account? <a href="#" style="color: var(--primary);">Register as Citizen</a>
+            </p>
+        </div>
+    </div>
+    
+    <!-- ===== DASHBOARD PAGE ===== -->
+    <div id="dashboard-page">
+        <!-- Sidebar -->
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <h2><i class="fas fa-shield-alt"></i> Smart Patrol</h2>
+                <div class="user-info">
+                    <div class="user-avatar" id="user-avatar">C</div>
+                    <div>
+                        <div style="font-weight: 600;" id="user-name">Citizen</div>
+                        <div style="font-size: 0.8rem; color: var(--gray);" id="user-role">Citizen</div>
+                    </div>
+                </div>
+            </div>
+            
+            <ul class="sidebar-menu" id="sidebar-menu">
+                <!-- Menu items will be injected based on role -->
+            </ul>
+        </aside>
+        
+        <!-- Header -->
+        <header class="header">
+            <div class="header-left">
+                <button class="menu-toggle" id="menu-toggle">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <h2 id="page-title">Dashboard</h2>
+            </div>
+            
+            <div class="header-right">
+                <button class="notification-btn" id="notification-btn">
+                    <i class="fas fa-bell"></i>
+                    <span class="notification-badge" id="notification-count">0</span>
+                </button>
+                
+                <button class="btn btn-danger" id="logout-btn">
+                    <i class="fas fa-sign-out-alt"></i> Logout
+                </button>
+            </div>
+        </header>
+        
+        <!-- Main Content -->
+        <main class="main-content" id="main-content">
+            <!-- Citizen Dashboard Section -->
+            <section class="section active" id="section-citizen-dashboard">
+                <div class="section-header">
+                    <h1>Citizen Dashboard</h1>
+                    <button class="btn btn-danger" id="quick-report-btn">
+                        <i class="fas fa-exclamation-triangle"></i> Quick Report
+                    </button>
+                </div>
+                
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-icon blue"><i class="fas fa-file-alt"></i></div>
+                        <div class="stat-info">
+                            <h3 id="total-reports">0</h3>
+                            <p>Total Reports</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon yellow"><i class="fas fa-clock"></i></div>
+                        <div class="stat-info">
+                            <h3 id="pending-reports">0</h3>
+                            <p>Pending</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon green"><i class="fas fa-check-circle"></i></div>
+                        <div class="stat-info">
+                            <h3 id="resolved-reports">0</h3>
+                            <p>Resolved</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <h3>My Recent Reports</h3>
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Type</th>
+                                    <th>Severity</th>
+                                    <th>Status</th>
+                                    <th>Date</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody id="my-reports-table">
+                                <!-- Reports will be loaded here -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+            
+            <!-- Report Incident Section -->
+            <section class="section" id="section-report-incident">
+                <div class="section-header">
+                    <h1>Report Incident</h1>
+                    <button class="btn btn-primary" id="report-locate-btn">
+                        <i class="fas fa-map-marker-alt"></i> Use Current Location
+                    </button>
+                </div>
+                
+                <div class="card">
+                    <form id="report-form">
+                        <div class="form-group">
+                            <label for="report-type">Incident Type</label>
+                            <select id="report-type" required>
+                                <option value="">Select type</option>
+                                <option value="road_accident">Road Accident</option>
+                                <option value="suspicious_activity">Suspicious Activity</option>
+                                <option value="theft">Theft</option>
+                                <option value="other">Other</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="report-severity">Severity</label>
+                            <select id="report-severity" required>
+                                <option value="">Select severity</option>
+                                <option value="minor">Minor</option>
+                                <option value="moderate">Moderate</option>
+                                <option value="major">Major</option>
+                                <option value="fatal">Fatal</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="report-description">Description</label>
+                            <textarea id="report-description" rows="4" placeholder="Describe what happened..." required></textarea>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="report-location">Location (GPS)</label>
+                            <input type="text" id="report-location" placeholder="Auto-captured GPS coordinates" readonly>
+                            <input type="hidden" id="report-latitude">
+                            <input type="hidden" id="report-longitude">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>Photos & Videos</label>
+                            <div class="media-upload" id="media-upload-area">
+                                <i class="fas fa-cloud-upload-alt" style="font-size: 2rem; color: var(--gray);"></i>
+                                <p>Click to upload photos/videos</p>
+                                <input type="file" id="media-input" multiple accept="image/*,video/*" style="display: none;">
+                            </div>
+                            <div class="media-preview" id="media-preview"></div>
+                        </div>
+                        
+                        <div class="btn-group">
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-paper-plane"></i> Submit Report
+                            </button>
+                            <button type="button" class="btn btn-warning" id="report-cancel-btn">
+                                <i class="fas fa-times"></i> Cancel
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </section>
+            
+            <!-- Patrol Dashboard Section -->
+            <section class="section" id="section-patrol-dashboard">
+                <div class="section-header">
+                    <h1>Patrol Officer Dashboard</h1>
+                    <button class="btn btn-danger" id="emergency-sos-btn">
+                        <i class="fas fa-siren-on"></i> Emergency SOS
+                    </button>
+                </div>
+                
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-icon blue"><i class="fas fa-map-marked-alt"></i></div>
+                        <div class="stat-info">
+                            <h3 id="assigned-incidents">0</h3>
+                            <p>Assigned Incidents</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon green"><i class="fas fa-check-double"></i></div>
+                        <div class="stat-info">
+                            <h3 id="completed-checkpoints">0</h3>
+                            <p>Checkpoints Done</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <h3>Live Map - My Location & Nearby Incidents</h3>
+                    <div id="patrol-map"></div>
+                </div>
+                
+                <div class="card">
+                    <h3>My Assigned Incidents</h3>
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Type</th>
+                                    <th>Location</th>
+                                    <th>Status</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody id="patrol-incidents-table">
+                                <!-- Incidents will be loaded here -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+            
+            <!-- Admin Dashboard Section -->
+            <section class="section" id="section-admin-dashboard">
+                <div class="section-header">
+                    <h1>Command Center - Super Admin</h1>
+                    <div class="btn-group">
+                        <button class="btn btn-success" id="refresh-stats-btn">
+                            <i class="fas fa-sync-alt"></i> Refresh
+                        </button>
+                        <button class="btn btn-primary" id="export-report-btn">
+                            <i class="fas fa-download"></i> Export Report
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-icon blue"><i class="fas fa-exclamation-triangle"></i></div>
+                        <div class="stat-info">
+                            <h3 id="admin-total-incidents">0</h3>
+                            <p>Total Incidents</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon yellow"><i class="fas fa-clock"></i></div>
+                        <div class="stat-info">
+                            <h3 id="admin-pending">0</h3>
+                            <p>Pending</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon green"><i class="fas fa-check-circle"></i></div>
+                        <div class="stat-info">
+                            <h3 id="admin-resolved">0</h3>
+                            <p>Resolved</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon red"><i class="fas fa-shuttle-van"></i></div>
+                        <div class="stat-info">
+                            <h3 id="admin-active-patrols">0</h3>
+                            <p>Active Patrols</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <h3>Live Command Map - All Patrols & Incidents</h3>
+                    <div id="admin-map"></div>
+                </div>
+                
+                <div class="card">
+                    <h3>All Incidents</h3>
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Type</th>
+                                    <th>Severity</th>
+                                    <th>Reporter</th>
+                                    <th>Status</th>
+                                    <th>Assigned To</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="admin-incidents-table">
+                                <!-- Incidents will be loaded here -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <h3>Fleet Management</h3>
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Vehicle</th>
+                                    <th>Officer</th>
+                                    <th>Status</th>
+                                    <th>Location</th>
+                                    <th>Speed</th>
+                                </tr>
+                            </thead>
+                            <tbody id="fleet-table">
+                                <!-- Fleet data will be loaded here -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+            
+            <!-- User Management Section (Admin Only) -->
+            <section class="section" id="section-user-management">
+                <div class="section-header">
+                    <h1>User Management</h1>
+                    <button class="btn btn-primary" id="add-user-btn">
+                        <i class="fas fa-user-plus"></i> Add User
+                    </button>
+                </div>
+                
+                <div class="card">
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Phone</th>
+                                    <th>Role</th>
+                                    <th>Ward</th>
+                                    <th>Status</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="users-table">
+                                <!-- Users will be loaded here -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+    
+    <!-- ===== INCIDENT DETAIL MODAL ===== -->
+    <div class="modal" id="incident-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Incident Details</h2>
+                <button class="modal-close" onclick="closeModal('incident-modal')">&times;</button>
+            </div>
+            <div id="incident-modal-body">
+                <!-- Details will be loaded here -->
+            </div>
+        </div>
+    </div>
+    
+    <!-- ===== JAVASCRIPT ===== -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script>
+        // ===== GLOBAL STATE =====
+        const AppState = {
+            user: null,
+            token: null,
+            role: null,
+            incidents: [],
+            patrolVehicles: [],
+            notifications: [],
+            currentMap: null,
+            mapMarkers: []
+        };
+        
+        const API_BASE_URL = 'http://localhost:8000/api'; // Change to your backend URL
+        
+        // ===== UTILITY FUNCTIONS =====
+        function showElement(id) {
+            document.getElementById(id).style.display = 'block';
+        }
+        
+        function hideElement(id) {
+            document.getElementById(id).style.display = 'none';
+        }
+        
+        function toggleElement(id) {
+            const el = document.getElementById(id);
+            el.style.display = el.style.display === 'none' ? 'block' : 'none';
+        }
+        
+        function showToast(message, type = 'success') {
+            // Simple alert for now
+            alert(message);
+        }
+        
+        // ===== AUTHENTICATION =====
+        async function login(phone, password) {
+            try {
+                const response = await fetch(`${API_BASE_URL}/auth/login`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ phone, password })
+                });
+                
+                const data = await response.json();
+                
+                if (!response.ok) {
+                    throw new Error(data.detail || 'Login failed');
+                }
+                
+                AppState.token = data.access_token;
+                AppState.user = data.user;
+                AppState.role = data.user.role;
+                
+                localStorage.setItem('token', AppState.token);
+                localStorage.setItem('user', JSON.stringify(AppState.user));
+                
+                initializeDashboard();
+            } catch (error) {
+                const errorEl = document.getElementById('login-error');
+                errorEl.textContent = error.message;
+                errorEl.style.display = 'block';
+            }
+        }
+        
+        function logout() {
+            localStorage.removeItem('token');
+            localStorage.removeItem('user');
+            AppState.token = null;
+            AppState.user = null;
+            AppState.role = null;
+            location.reload();
+        }
+        
+        function checkAuth() {
+            const token = localStorage.getItem('token');
+            const user = localStorage.getItem('user');
+            
+            if (token && user) {
+                AppState.token = token;
+                AppState.user = JSON.parse(user);
+                AppState.role = AppState.user.role;
+                initializeDashboard();
+            } else {
+                showElement('login-page');
+                hideElement('dashboard-page');
+            }
+        }
+        
+        // ===== DASHBOARD INITIALIZATION =====
+        function initializeDashboard() {
+            hideElement('login-page');
+            showElement('dashboard-page');
+            
+            // Set user info
+            document.getElementById('user-name').textContent = AppState.user.name || 'User';
+            document.getElementById('user-role').textContent = AppState.role.toUpperCase();
+            document.getElementById('user-avatar').textContent = (AppState.user.name || 'U').charAt(0).toUpperCase();
+            
+            // Setup sidebar based on role
+            setupSidebar();
+            
+            // Load role-specific data
+            if (AppState.role === 'citizen') {
+                loadCitizenDashboard();
+            } else if (AppState.role === 'patrol_officer') {
+                loadPatrolDashboard();
+                startGPSTracking();
+            } else if (AppState.role === 'super_admin') {
+                loadAdminDashboard();
+                initAdminMap();
+            }
+            
+            // Setup event listeners
+            setupEventListeners();
+        }
+        
+        // ===== SIDEBAR SETUP =====
+        function setupSidebar() {
+            const menu = document.getElementById('sidebar-menu');
+            let menuHTML = '';
+            
+            if (AppState.role === 'citizen') {
+                menuHTML = `
+                    <li><a href="#" onclick="showSection('section-citizen-dashboard')" class="active"><i class="fas fa-home"></i> Dashboard</a></li>
+                    <li><a href="#" onclick="showSection('section-report-incident')"><i class="fas fa-plus-circle"></i> Report Incident</a></li>
+                    <li><a href="#" onclick="showSection('section-citizen-dashboard')"><i class="fas fa-file-alt"></i> My Reports</a></li>
+                `;
+            } else if (AppState.role === 'patrol_officer') {
+                menuHTML = `
+                    <li><a href="#" onclick="showSection('section-patrol-dashboard')" class="active"><i class="fas fa-home"></i> Dashboard</a></li>
+                    <li><a href="#" onclick="showSection('section-patrol-dashboard')"><i class="fas fa-map-marked-alt"></i> My Route</a></li>
+                    <li><a href="#" onclick="showSection('section-patrol-dashboard')"><i class="fas fa-tasks"></i> Assigned Incidents</a></li>
+                `;
+            } else if (AppState.role === 'super_admin') {
+                menuHTML = `
+                    <li><a href="#" onclick="showSection('section-admin-dashboard')" class="active"><i class="fas fa-home"></i> Command Center</a></li>
+                    <li><a href="#" onclick="showSection('section-admin-dashboard')"><i class="fas fa-exclamation-triangle"></i> All Incidents</a></li>
+                    <li><a href="#" onclick="showSection('section-user-management')"><i class="fas fa-users"></i> User Management</a></li>
+                    <li><a href="#" onclick="showSection('section-admin-dashboard')"><i class="fas fa-shuttle-van"></i> Fleet Management</a></li>
+                    <li><a href="#" onclick="showSection('section-admin-dashboard')"><i class="fas fa-chart-bar"></i> Analytics</a></li>
+                `;
+            }
+            
+            menu.innerHTML = menuHTML;
+        }
+        
+        // ===== SECTION NAVIGATION =====
+        function showSection(sectionId) {
+            document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+            document.getElementById(sectionId).classList.add('active');
+            
+            // Update sidebar active state
+            document.querySelectorAll('.sidebar-menu a').forEach(a => a.classList.remove('active'));
+            event.target.classList.add('active');
+            
+            // Close sidebar on mobile
+            if (window.innerWidth <= 768) {
+                document.getElementById('sidebar').classList.remove('active');
+            }
+        }
+        
+        // ===== CITIZEN DASHBOARD =====
+        async function loadCitizenDashboard() {
+            try {
+                const response = await fetch(`${API_BASE_URL}/citizen/reports`, {
+                    headers: { 'Authorization': `Bearer ${AppState.token}` }
+                });
+                
+                const reports = await response.json();
+                AppState.incidents = reports;
+                
+                // Update stats
+                document.getElementById('total-reports').textContent = reports.length;
+                document.getElementById('pending-reports').textContent = reports.filter(r => r.status === 'pending').length;
+                document.getElementById('resolved-reports').textContent = reports.filter(r => r.status === 'resolved').length;
+                
+                // Load reports table
+                const tableBody = document.getElementById('my-reports-table');
+                tableBody.innerHTML = reports.map(report => `
+                    <tr>
+                        <td>#${report._id.slice(-6)}</td>
+                        <td>${report.type.replace('_', ' ').toUpperCase()}</td>
+                        <td><span class="badge badge-${report.severity}">${report.severity}</span></td>
+                        <td><span class="badge badge-${report.status}">${report.status}</span></td>
+                        <td>${new Date(report.created_at).toLocaleDateString()}</td>
+                        <td>
+                            <button class="btn btn-primary" onclick="viewIncident('${report._id}')">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                        </td>
+                    </tr>
+                `).join('');
+            } catch (error) {
+                console.error('Error loading citizen dashboard:', error);
+            }
+        }
+        
+        // ===== PATROL DASHBOARD =====
+        async function loadPatrolDashboard() {
+            try {
+                const response = await fetch(`${API_BASE_URL}/patrol/assigned-incident`, {
+                    headers: { 'Authorization': `Bearer ${AppState.token}` }
+                });
+                
+                const incidents = await response.json();
+                AppState.incidents = incidents;
+                
+                document.getElementById('assigned-incidents').textContent = incidents.length;
+                
+                const tableBody = document.getElementById('patrol-incidents-table');
+                tableBody.innerHTML = incidents.map(incident => `
+                    <tr>
+                        <td>#${incident._id.slice(-6)}</td>
+                        <td>${incident.type.replace('_', ' ').toUpperCase()}</td>
+                        <td>${incident.location.address || 'GPS: ${incident.location.coordinates}'}</td>
+                        <td><span class="badge badge-${incident.status}">${incident.status}</span></td>
+                        <td>
+                            <button class="btn btn-success" onclick="updateIncidentStatus('${incident._id}', 'on_scene')">
+                                <i class="fas fa-location-arrow"></i> On Scene
+                            </button>
+                            <button class="btn btn-primary" onclick="viewIncident('${incident._id}')">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                        </td>
+                    </tr>
+                `).join('');
+                
+                initPatrolMap();
+            } catch (error) {
+                console.error('Error loading patrol dashboard:', error);
+            }
+        }
+        
+        function startGPSTracking() {
+            if (navigator.geolocation) {
+                navigator.geolocation.watchPosition(
+                    async (position) => {
+                        const location = {
+                            lat: position.coords.latitude,
+                            lng: position.coords.longitude,
+                            speed: position.coords.speed || 0
+                        };
+                        
+                        // Send to backend via WebSocket or API
+                        await fetch(`${API_BASE_URL}/patrol/location`, {
+                            method: 'POST',
+                            headers: { 
+                                'Authorization': `Bearer ${AppState.token}`,
+                                'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify(location)
+                        });
+                        
+                        updatePatrolMapMarker(location);
+                    },
+                    (error) => console.error('GPS error:', error),
+                    { enableHighAccuracy: true, maximumAge: 5000 }
+                );
+            }
+        }
+        
+        function initPatrolMap() {
+            if (AppState.currentMap) {
+                AppState.currentMap.remove();
+            }
+            
+            const mapDiv = document.getElementById('patrol-map');
+            if (!mapDiv) return;
+            
+            AppState.currentMap = L.map('patrol-map').setView([27.7172, 85.3240], 13); // Kathmandu
+            
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '© OpenStreetMap contributors'
+            }).addTo(AppState.currentMap);
+            
+            // Add current location marker
+            navigator.geolocation.getCurrentPosition(async (position) => {
+                const lat = position.coords.latitude;
+                const lng = position.coords.longitude;
+                
+                L.marker([lat, lng]).addTo(AppState.currentMap)
+                    .bindPopup('📍 My Location').openPopup();
+                
+                AppState.currentMap.setView([lat, lng], 15);
+            });
+        }
+        
+        // ===== ADMIN DASHBOARD =====
+        async function loadAdminDashboard() {
+            try {
+                const response = await fetch(`${API_BASE_URL}/admin/dashboard`, {
+                    headers: { 'Authorization': `Bearer ${AppState.token}` }
+                });
+                
+                const data = await response.json();
+                AppState.incidents = data.incidents || [];
+                AppState.patrolVehicles = data.fleet || [];
+                
+                // Update stats
+                document.getElementById('admin-total-incidents').textContent = data.kpi?.total_incidents ||AppState.incidents.length;
+                document.getElementById('admin-pending').textContent = data.kpi?.incidents_by_status?.pending ||AppState.incidents.filter(r => r.status === 'pending').length;
+                document.getElementById('admin-resolved').textContent = data.kpi?.incidents_by_status?.resolved || AppState.incidents.filter(r => r.status === 'resolved').length;
+                document.getElementById('admin-active-patrols').textContent = data.kpi?.active_patrols ||AppState.patrolVehicles.length;
+                
+                // Load incidents table
+                const tableBody = document.getElementById('admin-incidents-table');
+                tableBody.innerHTML =AppState.incidents.map(incident => `
+                    <tr>
+                        <td>#${incident._id.slice(-6)}</td>
+                        <td>${incident.type.replace('_', ' ').toUpperCase()}</td>
+                        <td><span class="badge badge-${incident.severity}">${incident.severity}</span></td>
+                        <td>${incident.reporter_id || 'Anonymous'}</td>
+                        <td><span class="badge badge-${incident.status}">${incident.status}</span></td>
+                        <td>${incident.assigned_patrol_id || 'Unassigned'}</td>
+                        <td>
+                            <button class="btn btn-primary" onclick="viewIncident('${incident._id}')">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                            ${incident.status === 'pending' ? `
+                                <button class="btn btn-success" onclick="assignPatrol('${incident._id}')">
+                                    <i class="fas fa-paper-plane"></i> Assign
+                                </button>
+                            ` : ''}
+                        </td>
+                    </tr>
+                `).join('');
+                
+                // Load fleet table
+                const fleetTable = document.getElementById('fleet-table');
+                fleetTable.innerHTML =AppState.patrolVehicles.map(vehicle => `
+                    <tr>
+                        <td>${vehicle.vehicle_number}</td>
+                        <td>${vehicle.officer_ids?.[0] || 'N/A'}</td>
+                        <td><span class="badge badge-${vehicle.current_status}">${vehicle.current_status}</span></td>
+                        <td>${vehicle.current_location?.coordinates?.join(', ')}</td>
+                        <td>${vehicle.speed || 0} km/h</td>
+                    </tr>
+                `).join('');
+            } catch (error) {
+                console.error('Error loading admin dashboard:', error);
+            }
+        }
+        
+        function initAdminMap() {
+            if (AppState.currentMap) {
+                AppState.currentMap.remove();
+            }
+            
+            const mapDiv = document.getElementById('admin-map');
+            if (!mapDiv) return;
+            
+            AppState.currentMap = L.map('admin-map').setView([27.7172, 85.3240], 12); // Kathmandu
+            
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '© OpenStreetMap contributors'
+            }).addTo(AppState.currentMap);
+            
+            // Add incident markers
+            AppState.incidents.forEach(incident => {
+                const marker = L.marker(incident.location.coordinates).addTo(AppState.currentMap);
+                marker.bindPopup(`
+                    <strong>${incident.type}</strong><br>
+                    Severity: ${incident.severity}<br>
+                    Status: ${incident.status}
+                `);
+                AppState.mapMarkers.push(marker);
+            });
+            
+            // Add patrol vehicle markers
+            AppState.patrolVehicles.forEach(vehicle => {
+                if (vehicle.current_location?.coordinates) {
+                    const marker = L.marker(vehicle.current_location.coordinates, {
+                        icon: L.icon({
+                            iconUrl: 'https://cdn-icons-png.flaticon.com/512/754/754638.png',
+                            iconSize: [32, 32]
+                        })
+                    }).addTo(AppState.currentMap);
+                    marker.bindPopup(`
+                        <strong>${vehicle.vehicle_number}</strong><br>
+                        Status: ${vehicle.current_status}<br>
+                        Speed: ${vehicle.speed || 0} km/h
+                    `);
+                    AppState.mapMarkers.push(marker);
+                }
+            });
+        }
+        
+        // ===== INCIDENT FUNCTIONS =====
+        async function createReport(reportData, mediaFiles = []) {
+            try {
+                // Upload media first
+                const mediaUrls = [];
+                for (const file of mediaFiles) {
+                    const url = await uploadMedia(file);
+                    mediaUrls.push(url);
+                }
+                
+                // Create report
+                const response = await fetch(`${API_BASE_URL}/citizen/reports`, {
+                    method: 'POST',
+                    headers: { 
+                        'Authorization': `Bearer ${AppState.token}`,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        ...reportData,
+                        photos: mediaUrls.filter(u => u.endsWith('.jpg') || u.endsWith('.png')),
+                        videos: mediaUrls.filter(u => u.endsWith('.mp4') || u.endsWith('.mov'))
+                    })
+                });
+                
+                const data = await response.json();
+                
+                if (response.ok) {
+                    showToast('Report submitted successfully!', 'success');
+                    showSection('section-citizen-dashboard');
+                    loadCitizenDashboard();
+                } else {
+                    showToast(data.detail || 'Failed to create report', 'error');
+                }
+            } catch (error) {
+                console.error('Error creating report:', error);
+                showToast('Failed to create report', 'error');
+            }
+        }
+        
+        async function uploadMedia(file) {
+            // Get pre-signed URL
+            const urlResponse = await fetch(`${API_BASE_URL}/citizen/upload-media?media_type=${file.type.startsWith('video') ? 'video' : 'photo'}`, {
+                headers: { 'Authorization': `Bearer ${AppState.token}` }
+            });
+            const { upload_url, public_url } = await urlResponse.json();
+            
+            // Upload directly to S3
+            await fetch(upload_url, {
+                method: 'PUT',
+                body: file,
+                headers: { 'Content-Type': file.type }
+            });
+            
+            return public_url;
+        }
+        
+        function viewIncident(incidentId) {
+            const incident =AppState.incidents.find(i => i._id === incidentId);
+            if (!incident) return;
+            
+            const modalBody = document.getElementById('incident-modal-body');
+            modalBody.innerHTML = `
+                <p><strong>Type:</strong> ${incident.type.replace('_', ' ').toUpperCase()}</p>
+                <p><strong>Severity:</strong> ${incident.severity}</p>
+                <p><strong>Status:</strong> ${incident.status}</p>
+                <p><strong>Description:</strong> ${incident.description}</p>
+                <p><strong>Location:</strong> ${incident.location.address || incident.location.coordinates.join(', ')}</p>
+                <p><strong>Date:</strong> ${new Date(incident.timestamp).toLocaleString()}</p>
+                ${incident.photos?.length ? `
+                    <p><strong>Photos:</strong></p>
+                    <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); gap: 0.5rem; margin-top: 0.5rem;">
+                        ${incident.photos.map(url => `<img src="${url}" style="width: 100%; border-radius: 8px;">`).join('')}
+                    </div>
+                ` : ''}
+            `;
+            
+            document.getElementById('incident-modal').classList.add('active');
+        }
+        
+        function closeModal(modalId) {
+            document.getElementById(modalId).classList.remove('active');
+        }
+        
+        // ===== EVENT LISTENERS =====
+        function setupEventListeners() {
+            // Login form
+            document.getElementById('login-form').addEventListener('submit', async (e) => {
+                e.preventDefault();
+                const phone = document.getElementById('phone').value;
+                const password = document.getElementById('password').value;
+                await login(phone, password);
+            });
+            
+            // Logout
+            document.getElementById('logout-btn').addEventListener('click', logout);
+            
+            // Menu toggle
+            document.getElementById('menu-toggle').addEventListener('click', () => {
+                document.getElementById('sidebar').classList.toggle('active');
+            });
+            
+            // Quick report button
+            document.getElementById('quick-report-btn').addEventListener('click', () => {
+                showSection('section-report-incident');
+            });
+            
+            // Report form
+            document.getElementById('report-form').addEventListener('submit', async (e) => {
+                e.preventDefault();
+                
+                const reportData = {
+                    type: document.getElementById('report-type').value,
+                    severity: document.getElementById('report-severity').value,
+                    description: document.getElementById('report-description').value,
+                    latitude: parseFloat(document.getElementById('report-latitude').value),
+                    longitude: parseFloat(document.getElementById('report-longitude').value)
+                };
+                
+                const mediaFiles = Array.from(document.getElementById('media-input').files);
+                
+                await createReport(reportData, mediaFiles);
+            });
+            
+            // Use current location
+            document.getElementById('report-locate-btn').addEventListener('click', () => {
+                if (navigator.geolocation) {
+                    navigator.geolocation.getCurrentPosition((position) => {
+                        const lat = position.coords.latitude;
+                        const lng = position.coords.longitude;
+                        document.getElementById('report-latitude').value = lat;
+                        document.getElementById('report-longitude').value = lng;
+                        document.getElementById('report-location').value = `${lat}, ${lng}`;
+                        showToast('Location captured!', 'success');
+                    });
+                }
+            });
+            
+            // Media upload
+            document.getElementById('media-upload-area').addEventListener('click', () => {
+                document.getElementById('media-input').click();
+            });
+            
+            document.getElementById('media-input').addEventListener('change', (e) => {
+                const preview = document.getElementById('media-preview');
+                preview.innerHTML = '';
+                Array.from(e.target.files).forEach(file => {
+                    const reader = new FileReader();
+                    reader.onload = (e) => {
+                        if (file.type.startsWith('image')) {
+                            preview.innerHTML += `<img src="${e.target.result}">`;
+                        } else if (file.type.startsWith('video')) {
+                            preview.innerHTML += `<video src="${e.target.result}" controls></video>`;
+                        }
+                    };
+                    reader.readAsDataURL(file);
+                });
+            });
+            
+            // Cancel report
+            document.getElementById('report-cancel-btn').addEventListener('click', () => {
+                showSection('section-citizen-dashboard');
+                document.getElementById('report-form').reset();
+                document.getElementById('media-preview').innerHTML = '';
+            });
+            
+            // Emergency SOS
+            document.getElementById('emergency-sos-btn').addEventListener('click', () => {
+                if (confirm('Send emergency SOS to all commanders?')) {
+                    // Send SOS via WebSocket/API
+                    showToast('SOS sent! Help is on the way.', 'warning');
+                }
+            });
+            
+            // Refresh stats
+            document.getElementById('refresh-stats-btn').addEventListener('click', () => {
+                loadAdminDashboard();
+                showToast('Stats refreshed!', 'success');
+            });
+        }
+        
+        // ===== INITIALIZATION =====
+        document.addEventListener('DOMContentLoaded', () => {
+            checkAuth();
+        });
+    </script>
+</body>
+</html>
