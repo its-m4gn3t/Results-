@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MagnetBoss - Glassmorphism Profile</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #0f172a;
+            background-image: 
+                radial-gradient(at 0% 0%, rgba(59, 130, 246, 0.2) 0, transparent 50%),
+                radial-gradient(at 100% 0%, rgba(16, 185, 129, 0.15) 0, transparent 50%),
+                radial-gradient(at 50% 100%, rgba(99, 102, 241, 0.2) 0, transparent 50%);
+            background-attachment: fixed;
+        }
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.45);
+            backdrop-filter: blur(16px) saturate(120%);
+            -webkit-backdrop-filter: blur(16px) saturate(120%);
+            border: 1px solid rgba(255, 255, 255, 0.25);
+        }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.25);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        .glass-input {
+            background: rgba(255, 255, 255, 0.5);
+            backdrop-filter: blur(4px);
+            -webkit-backdrop-filter: blur(4px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+    </style>
+</head>
+<body class="p-4 md:p-8 flex justify-center items-center min-h-screen">
+
+    <!-- Main Profile Card Container (Glassmorphism Base) -->
+    <div class="glass-panel rounded-3xl shadow-[0_8px_32px_0_rgba(0,0,0,0.15)] w-full max-w-2xl p-6 relative overflow-hidden">
+        
+        <!-- Top Edit Action Button -->
+        <button id="editProfileBtn" class="absolute top-6 right-6 p-2.5 bg-white/40 hover:bg-white/60 text-slate-800 rounded-full border border-white/40 transition-all shadow-sm z-20" title="Edit Profile">
+            <i data-lucide="edit-2" class="w-5 h-5"></i>
+        </button>
+
+        <!-- Header Section: Avatar and Username -->
+        <div class="flex flex-col items-start gap-4 mb-6 relative z-10">
+            <div class="relative w-28 h-28 rounded-full p-[3px] bg-gradient-to-tr from-blue-500 to-emerald-400 shadow-lg">
+                <img id="avatarImage" src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=256&q=80" alt="Avatar" class="w-full h-full object-cover rounded-full bg-white/20 p-[2px]">
+            </div>
+            <div>
+                <span class="text-xs font-semibold text-slate-600 tracking-wider uppercase">@magnetboss</span>
+                <h1 id="displayName" class="text-3xl font-extrabold text-slate-900 tracking-tight mt-0.5">MagnetBoss</h1>
+                
+                <!-- Active Badge -->
+                <div class="inline-flex items-center gap-1.5 bg-blue-500/20 text-blue-900 px-3 py-1 rounded-lg text-xs font-bold mt-2.5 border border-white/30 shadow-sm backdrop-blur-md">
+                    <i data-lucide="shield-check" class="w-4 h-4 text-blue-700"></i>
+                    Active Citizen
+                </div>
+            </div>
+        </div>
+
+        <!-- SmartPatrol Banner Showcase Section -->
+        <div class="bg-gradient-to-br from-blue-500/20 to-sky-400/20 rounded-2xl p-6 mb-6 border border-white/30 flex flex-col md:flex-row justify-between items-start md:items-center gap-6 relative overflow-hidden shadow-inner">
+            <div class="z-10 max-w-sm">
+                <!-- Branding Header -->
+                <div class="flex items-center gap-3 mb-4">
+                    <div class="w-12 h-12 bg-blue-600/80 rounded-xl flex items-center justify-center text-white shadow-md border border-white/20">
+                        <i data-lucide="shield" class="w-6 h-6"></i>
+                    </div>
+                    <div>
+                        <div class="text-xl font-bold text-slate-900 leading-none">SmartPatrol<span class="text-emerald-600 font-extrabold">+</span></div>
+                        <div class="text-emerald-700 text-xs font-bold tracking-wider uppercase mt-1">Citizen</div>
+                    </div>
+                </div>
+                <p class="text-slate-800 text-sm leading-relaxed font-medium">Working together for a safer, smarter and stronger community.</p>
+            </div>
+            <!-- Dynamic Vector Substitute -->
+            <div class="flex items-end gap-1 opacity-60 md:opacity-90 self-end md:self-auto">
+                <div class="w-6 h-12 bg-blue-600/20 rounded-t-lg"></div>
+                <div class="w-8 h-16 bg-blue-600/30 rounded-t-lg"></div>
+                <div class="w-10 h-20 bg-emerald-600/40 rounded-t-lg flex items-center justify-center text-slate-900"><i data-lucide="users" class="w-5 h-5"></i></div>
+                <div class="w-8 h-14 bg-blue-600/30 rounded-t-lg"></div>
+                <div class="w-6 h-10 bg-blue-600/20 rounded-t-lg"></div>
+            </div>
+        </div>
+
+        <!-- Two-Column dynamic details section -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+            
+            <!-- Left Side: About & Metadata -->
+            <div class="glass-card p-5 rounded-2xl flex flex-col gap-4 shadow-sm">
+                <div>
+                    <h3 class="text-sm font-bold tracking-wider uppercase text-blue-800 border-b-2 border-blue-800/40 inline-block pb-0.5">About</h3>
+                    <p id="aboutTagline" class="text-sm text-slate-600 italic mt-3">Your tagline here</p>
+                </div>
+                
+                <div class="space-y-3.5 pt-1">
+                    <div class="flex items-center gap-3 text-slate-800 text-sm">
+                        <i data-lucide="user" class="w-4 h-4 text-slate-600 shrink-0"></i>
+                        <span>Pronouns: <span id="valPronouns" class="text-slate-500 font-medium">-</span></span>
+                    </div>
+                    <div class="flex items-center gap-3 text-slate-800 text-sm">
+                        <i data-lucide="briefcase" class="w-4 h-4 text-slate-600 shrink-0"></i>
+                        <span id="valOccupation" class="text-slate-700">Occupation at Organization</span>
+                    </div>
+                    <div class="flex items-center gap-3 text-slate-800 text-sm">
+                        <i data-lucide="map-pin" class="w-4 h-4 text-slate-600 shrink-0"></i>
+                        <span id="valLocation" class="text-slate-500 font-medium">Your location</span>
+                    </div>
+                    <div class="flex items-center gap-3 text-slate-700 text-xs pt-2 border-t border-white/20">
+                        <i data-lucide="calendar" class="w-4 h-4 text-slate-600 shrink-0"></i>
+                        <span>Joined 3 minutes ago <span class="text-emerald-600 font-bold text-[10px] ml-1">●</span> last seen in the past day</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Side: Action Link List -->
+            <div class="glass-card p-2 rounded-2xl flex flex-col justify-between shadow-sm">
+                <!-- GitHub -->
+                <a href="#" class="flex items-center justify-between p-3 hover:bg-white/30 rounded-xl transition-all group">
+                    <div class="flex items-center gap-3">
+                        <div class="p-2 bg-slate-900/80 text-white rounded-lg border border-white/20"><i data-lucide="github" class="w-4 h-4"></i></div>
+                        <div>
+                            <div class="text-sm font-bold text-slate-900">GitHub</div>
+                            <div class="text-xs text-slate-600">View my code</div>
+                        </div>
+                    </div>
+                    <i data-lucide="chevron-right" class="w-4 h-4 text-slate-600 group-hover:translate-x-0.5 transition-transform"></i>
+                </a>
+                
+                <!-- LinkedIn -->
+                <a href="#" class="flex items-center justify-between p-3 hover:bg-white/30 rounded-xl transition-all group">
+                    <div class="flex items-center gap-3">
+                        <div class="p-2 bg-blue-700/80 text-white rounded-lg border border-white/20"><i data-lucide="linkedin" class="w-4 h-4"></i></div>
+                        <div>
+                            <div class="text-sm font-bold text-slate-900">LinkedIn</div>
+                            <div class="text-xs text-slate-600">View my profile</div>
+                        </div>
+                    </div>
+                    <i data-lucide="chevron-right" class="w-4 h-4 text-slate-600 group-hover:translate-x-0.5 transition-transform"></i>
+                </a>
+
+                <!-- X (Twitter) -->
+                <a href="#" class="flex items-center justify-between p-3 hover:bg-white/30 rounded-xl transition-all group">
+                    <div class="flex items-center gap-3">
+                        <div class="p-2 bg-black/80 text-white rounded-lg border border-white/20"><i data-lucide="twitter" class="w-4 h-4"></i></div>
+                        <div>
+                            <div class="text-sm font-bold text-slate-900">X (Twitter)</div>
+                            <div class="text-xs text-slate-600">View my profile</div>
+                        </div>
+                    </div>
+                    <i data-lucide="chevron-right" class="w-4 h-4 text-slate-600 group-hover:translate-x-0.5 transition-transform"></i>
+                </a>
+
+                <!-- Website -->
+                <a href="#" class="flex items-center justify-between p-3 hover:bg-white/30 rounded-xl transition-all group">
+                    <div class="flex items-center gap-3">
+                        <div class="p-2 bg-emerald-600/80 text-white rounded-lg border border-white/20"><i data-lucide="globe" class="w-4 h-4"></i></div>
+                        <div>
+                            <div class="text-sm font-bold text-slate-900">Website</div>
+                            <div class="text-xs text-slate-600">Visit my website</div>
+                        </div>
+                    </div>
+                    <i data-lucide="chevron-right" class="w-4 h-4 text-slate-600 group-hover:translate-x-0.5 transition-transform"></i>
+                </a>
+            </div>
+        </div>
+
+        <!-- Footer Call-to-Action Banner -->
+        <div class="glass-card rounded-2xl p-5 flex items-center justify-between gap-4 shadow-inner">
+            <div class="flex items-center gap-4">
+                <div class="w-11 h-11 bg-blue-600/20 text-blue-900 rounded-xl flex items-center justify-center shrink-0 border border-white/20">
+                    <i data-lucide="shield-alert" class="w-5 h-5"></i>
+                </div>
+                <div>
+                    <h4 class="text-sm font-bold text-slate-900">Be the Change</h4>
+                    <p class="text-xs text-slate-700 mt-0.5 max-w-sm leading-normal font-medium">Report issues, stay informed, and help build a better community with SmartPatrol+ Citizen.</p>
+                </div>
+            </div>
+            <button class="bg-blue-600/80 hover:bg-blue-700/90 text-white text-xs font-bold px-4 py-2.5 rounded-xl tracking-wide shadow-md hover:shadow-lg transition-all shrink-0 border border-white/10 backdrop-blur-md">
+                Get Started
+            </button>
+        </div>
+
+    </div>
+
+    <!-- Interactive Edit Profile Modal -->
+    <div id="editModal" class="fixed inset-0 bg-slate-950/40 backdrop-blur-md hidden justify-center items-center p-4 z-50">
+        <div class="glass-panel rounded-2xl w-full max-w-md p-6 shadow-2xl transform transition-all">
+            <h3 class="text-lg font-bold text-slate-900 mb-4 flex items-center gap-2">
+                <i data-lucide="user-cog" class="w-5 h-5 text-blue-800"></i> Update Profile Info
+            </h3>
+            <div class="space-y-4">
+                <div>
+                    <label class="block text-[10px] font-bold text-slate-700 uppercase tracking-wider mb-1">Display Name</label>
+                    <input type="text" id="inputName" class="glass-input w-full rounded-xl px-3.5 py-2 text-sm text-slate-900 placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-blue-500/40" placeholder="MagnetBoss">
+                </div>
+                <div>
+                    <label class="block text-[10px] font-bold text-slate-700 uppercase tracking-wider mb-1">Tagline</label>
+                    <input type="text" id="inputTagline" class="glass-input w-full rounded-xl px-3.5 py-2 text-sm text-slate-900 placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-blue-500/40" placeholder="Your tagline here">
+                </div>
+                <div>
+                    <label class="block text-[10px] font-bold text-slate-700 uppercase tracking-wider mb-1">Pronouns</label>
+                    <input type="text" id="inputPronouns" class="glass-input w-full rounded-xl px-3.5 py-2 text-sm text-slate-900 placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-blue-500/40" placeholder="He/Him">
+                </div>
+                <div>
+                    <label class="block text-[10px] font-bold text-slate-700 uppercase tracking-wider mb-1">Occupation & Org</label>
+                    <input type="text" id="inputOccupation" class="glass-input w-full rounded-xl px-3.5 py-2 text-sm text-slate-900 placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-blue-500/40" placeholder="Manager at Tech Corp">
+                </div>
+                <div>
+                    <label class="block text-[10px] font-bold text-slate-700 uppercase tracking-wider mb-1">Location</label>
+                    <input type="text" id="inputLocation" class="glass-input w-full rounded-xl px-3.5 py-2 text-sm text-slate-900 placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-blue-500/40" placeholder="New York, USA">
+                </div>
+            </div>
+            <div class="flex justify-end gap-2.5 mt-6">
+                <button id="closeModalBtn" class="px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-white/20 rounded-xl transition-colors">Cancel</button>
+                <button id="saveProfileBtn" class="px-4 py-2 text-sm font-bold text-white bg-blue-600/80 hover:bg-blue-700/90 rounded-xl shadow-md transition-all border border-white/10">Save Changes</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- JS Handling Data Updates & Transitions -->
+    <script>
+        const editProfileBtn = document.getElementById('editProfileBtn');
+        const editModal = document.getElementById('editModal');
+        const closeModalBtn = document.getElementById('closeModalBtn');
+        const saveProfileBtn = document.getElementById('saveProfileBtn');
+
+        const displayName = document.getElementById('displayName');
+        const aboutTagline = document.getElementById('aboutTagline');
+        const valPronouns = document.getElementById('valPronouns');
+        const valOccupation = document.getElementById('valOccupation');
+        const valLocation = document.getElementById('valLocation');
+
+        const inputName = document.getElementById('inputName');
+        const inputTagline = document.getElementById('inputTagline');
+        const inputPronouns = document.getElementById('inputPronouns');
+        const inputOccupation = document.getElementById('inputOccupation');
+        const inputLocation = document.getElementById('inputLocation');
+
+        editProfileBtn.addEventListener('click', () => {
+            inputName.value = displayName.textContent.trim() === 'MagnetBoss' ? '' : displayName.textContent;
+            inputTagline.value = aboutTagline.textContent === 'Your tagline here' ? '' : aboutTagline.textContent;
+            inputPronouns.value = valPronouns.textContent === '-' ? '' : valPronouns.textContent;
+            inputOccupation.value = valOccupation.textContent === 'Occupation at Organization' ? '' : valOccupation.textContent;
+            inputLocation.value = valLocation.textContent === 'Your location' ? '' : valLocation.textContent;
+            
+            editModal.style.display = 'flex';
+        });
+
+        closeModalBtn.addEventListener('click', () => {
+            editModal.style.display = 'none';
+        });
+
+        saveProfileBtn.addEventListener('click', () => {
+            displayName.textContent = inputName.value.trim() || 'MagnetBoss';
+            aboutTagline.textContent = inputTagline.value.trim() || 'Your tagline here';
+            
+            valPronouns.textContent = inputPronouns.value.trim() || '-';
+            valOccupation.textContent = inputOccupation.value.trim() || 'Occupation at Organization';
+            valLocation.textContent = inputLocation.value.trim() || 'Your location';
+
+            aboutTagline.className = inputTagline.value.trim() ? "text-sm text-slate-800 mt-3 font-medium" : "text-sm text-slate-600 italic mt-3";
+            valPronouns.className = inputPronouns.value.trim() ? "text-slate-900 font-semibold" : "text-slate-500 font-medium";
+            valOccupation.className = inputOccupation.value.trim() ? "text-slate-900 font-semibold" : "text-slate-700";
+            valLocation.className = inputLocation.value.trim() ? "text-slate-900 font-semibold" : "text-slate-500 font-medium";
+
+            editModal.style.display = 'none';
+        });
+
+        window.addEventListener('click', (e) => {
+            if (e.target === editModal) editModal.style.display = 'none';
+        });
+
+        lucide.createIcons();
+    </script>
+</body>
+</html>
